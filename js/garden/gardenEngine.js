@@ -16,7 +16,7 @@
       text: null, // read from CSS var --ink
       vein: null, // read from CSS var --bg
     },
-    density: 1,
+    density: 2.0,
     boil: true,
     butterfly: true,
     maxDpr: 2,
@@ -63,6 +63,36 @@
       P.push([x, y]);
     }
     return P;
+  }
+
+  function curl(B, base, dir, len, amp, w) {
+    // Curled tendril
+    const P = vine(base, dir, len, amp, 2 + Math.random() * 2, Math.random() * 6.28, (Math.random() - 0.5) * 1.5, 30);
+    const n = P.length;
+    for (let i = 0; i < n - 1; i++) {
+      const u = i / n;
+      const thickness = w * (1 - u * 0.8);
+      B.stroke([P[i], P[i + 1]], '#1C2B8F', Math.max(0.5, thickness));
+    }
+    // Curl tip
+    const [tip, ta] = at(P, 1);
+    const curlR = len * 0.15;
+    const curlPts = [];
+    for (let i = 0; i <= 12; i++) {
+      const a = ta + (i / 12) * Math.PI * 1.5;
+      curlPts.push([tip[0] + Math.cos(a) * curlR * (i / 12), tip[1] + Math.sin(a) * curlR * (i / 12)]);
+    }
+    B.stroke(curlPts, '#1C2B8F', 1);
+  }
+
+  function strokeRange(B, pts, col, w0, w1) {
+    // Variable width stroke
+    const n = pts.length;
+    for (let i = 0; i < n - 1; i++) {
+      const u = i / (n - 1);
+      const w = w0 + (w1 - w0) * u;
+      B.stroke([pts[i], pts[i + 1]], col, Math.max(0.5, w));
+    }
   }
 
   function path(c, p, closed) {
@@ -147,6 +177,9 @@
       this.introProgress = 0;
       this.introStartTime = null;
       this.rafId = null;
+      this.frameTimes = [];
+      this.frameTimingDone = false;
+      this.lastFrameTime = 0;
       this.visible = true;
       this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       this.coarsePointer = window.matchMedia('(pointer: coarse)').matches;
@@ -204,7 +237,7 @@
     // Layout text
     layout() {
       const ctx = this.ctx;
-      const S = Math.min(this.W, this.H) * 0.15;
+      const S = Math.min(this.W, this.H) * 0.35;
       ctx.font = `${this.opts.fontWeight} ${S}px ${this.opts.font}`;
       const ws = this.opts.text.split('').map(ch => ctx.measureText(ch).width / S);
       const totalW = ws.reduce((a, b) => a + b, 0) * S;
@@ -220,12 +253,22 @@
         const nid = () => k0++;
         const w_px = ws[i] * S;
         const inX = () => (r() - 0.5) * w_px * 0.7;
-        const nUp = 1 + (r() < 0.45 * p.dens ? 1 : 0);
+        const nUp = 2 + (r() < 0.6 * p.dens ? 1 : 0);
         for (let j = 0; j < nUp; j++) {
-          this.grow(r, E, nid, p, { base: [inX(), -r() * 0.3], dir: -Math.PI / 2 + (r() - 0.5) * 0.7, len: 0.6 + r() * 0.5, d0: 40 + j * 130, tip: j === 0 ? 'rose' : null, curvy: p.curvy });
+          this.grow(r, E, nid, p, { base: [inX(), -r() * 0.3], dir: -Math.PI / 2 + (r() - 0.5) * 0.7, len: 0.5 + r() * 0.6, d0: 40 + j * 100, tip: 'rose', curvy: p.curvy });
+          // Add curl tendril
+          const curlBase = [inX(), -r() * 0.2];
+          E.push({ t: 'curl', id: nid(), base: curlBase, dir: -Math.PI / 2 + (r() - 0.5) * 1.2, len: 0.3 + r() * 0.3, amp: 0.3 + r() * 0.4, d0: 200 + j * 80 });
         }
-        if (r() < 0.4 * p.dens) {
-          this.grow(r, E, nid, p, { base: [inX(), -0.1 - r() * 0.35], dir: Math.PI / 2 + (r() - 0.5) * 0.8, len: 0.35 + r() * 0.35, d0: 160, curvy: p.curvy });
+        if (r() < 0.6 * p.dens) {
+          this.grow(r, E, nid, p, { base: [inX(), -0.1 - r() * 0.35], dir: Math.PI / 2 + (r() - 0.5) * 0.8, len: 0.3 + r() * 0.4, d0: 160, tip: 'rose', curvy: p.curvy });
+        }
+        // Add a downward stem with leaf
+        this.grow(r, E, nid, p, { base: [inX(), r() * 0.2], dir: Math.PI / 2 + (r() - 0.5) * 0.6, len: 0.4 + r() * 0.3, d0: 120, tip: 'leaf', curvy: p.curvy });
+        // Add bridge to next letter (if not last)
+        if (i < this.opts.text.length - 1) {
+          const nextX = x + w_px + ws[i+1] * S / 2;
+          E.push({ t: 'bridge', id: nid(), x1: x + w / 2, y1: y + S * 0.1, x2: nextX, y2: y + S * 0.1, d0: 300 });
         }
         this.letters.push({ ch, x: x + w / 2, y, w: w_px, S, els: E, birth: null, ws: ws[i] });
         x += w_px;
@@ -301,6 +344,9 @@
       if (this.rafId) {
         cancelAnimationFrame(this.rafId);
         this.rafId = null;
+      this.frameTimes = [];
+      this.frameTimingDone = false;
+      this.lastFrameTime = 0;
       }
     }
 
@@ -325,8 +371,22 @@
     }
 
     loop(now) {
+      if (this.lastFrameTime > 0 && this.grown && !this.frameTimingDone) {
+        const dt = now - this.lastFrameTime;
+        this.frameTimes.push(dt);
+        if (this.frameTimes.length >= 100) {
+          this.frameTimingDone = true;
+          const avg = this.frameTimes.reduce((a, b) => a + b, 0) / this.frameTimes.length;
+          const worst = Math.max(...this.frameTimes);
+          console.log('FRAME TIMING (100 frames, idle/sway): avg=' + avg.toFixed(2) + 'ms, worst=' + worst.toFixed(2) + 'ms');
+        }
+      }
+      this.lastFrameTime = now;
       if (!this.visible || document.hidden) {
         this.rafId = null;
+      this.frameTimes = [];
+      this.frameTimingDone = false;
+      this.lastFrameTime = 0;
         return;
       }
 
@@ -348,7 +408,7 @@
       if (!this.letters.length) return;
 
       // Draw letters (faint)
-      ctx.font = `${this.opts.fontWeight} ${Math.min(this.W, this.H) * 0.15}px ${this.opts.font}`;
+      ctx.font = `${this.opts.fontWeight} ${Math.min(this.W, this.H) * 0.35}px ${this.opts.font}`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'alphabetic';
       ctx.fillStyle = this.opts.colors.text + '20'; // 12% opacity
@@ -372,6 +432,15 @@
             this.drawLeaf(B, el, growthProgress, boilAmount);
           } else if (el.t === 'rose') {
             this.drawRose(B, el, growthProgress, boilAmount);
+          } else if (el.t === 'curl') {
+            if (growthProgress * 1000 > el.d0) {
+              curl(B, el.base, el.dir, el.len, el.amp, 1.5);
+            }
+          } else if (el.t === 'bridge') {
+            if (growthProgress * 1000 > el.d0) {
+              const pts = [[el.x1, el.y1], [(el.x1 + el.x2) / 2, el.y1 + 10], [el.x2, el.y2]];
+              strokeRange(B, pts, this.opts.colors.stem, 1.5, 0.5);
+            }
           }
         }
       }
@@ -393,12 +462,12 @@
       if (visible < 2) return;
       const visiblePts = pts.slice(0, Math.min(visible + 1, n));
       // Apply boil wobble
+      let drawPts = visiblePts;
       if (boil) {
-        const wobbled = visiblePts.map((p, i) => [p[0] + Math.sin(i * 0.5 + boil) * 0.5, p[1] + Math.cos(i * 0.3 + boil) * 0.3]);
-        B.stroke(wobbled, this.opts.colors.stem, 2);
-      } else {
-        B.stroke(visiblePts, this.opts.colors.stem, 2);
+        drawPts = visiblePts.map((p, i) => [p[0] + Math.sin(i * 0.5 + boil) * 0.5, p[1] + Math.cos(i * 0.3 + boil) * 0.3]);
       }
+      // Variable width: thick at base, thin at tip
+      strokeRange(B, drawPts, this.opts.colors.stem, 2.5, 0.5);
     }
 
     drawLeaf(B, leaf, progress, boil) {
