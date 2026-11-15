@@ -277,13 +277,13 @@
 
     // Grow function
     grow(r, E, nid, p, o) {
-      const tip = r() < 0.3 ? 'rose' : r() < 0.6 ? 'fan' : 'leaf';
+      const tip = r() < 0.5 ? 'rose' : r() < 0.75 ? 'fan' : 'leaf';
       const len = o.len || 0.8;
       const curvy = o.curvy || p.curvy;
       let P = vine(o.base, o.dir, len, (0.35 + r() * 0.45) * curvy, 1 + r() * 1.6, r() * 6.28, (r() - 0.5) * 1.2, 40);
       const dur = Math.max(320, len * 620);
       E.push({ t: 'stem', id: nid(), pts: P, d0: o.d0, dur, w: 1 });
-      const nl = Math.floor(r() * 2.8 * p.leafy);
+      const nl = Math.floor(r() * 4.0 * p.leafy);
       let sd = r() < 0.5 ? -1 : 1;
       for (let i = 0; i < nl; i++) {
         const u = 0.25 + r() * 0.6;
