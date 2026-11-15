@@ -270,7 +270,17 @@
           const nextX = x + w_px + ws[i+1] * S / 2;
           E.push({ t: 'bridge', id: nid(), x1: x + w / 2, y1: y + S * 0.1, x2: nextX, y2: y + S * 0.1, d0: 300 });
         }
-        this.letters.push({ ch, x: x + w / 2, y, w: w_px, S, els: E, birth: null, ws: ws[i] });
+        // Bridge to next letter
+        if (i < this.text.length - 1) {
+          const nextX = x + w_px + ws[i+1] * S / 2;
+          const bridgePts = [];
+          for (let b = 0; b <= 20; b++) {
+            const u = b / 20;
+            bridgePts.push([x + w_px/2 + (nextX - (x + w_px/2)) * u, y + 15 * Math.sin(u * Math.PI)]);
+          }
+          els.push({ t: 'bridge', pts: bridgePts, d0: 300, layer: 0 });
+        }
+        this.letters.push({ ch, x: x + w / 2, y, w: w_px, S, els, birth: null, ws: ws[i] });
         x += w_px;
       });
     }
@@ -432,6 +442,9 @@
             this.drawLeaf(B, el, growthProgress, boilAmount);
           } else if (el.t === 'rose') {
             this.drawRose(B, el, growthProgress, boilAmount);
+          } else if (el.t === 'bridge') {
+            if (growthProgress * 1000 < el.d0) continue;
+            strokeRange(B, el.pts, 0, 1, '#1C2B8F', 1.5);
           } else if (el.t === 'curl') {
             if (growthProgress * 1000 > el.d0) {
               curl(B, el.base, el.dir, el.len, el.amp, 1.5);
