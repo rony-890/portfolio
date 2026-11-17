@@ -24,6 +24,20 @@
     TOLERANCE: 128,
   };
 
+  // Slide-door animation constants
+  const SLIDE_DOOR_CONFIG = {
+    // Split after this letter index (0-indexed): 1 = after U (S,U | B,H,U)
+    SPLIT_AFTER_INDEX: 1,
+    // Maximum shift as fraction of viewport width
+    MAX_SHIFT_RATIO: 0.08,
+    // Scroll progress at which slide completes (0-1)
+    SLIDE_COMPLETE_PROGRESS: 0.6,
+    // Minimum opacity at end of zoom (not 0)
+    MIN_OPACITY: 0.38,
+    // Easing function for slide
+    SLIDE_EASE: (t) => 1 - Math.pow(1 - t, 3), // easeOutCubic
+  };
+
   function h(n) {
     const x = Math.sin(n) * 43758.5453;
     return x - Math.floor(x);
@@ -960,7 +974,7 @@
       const heroEl = document.querySelector('#hero .el');
       if (!heroEl) return;
       
-      // Parse heroEl transform to get scale and translateY
+      // Parse heroEl transform to get scale and translate
       const transform = heroEl.style.transform;
       const scaleMatch = transform.match(/scale\(([\d.]+)\)/);
       const translateMatch = transform.match(/translate3d\(([^,]+),\s*([^,]+)/);
@@ -968,22 +982,79 @@
       if (!scaleMatch || !translateMatch) return;
       
       const scale = parseFloat(scaleMatch[1]);
+      const translateX = parseFloat(translateMatch[1]);
       const translateY = parseFloat(translateMatch[2]);
       
       // Viewport center
+      const vpCenterX = window.innerWidth / 2;
       const vpCenterY = window.innerHeight / 2;
       
-      // HeroEl center in viewport = translateY (after translate3d, before translate(-50%,-50%))
+      // HeroEl center in viewport = translate (after translate3d, before translate(-50%,-50%))
+      const heroCenterX = translateX;
       const heroCenterY = translateY;
       
+      // Slide-door shift for B-hole (B is in right group, index 2 > splitIdx 1)
+      const slideShift = this._slideShift || 0;
+      const bHoleShiftX = slideShift; // B shifts right
+      
+      // B-hole position in heroEl coords (before CSS scale) = canvas center + slide shift
+      const bHoleHeroElX = this.W / 2 + bHoleShiftX;
+      const bHoleHeroElY = this.H / 2;
+      
+      // B-hole position in viewport = heroEl center + (bHoleHeroEl - heroEl center) * scale
+      // heroEl center in heroEl coords = (W/2, H/2)
+      const bHoleVpX = heroCenterX + (bHoleHeroElX - this.W / 2) * scale;
+      const bHoleVpY = heroCenterY + (bHoleHeroElY - this.H / 2) * scale;
+      
       // Required shift in viewport coords to center B-hole
-      const shiftVpY = vpCenterY - heroCenterY;
+      const shiftVpX = vpCenterX - bHoleVpX;
+      const shiftVpY = vpCenterY - bHoleVpY;
       
       // Convert to garden canvas coords (before heroEl CSS scale)
+      const shiftCanvasX = shiftVpX / scale;
       const shiftCanvasY = shiftVpY / scale;
       
       // Apply translation (g context already has DPR transform)
-      g.translate(0, shiftCanvasY * dpr);
+      g.translate(shiftCanvasX * dpr, shiftCanvasY * dpr);
+    }
+    _computeSlideDoorState() {
+      const heroEl = document.querySelector('#hero .el');
+      if (!heroEl) {
+        this._slideProgress = 0;
+        this._slideShift = 0;
+        this._globalOpacity = 1;
+        return;
+      }
+      
+      // Get scroll progress from heroEl scale
+      const transform = heroEl.style.transform;
+      const scaleMatch = transform.match(/scale\(([\d.]+)\)/);
+      if (!scaleMatch) {
+        this._slideProgress = 0;
+        this._slideShift = 0;
+        this._globalOpacity = 1;
+        return;
+      }
+      
+      const scale = parseFloat(scaleMatch[1]);
+      const minScale = 1;
+      const maxScale = 2.28;
+      
+      let progress = (scale - minScale) / (maxScale - minScale);
+      progress = Math.max(0, Math.min(1, progress));
+      
+      this._scrollProgress = progress;
+      
+      const slideProgress = Math.min(1, progress / SLIDE_DOOR_CONFIG.SLIDE_COMPLETE_PROGRESS);
+      const easedSlide = SLIDE_DOOR_CONFIG.SLIDE_EASE(slideProgress);
+      
+      const vpWidth = window.innerWidth;
+      const maxShiftCanvas = (vpWidth * SLIDE_DOOR_CONFIG.MAX_SHIFT_RATIO) / this.dpr;
+      this._slideShift = maxShiftCanvas * easedSlide;
+      
+      this._globalOpacity = 1 - (1 - SLIDE_DOOR_CONFIG.MIN_OPACITY) * progress;
+      
+      this._slideDoorActive = slideProgress > 0;
     }
     stop() {
       this._stopped = true;
@@ -1000,6 +1071,9 @@
         d = this.dpr;
       g.setTransform(d, 0, 0, d, 0, 0);
       
+      // Compute scroll progress and slide-door state
+      this._computeSlideDoorState();
+      
       // Apply focal compensation transform to keep B-hole at viewport center
       this._applyFocalCompensation(g, d);
       
@@ -1009,8 +1083,25 @@
       const f = CFG.boil && !this.reducedMotion ? Math.floor(now / 120) : 0;
       const amp =
         CFG.boil && !this.reducedMotion ? Math.max(0.8, this.S * 0.01) : 0;
+      
+      // Apply slide-door transform per letter
+      const splitIdx = SLIDE_DOOR_CONFIG.SPLIT_AFTER_INDEX;
+      const shift = this._slideShift || 0;
+      const opacity = this._globalOpacity !== undefined ? this._globalOpacity : 1;
+      
       for (const l of this.letters) {
         if (l.ch === " " || !l.els) continue;
+        
+        // Apply slide-door shift
+        const isLeftGroup = this.letters.indexOf(l) <= splitIdx;
+        const dir = isLeftGroup ? -1 : 1;
+        const slideX = dir * shift;
+        
+        // Temporarily shift letter position for drawing
+        const origX = l.x;
+        const origY = l.y;
+        l.x += slideX;
+        
         const age = this.reducedMotion ? 1e9 : now - l.birth;
         const S = this.S;
         for (const e of l.els) {
@@ -1022,7 +1113,15 @@
         }
         if (l.tend)
           for (const e of l.tend) this._drawStem(B, e, l, age, S, f, amp);
+        
+        // Draw text with global opacity
+        g.globalAlpha = opacity;
         B.text(l.ch, l.x, l.y, S, COLORS.text);
+        g.globalAlpha = 1;
+        
+        // Restore position
+        l.x = origX;
+        l.y = origY;
       }
     }
     _drawStem(B, e, l, age, S, f, amp) {
