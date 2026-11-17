@@ -1009,7 +1009,7 @@
 
       // safety fit: shrink ONLY if full garden (stems+leaves+roses) overflows — prevents crop
       // Extra left padding to prevent left-side crop from vines/flowers
-      const pad = Math.max(80, this.W * 0.08);  // Increased from 40/0.04 to 80/0.08
+      const pad = Math.max(250, this.W * 0.2);  // Increased to accommodate focal compensation + slide-door shifts (max ~204px combined)
       const availW = this.W - pad * 2,
         availH = this.H - pad * 2;
       let x0 = 1e9,
@@ -1151,8 +1151,17 @@
       const shiftVpY = vpCenterY - bHoleVpY;
       
       // Convert to garden canvas coords (before heroEl CSS scale)
-      const shiftCanvasX = shiftVpX / scale;
-      const shiftCanvasY = shiftVpY / scale;
+      let shiftCanvasX = shiftVpX / scale;
+      let shiftCanvasY = shiftVpY / scale;
+      
+      // Clamp shift to keep garden content on-canvas (within safety fit pad)
+      // After safety fit, content spans [pad, W-pad] x [pad, H-pad]
+      // Translation must keep content within [0, W] x [0, H]
+      const pad = Math.max(250, this.W * 0.2);
+      const maxShiftX = pad;
+      const maxShiftY = pad;
+      shiftCanvasX = Math.max(-pad, Math.min(pad, shiftCanvasX));
+      shiftCanvasY = Math.max(-pad, Math.min(pad, shiftCanvasY));
       
       // Apply translation (g context already has DPR transform)
       g.translate(shiftCanvasX * dpr, shiftCanvasY * dpr);
