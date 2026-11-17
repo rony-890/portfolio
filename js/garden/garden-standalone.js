@@ -16,6 +16,14 @@
   };
   const CFG = { boil: true, density: 1 };
 
+  // B-hole focal point constants
+  const B_HOLE_CONFIG = {
+    // Render B at this size for hole detection (relative to S)
+    RENDER_SCALE: 1.0,
+    // Flood fill tolerance
+    TOLERANCE: 128,
+  };
+
   function h(n) {
     const x = Math.sin(n) * 43758.5453;
     return x - Math.floor(x);
@@ -37,6 +45,127 @@
       t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
       return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
     };
+  }
+
+  // Compute lower hole centroid of "B" glyph
+  function computeBHoleCentroid(fontSpec, size) {
+    const offscreen = document.createElement('canvas');
+    const ctx = offscreen.getContext('2d');
+    const renderSize = Math.ceil(size * B_HOLE_CONFIG.RENDER_SCALE);
+    const padding = Math.ceil(renderSize * 0.2);
+    const canvasSize = renderSize + padding * 2;
+    
+    offscreen.width = canvasSize;
+    offscreen.height = canvasSize;
+    
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, canvasSize, canvasSize);
+    
+    ctx.font = fontSpec.replace('100px', `${renderSize}px`);
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = 'black';
+    ctx.fillText('B', canvasSize / 2, canvasSize / 2);
+    
+    // Get image data
+    const imgData = ctx.getImageData(0, 0, canvasSize, canvasSize);
+    const data = imgData.data;
+    const w = canvasSize;
+    const h = canvasSize;
+    
+    // Flood fill from outside (white background) to mark exterior
+    const visited = new Uint8Array(w * h);
+    const queue = [];
+    
+    // Start from corners (outside)
+    const corners = [[0, 0], [w - 1, 0], [0, h - 1], [w - 1, h - 1]];
+    for (const [qx, qy] of corners) {
+      const idx = qy * w + qx;
+      if (!visited[idx]) {
+        const alpha = data[idx * 4 + 3];
+        const brightness = (data[idx * 4] + data[idx * 4 + 1] + data[idx * 4 + 2]) / 3;
+        if (alpha < 128 || brightness > B_HOLE_CONFIG.TOLERANCE) {
+          visited[idx] = 1;
+          queue.push([qx, qy]);
+        }
+      }
+    }
+    
+    // BFS flood fill
+    while (queue.length > 0) {
+      const [cx, cy] = queue.shift();
+      const neighbors = [[cx + 1, cy], [cx - 1, cy], [cx, cy + 1], [cx, cy - 1]];
+      for (const [nx, ny] of neighbors) {
+        if (nx < 0 || nx >= w || ny < 0 || ny >= h) continue;
+        const nidx = ny * w + nx;
+        if (visited[nidx]) continue;
+        const alpha = data[nidx * 4 + 3];
+        const brightness = (data[nidx * 4] + data[nidx * 4 + 1] + data[nidx * 4 + 2]) / 3;
+        if (alpha < 128 || brightness > B_HOLE_CONFIG.TOLERANCE) {
+          visited[nidx] = 1;
+          queue.push([nx, ny]);
+        }
+      }
+    }
+    
+    // Find unvisited black pixels (enclosed regions = holes)
+    const holes = [];
+    for (let y = 0; y < h; y++) {
+      for (let x = 0; x < w; x++) {
+        const idx = y * w + x;
+        if (visited[idx]) continue;
+        const alpha = data[idx * 4 + 3];
+        const brightness = (data[idx * 4] + data[idx * 4 + 1] + data[idx * 4 + 2]) / 3;
+        if (alpha >= 128 && brightness <= B_HOLE_CONFIG.TOLERANCE) {
+          // Found a hole pixel - flood fill this hole
+          const holePixels = [];
+          const holeQueue = [[x, y]];
+          visited[idx] = 2; // Mark as hole
+          
+          while (holeQueue.length > 0) {
+            const [hx, hy] = holeQueue.shift();
+            holePixels.push([hx, hy]);
+            const neighbors = [[hx + 1, hy], [hx - 1, hy], [hx, hy + 1], [hx, hy - 1]];
+            for (const [nhx, nhy] of neighbors) {
+              if (nhx < 0 || nhx >= w || nhy < 0 || nhy >= h) continue;
+              const nidx = nhy * w + nhx;
+              if (visited[nidx] !== 0) continue;
+              const nalpha = data[nidx * 4 + 3];
+              const nbrightness = (data[nidx * 4] + data[nidx * 4 + 1] + data[nidx * 4 + 2]) / 3;
+              if (nalpha >= 128 && nbrightness <= B_HOLE_CONFIG.TOLERANCE) {
+                visited[nidx] = 2;
+                holeQueue.push([nhx, nhy]);
+              }
+            }
+          }
+          
+          if (holePixels.length > 10) { // Filter noise
+            holes.push(holePixels);
+          }
+        }
+      }
+    }
+    
+    if (holes.length === 0) return null;
+    
+    // Sort holes by vertical position (y centroid), pick the lower one
+    holes.sort((a, b) => {
+      const ay = a.reduce((sum, p) => sum + p[1], 0) / a.length;
+      const by = b.reduce((sum, p) => sum + p[1], 0) / b.length;
+      return ay - by;
+    });
+    
+    const lowerHole = holes[holes.length - 1];
+    
+    // Compute centroid of lower hole
+    const cx = lowerHole.reduce((sum, p) => sum + p[0], 0) / lowerHole.length;
+    const cy = lowerHole.reduce((sum, p) => sum + p[1], 0) / lowerHole.length;
+    
+    // Convert to normalized coordinates (0-1) relative to canvas center
+    const normX = (cx - canvasSize / 2) / (renderSize / 2);
+    const normY = (cy - canvasSize / 2) / (renderSize / 2);
+    
+    return { x: normX, y: normY, cx, cy, canvasSize, renderSize };
   }
   function bez(a, b, c, d, n) {
     const P = [];
@@ -773,18 +902,8 @@
         }
       }
 
-      // focal point: midpoint of "b" and "h" at canvas center-x
-      const bIdx = this.letters.findIndex((l) => l.ch.toLowerCase() === "b");
-      const hIdx = this.letters.findIndex((l) => l.ch.toLowerCase() === "h");
-      if (bIdx >= 0 && hIdx >= 0) {
-        const bl = this.letters[bIdx],
-          hl = this.letters[hIdx];
-        const dx = this.W / 2 - (bl.x + hl.x) / 2;
-        this.letters.forEach((l) => {
-          l.tx += dx;
-          l.x += dx;
-        });
-      }
+      // focal point: lower hole of "B" glyph
+      this.computeAndSetBHoleFocalPoint(S);
     }
     start() {
       const now = performance.now();
@@ -798,6 +917,73 @@
         this._frame(ts);
       };
       this.raf = requestAnimationFrame(loop);
+    }
+    computeAndSetBHoleFocalPoint(S) {
+      const hole = computeBHoleCentroid(FONT_SPEC, S);
+      if (!hole) return;
+      
+      // Find B letter
+      const bIdx = this.letters.findIndex((l) => l.ch.toLowerCase() === "b");
+      if (bIdx < 0) return;
+      const bLetter = this.letters[bIdx];
+      
+      // Convert normalized hole position to canvas coordinates
+      // hole.x, hole.y are normalized (-1 to 1) relative to B center
+      // B letter center is at bLetter.tx, bLetter.ty
+      const holeScale = S * 0.5; // approximate B width/2
+      const holeCanvasX = bLetter.tx + hole.x * holeScale;
+      const holeCanvasY = bLetter.ty + hole.y * holeScale;
+      
+      // Shift all letters so B-hole is at canvas center
+      const dx = this.W / 2 - holeCanvasX;
+      const dy = this.H / 2 - holeCanvasY;
+      this.letters.forEach((l) => {
+        l.tx += dx;
+        l.ty += dy;
+        l.x += dx;
+        l.y += dy;
+      });
+      
+      // After shift, B-hole is at canvas center (W/2, H/2)
+      // Transform-origin should be 50% 50% to scale around canvas center = B-hole
+      this.updateTransformOrigin(this.W / 2, this.H / 2);
+    }
+    updateTransformOrigin(canvasX, canvasY) {
+      const heroEl = document.querySelector('#hero .el');
+      if (!heroEl) return;
+      // Convert canvas coordinates to .el percentage (0-100%)
+      const originX = (canvasX / this.W) * 100;
+      const originY = (canvasY / this.H) * 100;
+      heroEl.style.transformOrigin = `${originX.toFixed(2)}% ${originY.toFixed(2)}%`;
+    }
+    _applyFocalCompensation(g, dpr) {
+      const heroEl = document.querySelector('#hero .el');
+      if (!heroEl) return;
+      
+      // Parse heroEl transform to get scale and translateY
+      const transform = heroEl.style.transform;
+      const scaleMatch = transform.match(/scale\(([\d.]+)\)/);
+      const translateMatch = transform.match(/translate3d\(([^,]+),\s*([^,]+)/);
+      
+      if (!scaleMatch || !translateMatch) return;
+      
+      const scale = parseFloat(scaleMatch[1]);
+      const translateY = parseFloat(translateMatch[2]);
+      
+      // Viewport center
+      const vpCenterY = window.innerHeight / 2;
+      
+      // HeroEl center in viewport = translateY (after translate3d, before translate(-50%,-50%))
+      const heroCenterY = translateY;
+      
+      // Required shift in viewport coords to center B-hole
+      const shiftVpY = vpCenterY - heroCenterY;
+      
+      // Convert to garden canvas coords (before heroEl CSS scale)
+      const shiftCanvasY = shiftVpY / scale;
+      
+      // Apply translation (g context already has DPR transform)
+      g.translate(0, shiftCanvasY * dpr);
     }
     stop() {
       this._stopped = true;
@@ -813,6 +999,10 @@
       const g = this.g,
         d = this.dpr;
       g.setTransform(d, 0, 0, d, 0, 0);
+      
+      // Apply focal compensation transform to keep B-hole at viewport center
+      this._applyFocalCompensation(g, d);
+      
       g.clearRect(0, 0, this.W, this.H);
       const B = backend(g);
       const st = { mx: this.touch ? null : this.mx, my: this.my, fa: this.fa };
