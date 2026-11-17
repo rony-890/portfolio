@@ -38,6 +38,16 @@
     SLIDE_EASE: (t) => 1 - Math.pow(1 - t, 3), // easeOutCubic
   };
 
+  // Safe rect for random seed constraint (Step 7)
+  const SAFE_RECT_CONFIG = {
+    // Vertical padding above/below text bounds (fraction of text height)
+    VERTICAL_PADDING_RATIO: 0.25,
+    // Horizontal padding left/right of text bounds (fraction of text width)
+    HORIZONTAL_PADDING_RATIO: 0.08,
+    // Max attempts to find a valid seed
+    MAX_SEED_ATTEMPTS: 20,
+  };
+
   function h(n) {
     const x = Math.sin(n) * 43758.5453;
     return x - Math.floor(x);
@@ -823,27 +833,157 @@
       this.layout();
     }
     _buildLetters() {
-      // Deterministic seed based on text content for stable positions
-      const seed = Math.floor(Math.random() * 1e9);
-      const rand = rng(seed);
-      const chars = [...this.text];
-      let prev = null;
-      this.letters = chars.map((ch) => {
-        const same = prev && prev.ch !== " ";
-        const l = {
-          ch,
-          id: this.uid++,
-          birth: null,
-          ws: same ? prev.ws : Math.floor(rand() * 1e9),
-          wi: same ? prev.wi + 1 : 0,
-          prev: same ? prev : null,
-        };
-        if (ch !== " ") genLetter(l, this.mw.bind(this), rand);
-        prev = l;
-        return l;
-      });
+      // Compute text bounds first (without garden elements) to establish safe rect
+      this._computeTextBoundsForSafeRect();
+      
+      // Try multiple random seeds until all garden elements fit in safe rect
+      let bestSeed = null;
+      let bestLetters = null;
+      let bestFit = false;
+      
+      for (let attempt = 0; attempt < SAFE_RECT_CONFIG.MAX_SEED_ATTEMPTS; attempt++) {
+        const seed = Math.floor(Math.random() * 1e9);
+        const rand = rng(seed);
+        const chars = [...this.text];
+        let prev = null;
+        const letters = chars.map((ch) => {
+          const same = prev && prev.ch !== " ";
+          const l = {
+            ch,
+            id: this.uid++,
+            birth: null,
+            ws: same ? prev.ws : Math.floor(rand() * 1e9),
+            wi: same ? prev.wi + 1 : 0,
+            prev: same ? prev : null,
+          };
+          if (ch !== " ") genLetter(l, this.mw.bind(this), rand);
+          prev = l;
+          return l;
+        });
+        
+        // Check if this seed's garden elements fit in safe rect (at target scale, before safety fit)
+        if (this._checkSafeRect(letters)) {
+          bestSeed = seed;
+          bestLetters = letters;
+          bestFit = true;
+          break;
+        }
+        
+        // Keep track of last attempt as fallback
+        bestSeed = seed;
+        bestLetters = letters;
+      }
+      
+      this.letters = bestLetters;
+      this._seedFit = bestFit;
+      
       // layout() will be called by resize() after font loads
       this.start();
+    }
+    
+    _computeTextBoundsForSafeRect() {
+      if (!this.W || !this.H) return;
+      const TARGET_S = 300;
+      let x = this.W / 2;
+      const y = this.H * 0.48;
+      
+      // Compute total text width at target scale
+      const chars = [...this.text];
+      let totalW = 0;
+      for (const ch of chars) {
+        totalW += this.mw(ch) * TARGET_S;
+      }
+      x -= totalW / 2;
+      
+      let textLeft = Infinity, textRight = -Infinity, textTop = Infinity, textBottom = -Infinity;
+      for (const ch of chars) {
+        const w = this.mw(ch) * TARGET_S;
+        const cx = x + w / 2;
+        textLeft = Math.min(textLeft, cx - w / 2);
+        textRight = Math.max(textRight, cx + w / 2);
+        textTop = Math.min(textTop, y - TARGET_S * 0.75); // Approx top of ascenders
+        textBottom = Math.max(textBottom, y + TARGET_S * 0.25); // Approx baseline
+        x += w;
+      }
+      
+      const textWidth = textRight - textLeft;
+      const textHeight = textBottom - textTop;
+      
+      this._safeRect = {
+        left: textLeft - textWidth * SAFE_RECT_CONFIG.HORIZONTAL_PADDING_RATIO,
+        right: textRight + textWidth * SAFE_RECT_CONFIG.HORIZONTAL_PADDING_RATIO,
+        top: textTop - textHeight * SAFE_RECT_CONFIG.VERTICAL_PADDING_RATIO,
+        bottom: textBottom + textHeight * SAFE_RECT_CONFIG.VERTICAL_PADDING_RATIO,
+      };
+      
+      // Clamp to canvas bounds
+      this._safeRect.left = Math.max(0, this._safeRect.left);
+      this._safeRect.top = Math.max(0, this._safeRect.top);
+      this._safeRect.right = Math.min(this.W, this._safeRect.right);
+      this._safeRect.bottom = Math.min(this.H, this._safeRect.bottom);
+    }
+    
+    _checkSafeRect(letters) {
+      if (!this._safeRect) return false;
+      const S = 300; // TARGET_S
+      
+      // Temporarily position letters at target positions (like layout does)
+      let x = this.W / 2;
+      const totalW = () => letters.reduce((s, l) => s + this.mw(l.ch) * S, 0);
+      x -= totalW() / 2;
+      const y = this.H * 0.48;
+      
+      for (const l of letters) {
+        const w = this.mw(l.ch) * S;
+        l.tx = x + w / 2;
+        l.ty = y;
+        l.tw = w;
+        x += w;
+      }
+      
+      // Check all garden elements against safe rect
+      for (const l of letters) {
+        if (l.ch === " " || !l.els) continue;
+        
+        // Check letter bounds
+        const halfW = l.tw / 2;
+        if (l.tx - halfW < this._safeRect.left || l.tx + halfW > this._safeRect.right ||
+            l.ty - S * 0.75 < this._safeRect.top || l.ty + S * 0.25 > this._safeRect.bottom) {
+          return false;
+        }
+        
+        // Check stems, leaves, roses
+        for (const e of [...l.els, ...(l.tend || [])]) {
+          if (e.t === "stem") {
+            for (const p of e.pts || []) {
+              const px = l.tx + p[0] * S;
+              const py = l.ty + p[1] * S;
+              if (px < this._safeRect.left || px > this._safeRect.right ||
+                  py < this._safeRect.top || py > this._safeRect.bottom) {
+                return false;
+              }
+            }
+          } else if (e.t === "leaf") {
+            const px = l.tx + e.x * S;
+            const py = l.ty + e.y * S;
+            const r = (e.L || 0.1) * S;
+            if (px - r < this._safeRect.left || px + r > this._safeRect.right ||
+                py - r < this._safeRect.top || py + r > this._safeRect.bottom) {
+              return false;
+            }
+          } else if (e.t === "rose") {
+            const px = l.tx + e.x * S;
+            const py = l.ty + e.y * S;
+            const r = (e.R || 0.15) * 1.4 * S;
+            if (px - r < this._safeRect.left || px + r > this._safeRect.right ||
+                py - r < this._safeRect.top || py + r > this._safeRect.bottom) {
+              return false;
+            }
+          }
+        }
+      }
+      
+      return true;
     }
     layout() {
       if (!this.W || !this.letters.length) return;
