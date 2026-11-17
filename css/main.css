@@ -45,7 +45,8 @@ body {
     line-height: 1.55;
     -webkit-font-smoothing: antialiased;
     padding-left: var(--gut);
-    padding-right: var(--gutR)
+    padding-right: var(--gutR);
+    overflow-x: visible !important
 }
 
 img {
@@ -420,9 +421,9 @@ a {
     margin: 0 calc(-1 * var(--gutR)) 0 calc(-1 * var(--gut))
 }
 
-.is3d body {
+/* .is3d body {
     overflow-x: hidden
-}
+} */
 
 .is3d #cv {
     display: block;
@@ -492,8 +493,17 @@ a {
 
 .h-cap {
     display: grid;
-    gap: 10px;
-    width: min(330px,80vw)
+    gap: 14px;
+    width: min(400px,85vw)
+}
+.h-cap .mono {
+    font-size: clamp(13px, 1.4vw, 18px);
+    letter-spacing: .1em;
+}
+.h-cap .lede {
+    font-size: clamp(16px, 1.3vw, 20px);
+    line-height: 1.55;
+    max-width: 40ch;
 }
 
 .h-cue {
@@ -2150,8 +2160,3 @@ a {
         font-size: 7vw
     }
 }
-
-/* Garden canvas */
-.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
-.garden-canvas-wrapper { position: relative; }
-#garden-canvas { display: block; }

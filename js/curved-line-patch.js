@@ -9,16 +9,16 @@
 
   // ============ CONFIGURATION CONSTANTS ============
   const CURVED_LINE_CONFIG = {
-    // Length: 45% of original
-    LENGTH_RATIO: 0.45,
+    // Length: 30% of original (shorter curve)
+    LENGTH_RATIO: 0.30,
     
-    // Tilt reduction: 50% of original
-    TILT_RATIO: 0.50,
+    // Tilt reduction: 30% of original (less tilted)
+    TILT_RATIO: 0.30,
     
     // Top end: aligned with "S" flower top
-    // Bottom end: 10% below last "U" baseline
-    TOP_OFFSET_RATIO: 0.0,    // 0 = at S top
-    BOTTOM_OFFSET_RATIO: 0.10, // 10% below U baseline
+    // Bottom end: 5% below last "U" baseline
+    TOP_OFFSET_RATIO: 0.0,
+    BOTTOM_OFFSET_RATIO: 0.05,
     
     // Colors (matching original: ct=[34,52,224], ut=[124,138,255])
     COLOR_START: [34, 52, 224],    // #2234E0
@@ -26,21 +26,22 @@
     
     // Line width (relative to viewport)
     BASE_LINE_WIDTH: 1.5,
-    MAX_LINE_WIDTH: 4,
+    MAX_LINE_WIDTH: 3,
     
-    // Dot size
-    DOT_SIZE_MIN: 4,
-    DOT_SIZE_MAX: 14,
-    FINAL_DOT_SIZE_MIN: 6,
-    FINAL_DOT_SIZE_MAX: 22,
-    
-    // Glow
-    GLOW_MULTIPLIER: 2.6,
-    GLOW_OPACITY: 0.18,
+    // NO DOT at end - removed extra blue dot
+    SHOW_END_DOT: false,
     
     // Z-index: above #cv (z-index: 1), above .el (z-index: 2), below #hud (z-index: 30)
     Z_INDEX: 3,
   };
+  
+  // Clean up unused constants
+  delete CURVED_LINE_CONFIG.DOT_SIZE_MIN;
+  delete CURVED_LINE_CONFIG.DOT_SIZE_MAX;
+  delete CURVED_LINE_CONFIG.FINAL_DOT_SIZE_MIN;
+  delete CURVED_LINE_CONFIG.FINAL_DOT_SIZE_MAX;
+  delete CURVED_LINE_CONFIG.GLOW_MULTIPLIER;
+  delete CURVED_LINE_CONFIG.GLOW_OPACITY;
 
   let canvas = null;
   let ctx = null;
@@ -235,8 +236,8 @@
       ctx.stroke();
     }
     
-    // Draw dot at end of drawn curve
-    if (drawProgress > 0) {
+    // Draw dot at end of drawn curve (if enabled)
+    if (drawProgress > 0 && CURVED_LINE_CONFIG.SHOW_END_DOT) {
       const endT = Math.min(drawProgress, 1);
       const u = 1 - endT;
       const uu = u * u;

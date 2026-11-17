@@ -28,8 +28,8 @@
   const SLIDE_DOOR_CONFIG = {
     // Split after this letter index (0-indexed): 1 = after U (S,U | B,H,U)
     SPLIT_AFTER_INDEX: 1,
-    // Maximum shift as fraction of viewport width
-    MAX_SHIFT_RATIO: 0.08,
+    // Maximum shift as fraction of viewport width (reduced to 2% to allow larger text)
+    MAX_SHIFT_RATIO: 0.02,
     // Scroll progress at which slide completes (0-1)
     SLIDE_COMPLETE_PROGRESS: 0.6,
     // Minimum opacity at end of zoom (not 0)
@@ -1009,8 +1009,12 @@
 
       // safety fit: shrink ONLY if full garden (stems+leaves+roses) overflows — prevents crop
       // Extra left padding to prevent left-side crop from vines/flowers
-      const pad = Math.max(250, this.W * 0.2);  // Increased to accommodate focal compensation + slide-door shifts (max ~204px combined)
-      const availW = this.W - pad * 2,
+      const pad = Math.max(80, this.W * 0.08);  // Original pad for larger text
+      
+      // The focal compensation shift is clamped to pad and only shifts LEFT (negative)
+      // Reserve shift space only on left side
+      const maxShift = pad;
+      const availW = this.W - pad * 2 - maxShift,  // Only left side needs shift reserve
         availH = this.H - pad * 2;
       let x0 = 1e9,
         y0 = 1e9,
@@ -1110,6 +1114,45 @@
       const originY = (canvasY / this.H) * 100;
       heroEl.style.transformOrigin = `${originX.toFixed(2)}% ${originY.toFixed(2)}%`;
     }
+    _computeSlideDoorState() {
+      const heroEl = document.querySelector('#hero .el');
+      if (!heroEl) {
+        this._slideProgress = 0;
+        this._slideShift = 0;
+        this._globalOpacity = 1;
+        return;
+      }
+      
+      // Get scroll progress from heroEl scale
+      const transform = heroEl.style.transform;
+      const scaleMatch = transform.match(/scale\(([\d.]+)\)/);
+      if (!scaleMatch) {
+        this._slideProgress = 0;
+        this._slideShift = 0;
+        this._globalOpacity = 1;
+        return;
+      }
+      
+      const scale = parseFloat(scaleMatch[1]);
+      const minScale = 1;
+      const maxScale = 2.43;  // Actual observed max scale
+      
+      let progress = (scale - minScale) / (maxScale - minScale);
+      progress = Math.max(0, Math.min(1, progress));
+      
+      this._scrollProgress = progress;
+      
+      const slideProgress = Math.min(1, progress / SLIDE_DOOR_CONFIG.SLIDE_COMPLETE_PROGRESS);
+      const easedSlide = SLIDE_DOOR_CONFIG.SLIDE_EASE(slideProgress);
+      
+      const vpWidth = window.innerWidth;
+      const maxShiftCanvas = (vpWidth * SLIDE_DOOR_CONFIG.MAX_SHIFT_RATIO) / this.dpr;
+      this._slideShift = maxShiftCanvas * easedSlide;
+      
+      this._globalOpacity = 1 - (1 - SLIDE_DOOR_CONFIG.MIN_OPACITY) * progress;
+      
+      this._slideDoorActive = slideProgress > 0;
+    }
     _applyFocalCompensation(g, dpr) {
       const heroEl = document.querySelector('#hero .el');
       if (!heroEl) return;
@@ -1154,56 +1197,14 @@
       let shiftCanvasX = shiftVpX / scale;
       let shiftCanvasY = shiftVpY / scale;
       
-      // Clamp shift to keep garden content on-canvas (within safety fit pad)
-      // After safety fit, content spans [pad, W-pad] x [pad, H-pad]
-      // Translation must keep content within [0, W] x [0, H]
-      const pad = Math.max(250, this.W * 0.2);
-      const maxShiftX = pad;
-      const maxShiftY = pad;
+      // Clamp shift to safety pad to prevent cropping
+      const pad = Math.max(80, this.W * 0.08);
+      const maxShift = pad;
       shiftCanvasX = Math.max(-pad, Math.min(pad, shiftCanvasX));
       shiftCanvasY = Math.max(-pad, Math.min(pad, shiftCanvasY));
       
       // Apply translation (g context already has DPR transform)
       g.translate(shiftCanvasX * dpr, shiftCanvasY * dpr);
-    }
-    _computeSlideDoorState() {
-      const heroEl = document.querySelector('#hero .el');
-      if (!heroEl) {
-        this._slideProgress = 0;
-        this._slideShift = 0;
-        this._globalOpacity = 1;
-        return;
-      }
-      
-      // Get scroll progress from heroEl scale
-      const transform = heroEl.style.transform;
-      const scaleMatch = transform.match(/scale\(([\d.]+)\)/);
-      if (!scaleMatch) {
-        this._slideProgress = 0;
-        this._slideShift = 0;
-        this._globalOpacity = 1;
-        return;
-      }
-      
-      const scale = parseFloat(scaleMatch[1]);
-      const minScale = 1;
-      const maxScale = 2.28;
-      
-      let progress = (scale - minScale) / (maxScale - minScale);
-      progress = Math.max(0, Math.min(1, progress));
-      
-      this._scrollProgress = progress;
-      
-      const slideProgress = Math.min(1, progress / SLIDE_DOOR_CONFIG.SLIDE_COMPLETE_PROGRESS);
-      const easedSlide = SLIDE_DOOR_CONFIG.SLIDE_EASE(slideProgress);
-      
-      const vpWidth = window.innerWidth;
-      const maxShiftCanvas = (vpWidth * SLIDE_DOOR_CONFIG.MAX_SHIFT_RATIO) / this.dpr;
-      this._slideShift = maxShiftCanvas * easedSlide;
-      
-      this._globalOpacity = 1 - (1 - SLIDE_DOOR_CONFIG.MIN_OPACITY) * progress;
-      
-      this._slideDoorActive = slideProgress > 0;
     }
     stop() {
       this._stopped = true;
