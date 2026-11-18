@@ -9,8 +9,7 @@
                 "--write",
                 "${workspaceFolder}/index.html",
                 "${workspaceFolder}/css/main.css",
-                "${workspaceFolder}/js/main.js",
-                "${workspaceFolder}/js/scroll-animation.js"
+                "${workspaceFolder}/js/main.js"
             ],
             "internalConsoleOptions": "neverOpen"
         }
