@@ -12,8 +12,18 @@ point; the full project backup is maintained by the user outside this folder.
   is grouped to avoid breaking across lines.
 - The current stats are “Creating since 2026,” “Projects 10+,” and “Worked
   with 2.” The requested “company” placement is not implemented.
-- The Journey section is the next area to continue. Earlier sections and
-  recorded polish issues should remain unchanged until requested.
+- The Journey section now has two month-based milestones: `MAR–AUG` and
+  `SEP–PRESENT`. The older 2019 and 2026 stops are removed.
+- The unrelated Beyond design stop is removed, and What I do now follows the
+  Journey with a shorter transition.
+- What I do now presents React UI refinements, landing page development,
+  accessibility enhancements, targeted test coverage, and frontend quality
+  assurance.
+- The later milestone links to the Assist-Ding setup PR and a merged AEO
+  Toolkit contribution. Keep internship and client-conversion claims out until
+  they can be verified.
+- New Journey artwork can be added under `img/journey-assets/`; the current
+  inline drawings remain temporary until replacement artwork is ready.
 
 ## Current source files
 
@@ -47,5 +57,6 @@ deferred until the full website is complete.
 
 ## Next
 
-Continue with the Journey section. Do not treat this checkpoint as a final
-release or as confirmation that the deferred polish issues are fixed.
+The user will provide the next Journey content/art direction. Do not treat
+this checkpoint as a final release or as confirmation that deferred polish
+issues are fixed.

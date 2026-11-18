@@ -7,16 +7,16 @@ scripts; the browser loads the page assets directly.
 
 ## Active files
 
-| File | Responsibility |
-|---|---|
-| `index.html` | Page content, section markup, metadata, and initialization |
-| `css/main.css` | Layout, responsive styling, type, and visual states |
-| `js/main.js` | Scroll-driven section transforms, counters, and interactions |
-| `js/garden/garden-standalone.js` | Canvas-based “SUBHU” and Garden animation |
-| `js/curved-line-patch.js` | Decorative curved line attached to the hero |
-| `img/` | Portfolio images, poses, and video assets |
+| File                             | Responsibility                                               |
+| -------------------------------- | ------------------------------------------------------------ |
+| `index.html`                     | Page content, section markup, metadata, and initialization   |
+| `css/main.css`                   | Layout, responsive styling, type, and visual states          |
+| `js/main.js`                     | Scroll-driven section transforms, counters, and interactions |
+| `js/garden/garden-standalone.js` | Canvas-based “SUBHU” and Garden animation                    |
+| `js/curved-line-patch.js`        | Decorative curved line attached to the hero                  |
+| `img/`                           | Portfolio images, poses, and video assets                    |
 
-The page currently requests `css/main.css?v=6`, `js/main.js?v=6`,
+The page currently requests `css/main.css?v=8`, `js/main.js?v=9`,
 `js/garden/garden-standalone.js?v=6`, and `js/curved-line-patch.js?v=2`.
 `js/scroll-animation.js` is disabled and is not part of the active runtime.
 
@@ -32,8 +32,9 @@ The page currently requests `css/main.css?v=6`, `js/main.js?v=6`,
 
 ## Content and state
 
-The current page includes the hero, About, By the numbers, Journey, and further
-portfolio content. The next requested work is the Journey section.
+The current page includes the hero, About, By the numbers, a two-milestone
+Journey (`MAR–AUG`, `SEP–PRESENT`), and further portfolio content. The user
+will provide the next Journey content and artwork direction.
 
 The page title and hero identify Subhu, but several About, project, contact,
 footer, and structured-data values still refer to John Bolster. These are

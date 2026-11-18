@@ -132,25 +132,43 @@ const sa = {
   ],
   services: [
     [
-      "Brand Identity",
+      "Accessibility Enhancements",
       [
-        "Logo design",
-        "Typography and color systems",
-        "Guidelines and brand playbooks",
+        "Semantic HTML",
+        "Keyboard and focus improvements",
+        "Accessible interface patterns",
       ],
     ],
-    ["Art Direction", ["Campaign concepts", "Art direction and imagery"]],
-    ["Print", ["Brand books", "Brochures and collateral"]],
     [
-      "Web and Digital",
-      ["Web design", "Digital assets and social", "Presentation design"],
+      "Landing Page Development",
+      [
+        "Responsive page layouts",
+        "React-based implementations",
+        "Clear content hierarchy",
+      ],
     ],
     [
-      "Brand Strategy",
+      "Targeted Test Coverage",
       [
-        "Positioning and differentiation",
-        "Audience definition",
-        "Voice, mission, vision and onlyness statements",
+        "Component-level tests",
+        "Form and interaction tests",
+        "Regression checks",
+      ],
+    ],
+    [
+      "React UI Refinements",
+      [
+        "Component improvements",
+        "Interaction and state fixes",
+        "Responsive corrections",
+      ],
+    ],
+    [
+      "Frontend Quality Assurance",
+      [
+        "Responsive layout checks",
+        "Cross-browser verification",
+        "Interaction and accessibility review",
       ],
     ],
   ],
@@ -617,94 +635,7 @@ oa();
         (r.removeAllRanges(), r.addRange(t));
       }
     }));
-  var Ee = l("#fx"),
-    O = Ee.getContext && Ee.getContext("2d"),
-    _e = [],
-    Ie = !1,
-    et = ["😄", "👍", "😎", "🙌", "✨", "😄", "👍"];
-  function tt() {
-    var e = innerWidth,
-      n = innerHeight;
-    (O.clearRect(0, 0, e, n),
-      (_e = _e.filter(function (a) {
-        return a.life < 120 && a.y < n + 80;
-      })),
-      _e.forEach(function (a) {
-        ((a.vy += 0.42),
-          (a.vx *= 0.99),
-          (a.x += a.vx),
-          (a.y += a.vy),
-          (a.r += a.vr),
-          a.life++,
-          O.save(),
-          (O.globalAlpha = Math.max(0, 1 - a.life / 120)),
-          O.translate(a.x, a.y),
-          O.rotate(a.r),
-          (O.font = a.s + "px serif"),
-          (O.textAlign = "center"),
-          (O.textBaseline = "middle"),
-          O.fillText(a.e, 0, 0),
-          O.restore());
-      }),
-      _e.length
-        ? requestAnimationFrame(tt)
-        : ((Ie = !1), O.clearRect(0, 0, e, n)));
-  }
-  var fe = l("#thumbs");
-  fe &&
-    O &&
-    fe.addEventListener("click", function () {
-      var e = Math.min(devicePixelRatio || 1, 2);
-      ((Ee.width = innerWidth * e),
-        (Ee.height = innerHeight * e),
-        O.setTransform(e, 0, 0, e, 0, 0));
-      for (
-        var n = fe.getBoundingClientRect(),
-          a = n.left + n.width / 2,
-          i = n.top + n.height / 2,
-          t = 0;
-        t < 54;
-        t++
-      ) {
-        var r = Math.random() * Math.PI * 2,
-          d = 6 + Math.random() * 13;
-        _e.push({
-          x: a,
-          y: i,
-          vx: Math.cos(r) * d,
-          vy: Math.sin(r) * d - 7,
-          r: Math.random() * 6.3,
-          vr: (Math.random() - 0.5) * 0.3,
-          s: 20 + Math.random() * 30,
-          e: et[t % et.length],
-          life: 0,
-        });
-      }
-      (Ie || ((Ie = !0), requestAnimationFrame(tt)),
-        fe.classList.remove("pop"),
-        fe.offsetWidth,
-        fe.classList.add("pop"),
-        setTimeout(function () {
-          fe.classList.remove("pop");
-        }, 600),
-        (l("#thumbtt").textContent = "Ha. You remember. Respect."));
-    });
-  var at = [
-      "Ah, a youngster. Ask your parents about Skip Intro buttons.",
-      "Let me guess. You were born after Flash died.",
-      "OK, zoomer. Back to your 9 second videos.",
-      "No Flash? You never waited 4 minutes for a website. Lucky you.",
-    ],
-    Pt = 0,
-    ke = l("#thumbsdn");
-  (ke &&
-    ke.addEventListener("click", function () {
-      ((l("#thumbtt").textContent = at[Pt++ % at.length]),
-        ke.classList.remove("nope"),
-        ke.offsetWidth,
-        ke.classList.add("nope"));
-    }),
-    (function () {
+  (function () {
       var e = l("#dkvid"),
         n = l("#dkfig");
       if (!e) return;
@@ -755,7 +686,7 @@ oa();
             d.setAttribute("aria-pressed", String(!e.muted)),
             d.setAttribute("aria-label", e.muted ? "Unmute" : "Mute"));
         }));
-    })());
+    })();
   var nt = l("#burger");
   function Re(e) {
     (C.classList.toggle("menu-open", e), nt.setAttribute("aria-expanded", e));
@@ -1547,13 +1478,7 @@ oa();
             t.runner._ph !== P &&
             ((t.runner._ph = P), ft(t.runner, P * 7 * Math.PI * 2)));
       }
-      (t.spr === void 0 && (t.spr = t.el.querySelector(".spray")),
-        t.spr &&
-          Ot(
-            t.spr,
-            M((M((0.55 * p - o) / (0.65 * p), 0, 1) - 0.3) / 0.68, 0, 1),
-          ),
-        t.ctw === void 0 && (t.ctw = t.el.querySelector(".ct-wrap")),
+      (t.ctw === void 0 && (t.ctw = t.el.querySelector(".ct-wrap")),
         t.ctw &&
           Kt(
             t.ctw,
@@ -1674,81 +1599,6 @@ oa();
         })(r);
       }
       We && i > 1.4 * p && ((We = !1), Ue++, (qe.textContent = "0"));
-    }
-  }
-  function Ot(e, n) {
-    if (e._p !== n) {
-      e._p = n;
-      var a = e.querySelector(".spray-p"),
-        i = e.querySelector(".spray-mist");
-      if (!e._L) {
-        let R = function () {
-          return ((r = (r * 16807) % 2147483647), r / 2147483647);
-        };
-        var Y = R;
-        ((e._L = a.getTotalLength()), (a.style.strokeDasharray = e._L));
-        var t = e.querySelector(".spray-dots"),
-          r = 11,
-          d = "";
-        e._dots = [];
-        for (var o = 0; o < 55; o++) {
-          var u = R(),
-            s = a.getPointAtLength(u * e._L),
-            f = R() * Math.PI * 2,
-            j = 10 + Math.pow(R(), 1.6) * 20;
-          ((d +=
-            '<circle cx="' +
-            (s.x + Math.cos(f) * j).toFixed(1) +
-            '" cy="' +
-            (s.y + Math.sin(f) * j).toFixed(1) +
-            '" r="' +
-            (0.7 + R() * 2).toFixed(1) +
-            '" opacity="0"/>'),
-            e._dots.push(u));
-        }
-        ((t.innerHTML = d), (e._dc = [].slice.call(t.children)));
-      }
-      var c = Math.min(1, n / 0.55),
-        w = E((n - 0.4) / 0.5),
-        A = M((n - 0.72) / 0.28, 0, 1);
-      a.style.strokeDashoffset = (e._L * (1 - c)).toFixed(1);
-      var _ = e.querySelector(".spray-pool"),
-        g = e.querySelector(".spray-drip");
-      (_ && (_.style.transform = "scale(" + w.toFixed(3) + ")"),
-        g &&
-          ((g.style.strokeDashoffset = (40 * (1 - A)).toFixed(1)),
-          (g.style.opacity = A > 0.01 ? 1 : 0)),
-        (a.style.opacity = c > 0.005 ? 1 : 0),
-        e._dc.forEach(function (R, $) {
-          var h = e._dots[$];
-          R.setAttribute(
-            "opacity",
-            c > h ? (0.35 + (0.5 * (($ * 37) % 10)) / 10).toFixed(2) : 0,
-          );
-        }),
-        (i.style.opacity = n > 0.01 && n < 0.9 ? 1 : 0));
-      var H = a.getPointAtLength(Math.max(0.001, c) * e._L);
-      (i.setAttribute("cx", (H.x + 34).toFixed(1)),
-        i.setAttribute("cy", (H.y - 8).toFixed(1)));
-      var S = e.parentNode.querySelector(".spray-can");
-      if (S) {
-        var P = e.parentNode,
-          z = P.offsetWidth / 160,
-          I = P.offsetHeight / 300,
-          D = e._st || (e._st = a.getPointAtLength(0)),
-          F = D.x + 64 + (H.x - D.x) * 0.12,
-          y = D.y - 16 + n * 14,
-          N = F * z - S.offsetWidth * 0.781,
-          Q = y * I - S.offsetHeight * 0.056;
-        S.style.transform =
-          "translate(" +
-          N.toFixed(1) +
-          "px," +
-          Q.toFixed(1) +
-          "px) rotate(" +
-          (Math.sin(n * 6) * 2).toFixed(1) +
-          "deg)";
-      }
     }
   }
   function Kt(e, n) {
