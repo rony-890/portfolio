@@ -6,7 +6,7 @@ const inputDir = path.join(__dirname, 'img', 'my assets');
 const outputDir = path.join(__dirname, 'img');
 
 const targetWidth = 571;
-const targetHeight = 747;
+const targetHeight = 1024;
 
 async function processPoses() {
   console.log('Processing poses...');
@@ -17,9 +17,10 @@ async function processPoses() {
     
     try {
       await sharp(inputPath)
-        .resize(571, 747, {
-          fit: 'cover',
-          position: 'center'
+        .resize(targetWidth, targetHeight, {
+          fit: 'contain',
+          position: 'centre',
+          background: { r: 0, g: 0, b: 0, alpha: 0 }
         })
         .webp({ quality: 85 })
         .toFile(outputPath);

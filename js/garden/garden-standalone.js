@@ -32,11 +32,12 @@
     MAX_SHIFT_RATIO: 0.02,
     // Scroll progress at which slide completes (0-1)
     SLIDE_COMPLETE_PROGRESS: 0.6,
-    // Minimum opacity at end of zoom (not 0)
-    MIN_OPACITY: 0.38,
+    // The hero container supplies the fade floor; don't compound it on canvas text.
+    MIN_OPACITY: 1,
     // Easing function for slide
     SLIDE_EASE: (t) => 1 - Math.pow(1 - t, 3), // easeOutCubic
   };
+  const HERO_LETTER_GAP_RATIO = 0.025;
 
   // Safe rect for random seed constraint (Step 7)
   const SAFE_RECT_CONFIG = {
@@ -798,6 +799,7 @@
         this.cache = {};
         this._buildLetters();
         this.resize();
+        if (typeof this.opts.onReady === "function") this.opts.onReady();
       };
       
       if (document.fonts) {
@@ -893,17 +895,19 @@
       for (const ch of chars) {
         totalW += this.mw(ch) * TARGET_S;
       }
+      totalW += HERO_LETTER_GAP_RATIO * TARGET_S * Math.max(0, chars.length - 1);
       x -= totalW / 2;
       
       let textLeft = Infinity, textRight = -Infinity, textTop = Infinity, textBottom = -Infinity;
-      for (const ch of chars) {
+      for (let i = 0; i < chars.length; i++) {
+        const ch = chars[i];
         const w = this.mw(ch) * TARGET_S;
         const cx = x + w / 2;
         textLeft = Math.min(textLeft, cx - w / 2);
         textRight = Math.max(textRight, cx + w / 2);
         textTop = Math.min(textTop, y - TARGET_S * 0.75); // Approx top of ascenders
         textBottom = Math.max(textBottom, y + TARGET_S * 0.25); // Approx baseline
-        x += w;
+        x += w + (i < chars.length - 1 ? HERO_LETTER_GAP_RATIO * TARGET_S : 0);
       }
       
       const textWidth = textRight - textLeft;
@@ -929,16 +933,20 @@
       
       // Temporarily position letters at target positions (like layout does)
       let x = this.W / 2;
-      const totalW = () => letters.reduce((s, l) => s + this.mw(l.ch) * S, 0);
+      const letterGap = HERO_LETTER_GAP_RATIO * S;
+      const totalW = () =>
+        letters.reduce((s, l) => s + this.mw(l.ch) * S, 0) +
+        letterGap * Math.max(0, letters.length - 1);
       x -= totalW() / 2;
       const y = this.H * 0.48;
       
-      for (const l of letters) {
+      for (let i = 0; i < letters.length; i++) {
+        const l = letters[i];
         const w = this.mw(l.ch) * S;
         l.tx = x + w / 2;
         l.ty = y;
         l.tw = w;
-        x += w;
+        x += w + (i < letters.length - 1 ? letterGap : 0);
       }
       
       // Check all garden elements against safe rect
@@ -989,17 +997,20 @@
       if (!this.W || !this.letters.length) return;
       const TARGET_S = 300;
       let S = TARGET_S;
+      const letterGap = HERO_LETTER_GAP_RATIO * S;
 
       // center letters at the target size first - DETERMINISTIC
-      const totalW = () => this.letters.reduce((s, l) => s + this.mw(l.ch) * S, 0);
+      const totalW = () =>
+        this.letters.reduce((s, l) => s + this.mw(l.ch) * S, 0) +
+        letterGap * Math.max(0, this.letters.length - 1);
       let x = this.W / 2 - totalW() / 2;
       const y = this.H * 0.48;
-      this.letters.forEach((l) => {
+      this.letters.forEach((l, i) => {
         const w = this.mw(l.ch) * S;
         l.tx = x + w / 2;
         l.ty = y;
         l.tw = w;
-        x += w;
+        x += w + (i < this.letters.length - 1 ? letterGap : 0);
       });
       this.S = S;
       this.letters.forEach((l) => {
@@ -1176,9 +1187,8 @@
       const heroCenterX = translateX;
       const heroCenterY = translateY;
       
-      // Slide-door shift for B-hole (B is in right group, index 2 > splitIdx 1)
-      const slideShift = this._slideShift || 0;
-      const bHoleShiftX = slideShift; // B shifts right
+      // Keep focal compensation independent of the split so both groups move equally.
+      const bHoleShiftX = 0;
       
       // B-hole position in heroEl coords (before CSS scale) = canvas center + slide shift
       const bHoleHeroElX = this.W / 2 + bHoleShiftX;

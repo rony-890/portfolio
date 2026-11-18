@@ -1,0 +1,18 @@
+{
+    "configurations": [
+        {
+            "type": "pwa-node",
+            "request": "launch",
+            "name": "Format Files with Prettier",
+            "program": "${workspaceFolder}/node_modules/prettier/bin-prettier.cjs",
+            "args": [
+                "--write",
+                "${workspaceFolder}/index.html",
+                "${workspaceFolder}/css/main.css",
+                "${workspaceFolder}/js/main.js",
+                "${workspaceFolder}/js/scroll-animation.js"
+            ],
+            "internalConsoleOptions": "neverOpen"
+        }
+    ]
+}
