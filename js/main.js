@@ -132,7 +132,7 @@ const sa = {
   ],
   services: [
     [
-      "Accessibility Enhancements",
+      "Accessible UI",
       [
         "Semantic HTML",
         "Keyboard and focus improvements",
@@ -140,7 +140,7 @@ const sa = {
       ],
     ],
     [
-      "Landing Page Development",
+      "Landing Pages",
       [
         "Responsive page layouts",
         "React-based implementations",
@@ -148,7 +148,7 @@ const sa = {
       ],
     ],
     [
-      "Targeted Test Coverage",
+      "Targeted Testing",
       [
         "Component-level tests",
         "Form and interaction tests",
@@ -164,7 +164,7 @@ const sa = {
       ],
     ],
     [
-      "Frontend Quality Assurance",
+      "Interface QA",
       [
         "Responsive layout checks",
         "Cross-browser verification",
@@ -408,11 +408,11 @@ oa();
       return ((e.i = n), e);
     });
   var He = [
-    [-0.27, -0.1, 0.5, -0.16, -0.2],
-    [0.26, 0.2, 0.18, 0.16, 0.02],
-    [0.29, -0.24, 0.85, 0.2, -0.3],
-    [-0.2, 0.27, -0.12, 0, 0.22],
-    [-0.02, 0.04, 1.2, -0.1, 0.38],
+    [-0.28, -0.2, 0.1, -0.15, -0.34],
+    [0.28, -0.14, 0.1, 0.15, -0.16],
+    [-0.24, 0.12, 0.1, 0, 0.02],
+    [0.24, 0.28, 0.1, -0.15, 0.2],
+    [0, 0, 0.1, 0.12, 0.38],
   ];
   l(".svc-st").insertAdjacentHTML(
     "beforeend",

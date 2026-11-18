@@ -16,7 +16,7 @@ scripts; the browser loads the page assets directly.
 | `js/curved-line-patch.js`        | Decorative curved line attached to the hero                  |
 | `img/`                           | Portfolio images, poses, and video assets                    |
 
-The page currently requests `css/main.css?v=8`, `js/main.js?v=9`,
+The page currently requests `css/main.css?v=9`, `js/main.js?v=10`,
 `js/garden/garden-standalone.js?v=6`, and `js/curved-line-patch.js?v=2`.
 `js/scroll-animation.js` is disabled and is not part of the active runtime.
 

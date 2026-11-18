@@ -16,9 +16,8 @@ point; the full project backup is maintained by the user outside this folder.
   `SEP–PRESENT`. The older 2019 and 2026 stops are removed.
 - The unrelated Beyond design stop is removed, and What I do now follows the
   Journey with a shorter transition.
-- What I do now presents React UI refinements, landing page development,
-  accessibility enhancements, targeted test coverage, and frontend quality
-  assurance.
+- What I do now presents React UI refinements, landing pages, accessible UI,
+  targeted testing, and interface QA with more spacing across screen sizes.
 - The later milestone links to the Assist-Ding setup PR and a merged AEO
   Toolkit contribution. Keep internship and client-conversion claims out until
   they can be verified.

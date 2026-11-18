@@ -925,6 +925,7 @@ a {
   font-size: clamp(40px, 4.8vw, 96px);
   line-height: 0.92;
   white-space: nowrap;
+  word-spacing: 0.12em;
   transition: color 0.35s;
 }
 
@@ -1004,6 +1005,7 @@ a {
 @media (max-width: 760px) {
   .svc-nm {
     font-size: clamp(30px, 9vw, 46px);
+    word-spacing: 0.1em;
   }
 
   .svc-det {
