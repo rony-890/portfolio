@@ -18,6 +18,10 @@ point; the full project backup is maintained by the user outside this folder.
   Journey with a shorter transition.
 - What I do now presents React UI refinements, landing pages, accessible UI,
   targeted testing, and interface QA with more spacing across screen sizes.
+- Work now presents three verified examples: a live Accessible Search demo,
+  an open Assist-Ding setup PR, and a merged AEO Toolkit contribution. Each
+  uses a simple inline SVG flow diagram; unrelated downloaded icons were not
+  reused. Project dialogs use query URLs so refresh works on static hosting.
 - The later milestone links to the Assist-Ding setup PR and a merged AEO
   Toolkit contribution. Keep internship and client-conversion claims out until
   they can be verified.
@@ -45,17 +49,20 @@ The detailed measurements and screenshot observations are in
   trace.
 - The hero was hidden before About first appeared, leaving an observed gap.
 - The About pose box ended 48 px below the last bio line in this preview.
+- At 320 x 766, the About bio began below the viewport; the mobile text
+  transform added 306.4 px in the tested preview. At 1377 x 766, the text
+  block began 215 px below the portrait's top.
 - The settled Projects counter displayed `10+`; “company” is absent from the
   Worked with card.
 - The only observed console/network error was a 404 for optional Vercel
   analytics. The user's separate Chrome logs remain unavailable.
 
-These are preview observations, not cross-browser sign-off. The six issues in
+These are preview observations, not cross-browser sign-off. The nine issues in
 [`WEBSITE_ISSUES.md`](../WEBSITE_ISSUES.md) are still open and intentionally
 deferred until the full website is complete.
 
 ## Next
 
-The user will provide the next Journey content/art direction. Do not treat
-this checkpoint as a final release or as confirmation that deferred polish
-issues are fixed.
+The user can review the shortened Work section and request refinements. Do not
+treat this checkpoint as a final release or as confirmation that deferred
+polish issues are fixed.

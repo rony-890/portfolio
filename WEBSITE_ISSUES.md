@@ -18,6 +18,17 @@ time. Do not treat an issue as resolved until it has been verified.
 - The only preview console/network error observed was a 404 for the optional
   `/_vercel/insights/script.js` request. No failure for the portfolio's main
   assets was observed. The user's separate Chrome logs could not be inspected.
+- At 320 x 800, selecting Work in the integrated preview placed all three Work
+  cards at the same visible coordinates. The page eased to `scrollY=8648` in
+  that run; use the Work navigation rather than treating that scroll offset as
+  a stable threshold.
+- A fresh 1440 x 900 load followed by a direct scroll to y=9424 showed only
+  Accessible Search after settling. The earlier live Work view showed multiple
+  items overlapping, so the desktop reproduction remains dependent on the
+  scroll path or animation state and needs another check during the fix.
+- The blue right-edge line was reproduced in the preview. Its colored segment
+  and marker belong to the fixed `#hud` scroll indicator; `#spacer` has a
+  transparent background and only adds scroll height.
 - This is a report-only update. No website behavior was changed, and all items
   remain open for the post-completion polish pass.
 
@@ -173,3 +184,97 @@ time. Do not treat an issue as resolved until it has been verified.
   reviewing the final stats.
 - **Investigation/fix:** Tested in the integrated preview; not fixed. Keep this
   in the backlog until the website is complete.
+
+### WEB-007 — Work project cards overlap on narrow screens
+
+- **Priority:** High
+- **Status:** Open — fix deferred by user
+- **Area:** Work / responsive 3D scroll scene
+- **Reported:** 2026-11-18
+- **Observed:** At 320 x 800, selecting Work in the integrated preview shows all
+  three project cards at once in nearly identical bounds: approximately
+  x=45, y=244, 230 x 284 px. Their boxes overlap almost completely, hiding the
+  first two cards beneath AEO Toolkit. A center-point hit test targeted
+  AEO Toolkit, so the underlying cards are also obstructed for pointer users.
+- **Expected:** Each Work card should have its own readable scroll moment and
+  not cover another card. Each project should remain individually selectable.
+- **Reproduce:** Open
+  `http://127.0.0.1:5000/`, set the viewport to 320 x 800, select Work from the
+  navigation, and wait for the scene to settle. In this run the page reached
+  `scrollY=8648`; the exact value may vary with viewport and scroll easing.
+- **Integrated-preview test:** At 320 x 800, Accessible Search, Assist-Ding,
+  and AEO Toolkit were all `visibility: visible`, each at approximately the
+  same 230 x 284 px rectangle. Their parent transforms also placed them within
+  about 0.2 px of one another. At 1440 x 900, a clean reload followed by a
+  direct scroll to y=9424 showed only Accessible Search after settling; the
+  earlier live Work view did show multiple items overlapping. Treat the
+  desktop behavior as path-dependent and recheck it during the fix.
+- **Likely cause:** The Work generator spaces later stops with `data-gap="1.55"`
+  ([js/main.js](./js/main.js):390), while the 3D scene keeps elements visible
+  through a depth window reaching `2.7 * p`
+  ([js/main.js](./js/main.js):1250). Multiple nearby cards can therefore be
+  visible together, and perspective positioning brings their boxes into the
+  same area on the narrow viewport. This is the best-supported explanation
+  from the source and preview; the exact desktop trigger still needs
+  confirmation.
+- **Fix direction:** Adjust the Work scene's spacing/visibility so only the
+  intended card occupies the active area. No source changes have been made,
+  per the user's instruction.
+
+### WEB-008 — Remove the blue scroll-progress line at the right edge
+
+- **Priority:** Medium
+- **Status:** Open — fix deferred by user
+- **Area:** Global HUD / scroll indicator
+- **Reported:** 2026-11-18
+- **Observed:** A blue vertical line and progress marker appear at the right
+  edge of the page in the supplied browser view. The user considers the line
+  extra and wants it removed.
+- **Expected:** The blue vertical line should not appear. Confirm separately
+  whether the endpoint marker or the other HUD ticks should also be removed.
+- **Reproduce:** Scroll the integrated preview to a content section. At 320 x
+  800, the HUD rail measured 1 x 694 px at x=305, y=84; its blue segment was
+  about 347 px high and its marker used the same blue color.
+- **Investigation:** The visible rail is the fixed `#hud` progress indicator,
+  not `#spacer`: `#hud .trk i` paints the progress segment with `var(--line)`
+  ([css/main.css](./css/main.css):344), and `.hd` paints the marker with that
+  color ([css/main.css](./css/main.css):369). The scroll handler updates its
+  progress value ([js/main.js](./js/main.js):1698). The selected `#spacer`
+  element is transparent and only provides document scroll height.
+- **Fix direction:** Remove the unwanted blue rail as requested, then verify
+  whether the marker should go with it. No source changes have been made.
+
+### WEB-009 — About bio block sits too low
+
+- **Priority:** High on narrow screens
+- **Status:** Open — fix deferred by user
+- **Area:** About / bio positioning
+- **Reported:** 2026-11-18
+- **Observed:** At 320 x 766, after selecting About and waiting for the scene
+  to settle, the portrait occupied y=209–543 while the bio container began at
+  y=695. The title began at y=726 and the paragraph at y=798, below the
+  viewport; the paragraph ended at y=1098. At 1377 x 766, the text container
+  began at y=336, 215 px below the portrait's top at y=121. This reproduces the
+  user's report that the bio sits too low.
+- **Expected:** Raise the bio heading and copy so they appear within the About
+  scene and sit in a deliberate relationship to the portrait, including on
+  narrow screens.
+- **Reproduce:** Open `http://127.0.0.1:5000/`, set the viewport to 320 x 766,
+  select About from the navigation, and wait about 2.2 seconds. In this run the
+  page reached `scrollY=1466`; the number varies with viewport and camera
+  easing.
+- **Integrated-preview test:** At 320 x 766, the bio's computed transform was
+  `translateY(306.4px)`, matching the mobile CSS rule. At 1377 x 766, the bio
+  remained visibly lower than the portrait's top, though it fit in the
+  viewport. These measurements are preview observations, not the exact user's
+  Chrome state.
+- **Likely cause:** The About text scene uses a lower vertical position
+  (`data-p="0.18,0.21"` and mobile `data-mp="0,0.35"` in
+  [index.html](./index.html):402), and the <=360 px rule adds
+  `translateY(40vh)` ([css/main.css](./css/main.css):638). The mobile offset is
+  directly confirmed by the computed transform; the desktop placement also
+  needs to be tuned against the intended composition. This is separate from
+  WEB-005, which tracks portrait sizing and baseline alignment.
+- **Fix direction:** Rework the About text's vertical placement and narrow
+  screen stacking, then verify the portrait and complete bio together at
+  mobile and desktop sizes. No source changes have been made.

@@ -174,202 +174,67 @@ const sa = {
   ],
   projects: [
     {
-      slug: "alliance-180",
-      title: "Alliance 180",
-      category: "Brand Strategy and Design",
-      year: "2018",
-      client: "Alliance 180",
-      description: `Veterans and first responders dealing with trauma have stopped trusting the system. Alliance 180 works differently: peer to peer, action based, built on trust instead of treatment.
-
-A typical nonprofit look would have sounded like everything this audience had already tuned out. So we built the brand around the idea of "doing a 180", with bold type, high energy visuals and a direct, peer level voice. It meets people on their terms.`,
-      services: ["Brand Strategy", "Visual Identity", "Web Design"],
-      images: [
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1772739165/A180-1-50_uhu3j4.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1772739166/A1805-50_pm98cc.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1772739166/A180-8-50_tpsviw.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1772739166/A180-7-50_q82zbz.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1772739166/A180-2-50_chup0v.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1772739165/A180-9-50_hpnlhi.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1772739165/Asset_15_c5q1sa.png",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1772739165/A180.psd-50_ndnaeu.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1772739165/IMG_6652.psd-50_oxcfog.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1772739165/Asset_12-50_fjwhdp.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1772739165/Asset_16_e1faeu.png",
+      slug: "accessible-search-demo",
+      title: "Accessible Search",
+      category: "Live demo",
+      projectType: "Independent demo",
+      description: `A React demo of accessible search patterns using local sample data. It includes a visible label, helper text, loading, empty, and error states, result announcements, and visible keyboard focus.`,
+      services: ["React", "Accessible search", "Keyboard interaction"],
+      images: [],
+      summary: "Accessible search patterns using local sample data.",
+      lines: [
+        "A query comes in.",
+        "Local results are filtered.",
+        "States are announced.",
       ],
-      cover:
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1772739165/A180.psd-50_ndnaeu.jpg",
-      summary:
-        "A peer-to-peer brand for veterans and first responders, built on the idea of doing a 180.",
-      discipline: "Identity",
-      seoTitle: "Alliance 180 · Nonprofit Brand Identity Design",
+      seoTitle: "Accessible Search Demo",
       seoDescription:
-        "Brand strategy, visual identity and web design for Alliance 180, a peer to peer program for veterans and first responders.",
+        "A React demo of accessible search patterns using local sample data.",
+      url: "https://rony-890.github.io/react-accessible-search-demo/",
+      cta: "Open live demo",
+      diagram: ["SEARCH", "LOCAL FILTER", "RESULTS"],
     },
     {
-      slug: "king-brothers-dairy",
-      title: "King Brothers Dairy",
-      category: "Brand Strategy and Design",
-      year: "2017",
-      client: "King Brothers Dairy",
-      description: `King Brothers had great product, deep history and local trust. What they lacked was memorability in a category where everyone says "fresh," "local" and "family owned."
-
-So we built the brand around personality instead of expected heritage. The idea: Drink like a King. A crown ties together packaging, environment and merch, giving a farm brand people notice and remember.`,
-      services: ["Brand Strategy", "Brand Identity", "Environmental Design"],
-      images: [
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1772741870/4_pb4mnm.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1772741864/2_vpd8jl.png",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1772741867/11_xpaay2.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1772741867/7_qi3ieh.png",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1772741866/19_bkwn2o.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1772741862/17_aokwzd.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1772741858/8_mip4nd.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1772741858/10_kdcp2q.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1772741855/9_g9l3y9.png",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1772741856/12_gngzn1.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1772741871/6_jg6jua.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1772741859/14_eqlvil.jpg",
+      slug: "assist-ding",
+      title: "Assist-Ding",
+      category: "Open setup PR",
+      projectType: "Independent prototype",
+      description: `Open PR #2 sets up the React, Vite, TypeScript, and Tailwind project and a landing-page prototype with hero, features, pricing, and footer sections. The pull request is still open.`,
+      services: ["React", "Vite", "TypeScript", "Tailwind CSS"],
+      images: [],
+      summary: "Initial setup and landing-page prototype, shown as an open PR.",
+      lines: [
+        "React and Vite are set up.",
+        "Landing page sections take shape.",
+        "The pull request remains open.",
       ],
-      cover:
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1772741866/19_bkwn2o.jpg",
-      summary:
-        "A farm brand with a crown and a point of view. Drink like a King.",
-      discipline: "Identity",
-      seoTitle: "King Brothers Dairy · Brand Strategy and Identity Design",
+      seoTitle: "Assist-Ding Setup",
       seoDescription:
-        "A crown, a point of view and a brand people remember. Brand strategy, identity, packaging and environmental design for King Brothers Dairy.",
+        "Initial React, Vite, TypeScript, and Tailwind setup for Assist-Ding.",
+      url: "https://github.com/rony-890/assist-ding/pull/2",
+      cta: "Review open setup PR",
+      diagram: ["HERO", "FEATURES", "PRICING"],
     },
     {
-      slug: "dlg",
-      title: "DLG",
-      category: "Brand Strategy and Design",
-      year: "2018",
-      client: "DLG",
-      description: `DLG had grown into a national force in high stakes litigation, but its identity hadn't caught up.
-
-We built a bold, editorial system of stark black and white, precise type and no color, because when everything is gray, clarity gets lost. At its center is DNA, a hardcover brand book written as a manifesto that aligns the team and positions DLG as principled advocates.`,
-      services: ["Rebranding", "Print Design", "Digital Assets"],
-      images: [
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1775302294/DLG_MG_5557-Edit-print_eipjl6.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1772742866/1_g1vd9h.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1772742867/2_xhtwke.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1772742868/4_qzpvn0.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1772742869/5_ajfwz4.png",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1772742871/6_kmt0b7.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1772742872/7a_ri4slx.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1772742873/7_epcss9.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1772742879/8a_gxsoqk.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1772742884/9_vm293p.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1772742887/11_hwvfuw.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1772742876/15_ql5wug.jpg",
+      slug: "aeo-toolkit-contribution",
+      title: "AEO Toolkit",
+      category: "Merged contribution",
+      projectType: "Open-source contribution",
+      description: `Merged PR #70 extracted AuditInputCard and normalizeUrl into a separate component and added an AuditInputCard test.`,
+      services: ["React", "Component extraction", "Testing"],
+      images: [],
+      summary: "Extracted the audit input component and added a test.",
+      lines: [
+        "AuditInputCard is extracted.",
+        "URLs get normalized.",
+        "A component test is added.",
       ],
-      cover:
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1775302294/DLG_MG_5557-Edit-print_eipjl6.jpg",
-      summary:
-        "An editorial, black-and-white identity for a national litigation firm, anchored by a hardcover brand book.",
-      discipline: "Identity",
-      seoTitle: "DLG · Law Firm Rebrand and Brand Book Design",
+      seoTitle: "AEO Toolkit Contribution",
       seoDescription:
-        "A bold black and white rebrand and a hardcover brand manifesto for national litigation firm DLG, designed by John Bolster.",
-    },
-    {
-      slug: "auryon",
-      title: "Auryon",
-      category: "Brand Strategy and Guidelines",
-      client: "AngioDynamics",
-      description: `Auryon, AngioDynamics' laser system for treating peripheral artery disease, already had a strong look and feel. What it needed was the strategy behind it, and a system to keep it consistent as it grew.
-
-We worked backwards from the existing identity to define who the brand serves, from vascular surgeons to interventional cardiologists and radiologists, along with its Hero and Explorer archetypes and a voice that is confident but not cocky. Then we built it out into complete guidelines covering logo, typography, color, imagery, icons and data, giving employees and agency partners one clear way to bring the brand to life.`,
-      services: ["Brand Strategy", "Brand Guidelines"],
-      images: [
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1793115680/Artboard_1-80_nqpz0q.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1793115671/Artboard_1_copy-80_q0vzag.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1793115610/Artboard_1_copy_3-80_okwbb8.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1793115619/Artboard_1_copy_4-80_icglzs.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1793115628/Artboard_1_copy_5-80_q7dz6f.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1793115637/Artboard_1_copy_6-80_qcndx2.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1793115645/Artboard_1_copy_7-80_xai0ya.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1793116232/Auryon_Brand_Guidelines_nnix7q.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1793115663/Artboard_1_copy_9-80_rer8lb.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1793115654/Artboard_1_copy_8-80_j5fpyp.jpg",
-      ],
-      cover:
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1793116232/Auryon_Brand_Guidelines_nnix7q.jpg",
-      summary:
-        "Turning an existing look into a complete brand strategy and system.",
-      discipline: "Strategy",
-      seoTitle: "Auryon · Medical Device Brand Strategy and Brand Guidelines",
-      seoDescription:
-        "Brand strategy and complete brand style guidelines for Auryon, AngioDynamics' laser system for peripheral artery disease, designed by John Bolster.",
-    },
-    {
-      slug: "siena",
-      title: "Siena University",
-      category: "Social Media and Motion",
-      client: "Siena University",
-      description: `An ongoing mix of work for Siena University, built to stand out in a crowded feed.
-
-Bold green and gold social campaigns that lead with proof points, animated social pieces, plus a logo for The Stack Center for Innovation and Ethical Entrepreneurship and a campus banner.`,
-      services: [
-        "Social Media",
-        "Motion Graphics",
-        "Logo Design",
-        "Environmental Graphics",
-      ],
-      images: [
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1792946894/1-80_mwkbnc.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1792946885/2-80_fqvync.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1792946873/3-80_tloqpj.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1792946878/4-80_k23wo9.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1792946881/5-80_oadotk.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1792946870/6-80_vzoexh.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1792946889/7-80_wctauo.jpg",
-      ],
-      cover:
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1792946894/1-80_mwkbnc.jpg",
-      videos: [
-        {
-          src: "https://res.cloudinary.com/dnf3dn2wb/video/upload/v1792947128/Siena-Social-Master_ljvcno.mp4",
-          after: 4,
-        },
-        {
-          src: "https://res.cloudinary.com/dnf3dn2wb/video/upload/v1792947360/SIEN_SOBGradCerts_1080x1080_br3s2n.mp4",
-          after: 5,
-        },
-      ],
-      summary:
-        "Social campaigns, motion, a logo and a banner for Siena University.",
-      discipline: "Social",
-      seoTitle: "Siena University · Higher Education Social Media and Branding",
-      seoDescription:
-        "Social media campaigns, motion graphics, a logo and a campus banner for Siena University, designed by brand identity designer John Bolster.",
-    },
-    {
-      slug: "finishline",
-      title: "Finish Line",
-      category: "Art Direction / Design",
-      year: "2016",
-      client: "Finish Line",
-      description: `Finish Line needed to attract a new generation of talent across 700+ stores, candidates in their twenties looking for purpose, growth and belonging.
-
-We created a recruitment brand storybook built on energy and momentum, with layered type, dynamic composition and bold color drawn from sport. The message: opportunity over role, built for real use in stores and at job fairs.`,
-      services: ["Creative Direction", "Art Direction"],
-      images: [
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1772818230/1_ajppmc.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1793020249/Spread_1_ox7jo6.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1772818232/3_lxi3wv.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1772818227/5_yscwdj.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1772818237/7_tkykmr.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1793019860/6_durbwt.jpg",
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1772818228/4_lzrxip.jpg",
-      ],
-      cover:
-        "https://res.cloudinary.com/dnf3dn2wb/image/upload/v1793021185/FL_hbcweb.png",
-      summary:
-        "A recruitment brand storybook for 700+ stores, built on energy and momentum.",
-      discipline: "Art Direction",
-      seoTitle: "Finish Line · Recruitment Brand Storybook and Art Direction",
-      seoDescription:
-        "Creative direction and a recruitment brand storybook for Finish Line, built to attract a new generation of talent across 700+ stores.",
+        "A merged contribution extracting AuditInputCard and normalizeUrl, with a new test.",
+      url: "https://github.com/Advance-Labs/aeo-toolkit/pull/70",
+      cta: "Review merged PR",
+      diagram: ["INPUT CARD", "NORMALIZE URL", "COMPONENT TEST"],
     },
   ],
 };
@@ -472,7 +337,7 @@ oa();
         x: -0.22,
         y: -0.02,
         w: "clamp(260px,30vw,560px)",
-        ar: "4/3",
+        ar: "16/9",
         ax: 0.05,
         ay: 0.3,
       },
@@ -480,56 +345,44 @@ oa();
         x: 0.21,
         y: 0.05,
         w: "clamp(260px,30vw,560px)",
-        ar: "4/3",
+        ar: "16/9",
         ax: -0.02,
         ay: -0.3,
       },
       {
         x: -0.18,
         y: 0,
-        w: "clamp(280px,34vw,640px)",
+        w: "clamp(260px,30vw,560px)",
         ar: "16/9",
         ax: 0.26,
         ay: 0.34,
       },
-      {
-        x: 0.19,
-        y: -0.04,
-        w: "clamp(280px,34vw,640px)",
-        ar: "16/9",
-        ax: 0,
-        ay: 0.32,
-      },
-      {
-        x: -0.24,
-        y: 0.03,
-        w: "clamp(230px,25vw,460px)",
-        ar: "3/2",
-        ax: 0.04,
-        ay: -0.3,
-      },
-      {
-        x: 0.23,
-        y: 0,
-        w: "clamp(230px,25vw,460px)",
-        ar: "3/2",
-        ax: -0.12,
-        ay: 0.36,
-      },
     ],
-    Ft = [
-      "siena",
-      "king-brothers-dairy",
-      "dlg",
-      "alliance-180",
-      "finishline",
-      "auryon",
-    ],
-    U = Ft.map(function (e) {
-      return b.projects.filter(function (n) {
-        return n.slug === e;
-      })[0];
-    });
+    U = b.projects;
+  function renderWorkDiagram(e) {
+    var n = [110, 320, 530];
+    return (
+      '<svg class="work-svg" viewBox="0 0 640 260" role="img" aria-label="' +
+      e.title +
+      ' project flow"><path d="M192 130h46m164 0h46" fill="none" stroke="var(--line)" stroke-width="2"/>' +
+      n
+        .map(function (a, i) {
+          return (
+            '<rect x="' +
+            (a - 82) +
+            '" y="91" width="164" height="78" rx="2" fill="var(--bg)" stroke="var(--hair)"/><circle cx="' +
+            a +
+            '" cy="130" r="4" fill="var(--line)"/><text x="' +
+            a +
+            '" y="134" text-anchor="middle" fill="var(--ink)">' +
+            e.diagram[i] +
+            "</text>"
+          );
+        })
+        .join("") +
+      "</svg>"
+    );
+  }
   ((l("#work-stops").outerHTML = U.map(function (e, n) {
     var a = Et[n],
       i = a.x < 0 ? 1 : -1;
@@ -552,27 +405,30 @@ oa();
       (a.x < 0 ? 18 : -18) +
       '"><button class="card ' +
       (a.x < 0 ? "l" : "r") +
-      (e.coverAr ? " full" : "") +
       '" data-proj="' +
       n +
       '" style="width:' +
       a.w +
-      '"><span class="fig" style="--ar:' +
-      (e.coverAr || a.ar) +
-      '"><img src="' +
-      L(e.cover, 1200) +
-      '" srcset="' +
-      G(e.cover) +
-      '" sizes="(max-width:760px) 80vw, 36vw" alt="' +
-      e.title +
-      ' project" loading="lazy" decoding="async"></span><span class="meta"><span class="mono">' +
+      '"><span class="fig work-diagram" style="--ar:' +
+      a.ar +
+      '">' +
+      renderWorkDiagram(e) +
+      '</span><span class="meta"><span class="mono">' +
       String(n + 1).padStart(2, "0") +
-      ' / 06</span></span><span class="d ' +
+      " / " +
+      String(U.length).padStart(2, "0") +
+      '</span> <span class="mono">' +
+      e.category +
+      '</span></span><span class="d ' +
       (n % 2 ? "t2" : "b7") +
       '">' +
       e.title +
-      '</span><span class="small">' +
-      e.category +
+      '</span><span class="small work-copy">' +
+      e.lines
+        .map(function (i) {
+          return "<span>" + i + "</span>";
+        })
+        .join(" ") +
       '</span><span class="mono open">View project<i aria-hidden="true"></i></span></button></div></section>'
     );
   }).join("")),
@@ -636,57 +492,57 @@ oa();
       }
     }));
   (function () {
-      var e = l("#dkvid"),
-        n = l("#dkfig");
-      if (!e) return;
-      var a = l("#dkpp"),
-        i = l("#dkbig"),
-        t = l("#dkseek"),
-        r = l("#dktime"),
-        d = l("#dksnd");
-      function o(f) {
-        return (
-          (f = Math.max(0, Math.floor(f || 0))),
-          Math.floor(f / 60) + ":" + String(f % 60).padStart(2, "0")
-        );
-      }
-      function u() {
-        if (e.paused) {
-          e.preload !== "auto" && (e.preload = "auto");
-          var f = e.play();
-          f && f.catch && f.catch(function () {});
-        } else e.pause();
-      }
-      (i.addEventListener("click", u),
-        a.addEventListener("click", u),
-        e.addEventListener("click", u),
-        e.addEventListener("play", function () {
-          (n.classList.add("playing"), a.setAttribute("aria-label", "Pause"));
-        }),
-        e.addEventListener("pause", function () {
-          (n.classList.remove("playing"), a.setAttribute("aria-label", "Play"));
-        }));
-      function s() {
-        var f = e.duration || 0,
-          j = f ? e.currentTime / f : 0;
-        ((t.value = Math.round(j * 1e3)),
-          t.style.setProperty("--pct", (j * 100).toFixed(2) + "%"),
-          (r.textContent = o(e.currentTime) + " / " + o(f)));
-      }
-      (e.addEventListener("timeupdate", s),
-        e.addEventListener("loadedmetadata", s),
-        e.addEventListener("ended", function () {
-          ((e.currentTime = 0), s());
-        }),
-        t.addEventListener("input", function () {
-          e.duration && ((e.currentTime = (t.value / 1e3) * e.duration), s());
-        }),
-        d.addEventListener("click", function () {
-          ((e.muted = !e.muted),
-            d.setAttribute("aria-pressed", String(!e.muted)),
-            d.setAttribute("aria-label", e.muted ? "Unmute" : "Mute"));
-        }));
-    })();
+    var e = l("#dkvid"),
+      n = l("#dkfig");
+    if (!e) return;
+    var a = l("#dkpp"),
+      i = l("#dkbig"),
+      t = l("#dkseek"),
+      r = l("#dktime"),
+      d = l("#dksnd");
+    function o(f) {
+      return (
+        (f = Math.max(0, Math.floor(f || 0))),
+        Math.floor(f / 60) + ":" + String(f % 60).padStart(2, "0")
+      );
+    }
+    function u() {
+      if (e.paused) {
+        e.preload !== "auto" && (e.preload = "auto");
+        var f = e.play();
+        f && f.catch && f.catch(function () {});
+      } else e.pause();
+    }
+    (i.addEventListener("click", u),
+      a.addEventListener("click", u),
+      e.addEventListener("click", u),
+      e.addEventListener("play", function () {
+        (n.classList.add("playing"), a.setAttribute("aria-label", "Pause"));
+      }),
+      e.addEventListener("pause", function () {
+        (n.classList.remove("playing"), a.setAttribute("aria-label", "Play"));
+      }));
+    function s() {
+      var f = e.duration || 0,
+        j = f ? e.currentTime / f : 0;
+      ((t.value = Math.round(j * 1e3)),
+        t.style.setProperty("--pct", (j * 100).toFixed(2) + "%"),
+        (r.textContent = o(e.currentTime) + " / " + o(f)));
+    }
+    (e.addEventListener("timeupdate", s),
+      e.addEventListener("loadedmetadata", s),
+      e.addEventListener("ended", function () {
+        ((e.currentTime = 0), s());
+      }),
+      t.addEventListener("input", function () {
+        e.duration && ((e.currentTime = (t.value / 1e3) * e.duration), s());
+      }),
+      d.addEventListener("click", function () {
+        ((e.muted = !e.muted),
+          d.setAttribute("aria-pressed", String(!e.muted)),
+          d.setAttribute("aria-label", e.muted ? "Unmute" : "Mute"));
+      }));
+  })();
   var nt = l("#burger");
   function Re(e) {
     (C.classList.toggle("menu-open", e), nt.setAttribute("aria-expanded", e));
@@ -699,8 +555,8 @@ oa();
     X = -1,
     Fe = null,
     rt = {
-      t: "John Bolster · Brand Identity Designer and Art Director, Saratoga Springs NY",
-      d: "Independent brand identity designer and art director in Saratoga Springs, NY. Brand strategy, identity, print and web for businesses, higher ed, healthcare and nonprofits.",
+      t: v.title,
+      d: (l('meta[name="description"]') || {}).content || "",
     };
   function zt(e) {
     var n = v.querySelector('meta[name="description"]'),
@@ -708,28 +564,32 @@ oa();
     if (e < 0) {
       ((v.title = rt.t),
         n && (n.content = rt.d),
-        a && (a.href = "https://johnbolster.design/"));
+        a && (a.href = location.origin + "/"));
       return;
     }
     var i = U[e];
-    ((v.title = (i.seoTitle || i.title) + " | John Bolster"),
+    ((v.title = (i.seoTitle || i.title) + " | Subhu"),
       n && i.seoDescription && (n.content = i.seoDescription),
-      a && (a.href = "https://johnbolster.design/projects/" + i.slug));
+      a && (a.href = location.origin + "/"));
   }
   function je(e, n) {
-    var a = e < 0 ? "/" : "/projects/" + U[e].slug;
-    if ((zt(e), location.pathname !== a))
+    var a = new URL(location.href);
+    e < 0
+      ? a.searchParams.delete("project")
+      : a.searchParams.set("project", U[e].slug);
+    var i = a.pathname + a.search + a.hash;
+    if ((zt(e), location.pathname + location.search + location.hash !== i))
       try {
-        history[n ? "pushState" : "replaceState"]({ proj: e }, "", a);
+        history[n ? "pushState" : "replaceState"]({ proj: e }, "", i);
       } catch (i) {}
   }
   function Dt() {
-    var e = location.pathname.match(/^\/projects\/([^\/]+)/),
+    var e = new URLSearchParams(location.search).get("project"),
       n = -1;
     return (
       e &&
         U.forEach(function (a, i) {
-          a.slug === e[1] && (n = i);
+          a.slug === e && (n = i);
         }),
       n
     );
@@ -802,6 +662,11 @@ oa();
         s.after != null ? r.splice(s.after, 0, d(s, "mid")) : o.unshift(s);
       });
     var u = r.join("");
+    u ||
+      (u =
+        '<figure class="work-detail-diagram">' +
+        renderWorkDiagram(a) +
+        '<figcaption class="mono">Project flow</figcaption></figure>');
     (o.length &&
       (u +=
         '<div class="pv-vids">' +
@@ -814,15 +679,21 @@ oa();
       (V.innerHTML =
         '<div class="pv"><div class="pv-l"><span class="mono">' +
         String(e + 1).padStart(2, "0") +
-        ' / 06</span><h2 class="d b9">' +
+        " / " +
+        String(U.length).padStart(2, "0") +
+        '</span><h2 class="d b9">' +
         a.title +
         '</h2><div><span class="mono">Overview</span><div style="margin-top:12px">' +
         t +
-        '</div></div><dl class="pv-dl"><dt>Client</dt><dd>' +
-        a.client +
+        '</div></div><dl class="pv-dl"><dt>Project type</dt><dd>' +
+        a.projectType +
         "</dd><dt>Services</dt><dd>" +
         a.services.join(", ") +
-        '</dd></dl><button class="pv-next" id="pvn"><span class="mono">Next project</span><span class="d t1">' +
+        '</dd></dl><a class="pv-link mono" href="' +
+        a.url +
+        '" target="_blank" rel="noopener noreferrer">' +
+        a.cta +
+        '</a><button class="pv-next" id="pvn"><span class="mono">Next project</span><span class="d t1">' +
         i.title +
         '</span></button></div><div class="pv-r">' +
         u +
@@ -892,7 +763,10 @@ oa();
       var a = U[e],
         i = st(e);
       ((Tt.textContent =
-        "Next project · " + String(e + 1).padStart(2, "0") + " / 06"),
+        "Next project · " +
+        String(e + 1).padStart(2, "0") +
+        " / " +
+        String(U.length).padStart(2, "0")),
         (he.innerHTML = a.title
           .split("")
           .map(function (o) {
@@ -1303,66 +1177,66 @@ oa();
       }
       var r = null,
         d = null;
-    ((k.lineCap = "butt"),
-      (k.lineJoin = "round"),
-      (k.miterLimit = 1),
-      (k.strokeStyle = Je(ct, ut, ce)));
-    for (var o = null, u = 0; u < ge.length; u++) {
-      var s = ge[u];
-      if (s.z < e + i) {
-        r = null;
-        continue;
+      ((k.lineCap = "butt"),
+        (k.lineJoin = "round"),
+        (k.miterLimit = 1),
+        (k.strokeStyle = Je(ct, ut, ce)));
+      for (var o = null, u = 0; u < ge.length; u++) {
+        var s = ge[u];
+        if (s.z < e + i) {
+          r = null;
+          continue;
+        }
+        if (s.z > t)
+          if (r) {
+            var f = ge[u - 1],
+              j = (t - f.z) / Math.max(1, s.z - f.z);
+            s = { z: t, x: f.x + (s.x - f.x) * j, y: f.y + (s.y - f.y) * j };
+          } else break;
+        var c = s.z - e,
+          w = p / c,
+          A = n + s.x * w,
+          _ = a + s.y * w,
+          g = { X: A, Y: _, dz: c, z: s.z };
+        if (!(r && s.z < t && Math.abs(A - r.X) + Math.abs(_ - r.Y) < 1.2)) {
+          if (r) {
+            var H = M(2.4 * w, 0.5, 7),
+              S =
+                (1 - 0.82 * E((c - 1.2 * p) / (Ae - 1.2 * p))) *
+                E((c - i) / (0.3 * p)),
+              P = Math.round(S * 40) / 40,
+              z = Math.round(H * 4) / 4;
+            if (P <= 0) {
+              (o && (k.stroke(), (o = null)), (r = g));
+              continue;
+            }
+            ((!o || o.a !== P || o.w !== z) &&
+              (o && k.stroke(),
+              (o = { a: P, w: z }),
+              (k.globalAlpha = P),
+              (k.lineWidth = z),
+              k.beginPath(),
+              k.moveTo(r.X, r.Y)),
+              k.lineTo(A, _));
+          } else o && (k.stroke(), (o = null));
+          if (((r = g), (d = g), s.z >= t)) break;
+        }
       }
-      if (s.z > t)
-        if (r) {
-          var f = ge[u - 1],
-            j = (t - f.z) / Math.max(1, s.z - f.z);
-          s = { z: t, x: f.x + (s.x - f.x) * j, y: f.y + (s.y - f.y) * j };
-        } else break;
-      var c = s.z - e,
-        w = p / c,
-        A = n + s.x * w,
-        _ = a + s.y * w,
-        g = { X: A, Y: _, dz: c, z: s.z };
-      if (!(r && s.z < t && Math.abs(A - r.X) + Math.abs(_ - r.Y) < 1.2)) {
-        if (r) {
-          var H = M(2.4 * w, 0.5, 7),
-            S =
-              (1 - 0.82 * E((c - 1.2 * p) / (Ae - 1.2 * p))) *
-              E((c - i) / (0.3 * p)),
-            P = Math.round(S * 40) / 40,
-            z = Math.round(H * 4) / 4;
-          if (P <= 0) {
-            (o && (k.stroke(), (o = null)), (r = g));
-            continue;
-          }
-          ((!o || o.a !== P || o.w !== z) &&
-            (o && k.stroke(),
-            (o = { a: P, w: z }),
-            (k.globalAlpha = P),
-            (k.lineWidth = z),
-            k.beginPath(),
-            k.moveTo(r.X, r.Y)),
-            k.lineTo(A, _));
-        } else o && (k.stroke(), (o = null));
-        if (((r = g), (d = g), s.z >= t)) break;
-      }
-    }
-    if ((o && k.stroke(), (k.globalAlpha = 1), d)) {
-      var I = p / d.dz,
-        D = M(5 * I, 2.5, 14),
-        F = t >= Ce - 1;
-      ((k.fillStyle = Je(ct, ut, ce)),
-        k.beginPath(),
-        k.arc(d.X, d.Y, F ? M(11 * I, 6, 22) : D, 0, Math.PI * 2),
-        k.fill(),
-        F ||
-          ((k.globalAlpha = 0.18),
+      if ((o && k.stroke(), (k.globalAlpha = 1), d)) {
+        var I = p / d.dz,
+          D = M(5 * I, 2.5, 14),
+          F = t >= Ce - 1;
+        ((k.fillStyle = Je(ct, ut, ce)),
           k.beginPath(),
-          k.arc(d.X, d.Y, D * 2.6, 0, Math.PI * 2),
+          k.arc(d.X, d.Y, F ? M(11 * I, 6, 22) : D, 0, Math.PI * 2),
           k.fill(),
-          (k.globalAlpha = 1)));
-    }
+          F ||
+            ((k.globalAlpha = 0.18),
+            k.beginPath(),
+            k.arc(d.X, d.Y, D * 2.6, 0, Math.PI * 2),
+            k.fill(),
+            (k.globalAlpha = 1)));
+      }
       k.restore();
     }
   }
@@ -1882,15 +1756,10 @@ oa();
     scrollTo(0, 0),
     requestAnimationFrame(wt),
     (function () {
-      var e = location.pathname.match(/^\/projects\/([^\/]+)/);
-      if (e) {
-        var n = -1;
-        if (
-          (U.forEach(function (a, i) {
-            a.slug === e[1] && (n = i);
-          }),
-          n < 0)
-        ) {
+      var n = Dt(),
+        e = new URLSearchParams(location.search);
+      if (e.has("project")) {
+        if (n < 0) {
           je(-1);
           return;
         }
