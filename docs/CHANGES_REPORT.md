@@ -20,8 +20,22 @@ point; the full project backup is maintained by the user outside this folder.
   targeted testing, and interface QA with more spacing across screen sizes.
 - Work now presents three verified examples: a live Accessible Search demo,
   an open Assist-Ding setup PR, and a merged AEO Toolkit contribution. Each
-  uses a simple inline SVG flow diagram; unrelated downloaded icons were not
-  reused. Project dialogs use query URLs so refresh works on static hosting.
+  card keeps its inline SVG flow diagram, and project dialogs now include the
+  supplied project artwork. Project dialogs use query URLs so refresh works on
+  static hosting.
+- The previous Distinkt feature is now a compact Assist-Ding project
+  spotlight, using its supplied artwork and linking to the live first website.
+  PR #2 remains referenced as project evidence. The copy makes no claims about
+  business traction, and its scroll hold is shorter than before.
+- The five supplied images are copied into `img/projects/` as descriptive PNG
+  sources and optimized WebP files. Accessible Search and AEO Toolkit each use
+  two project images; Assist-Ding uses one in its spotlight and project detail.
+  The AEO Toolkit normalization image contains visible generated labels and
+  should be cleaned up in Canva before publication.
+- Contact now says “Let’s build something,” keeps Copy email, and uses the
+  provided email and LinkedIn link. The unrelated FAQ and old
+  location/service links are removed. Stale John Bolster metadata and contact
+  details are also removed; no site URL or preview image was invented.
 - The later milestone links to the Assist-Ding setup PR and a merged AEO
   Toolkit contribution. Keep internship and client-conversion claims out until
   they can be verified.
@@ -35,7 +49,8 @@ point; the full project backup is maintained by the user outside this folder.
 - `js/main.js` — section transforms, scroll state, stats, and interactions.
 - `js/garden/garden-standalone.js` — canvas typography and Garden animation.
 - `js/curved-line-patch.js` — decorative curved line.
-- `img/` — portfolio images and video assets.
+- `img/` — portfolio images and video assets, including generated project
+  artwork in `img/projects/`.
 
 ## Verification snapshot
 
@@ -63,6 +78,6 @@ deferred until the full website is complete.
 
 ## Next
 
-The user can review the shortened Work section and request refinements. Do not
+The user can review the Assist-Ding spotlight and Contact section. Do not
 treat this checkpoint as a final release or as confirmation that deferred
 polish issues are fixed.

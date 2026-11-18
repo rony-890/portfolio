@@ -121,10 +121,7 @@ function oa(b = { debug: !0 }, v) {
     document.head.appendChild(G));
 }
 const sa = {
-  email: "jsb@johnbolster.design",
-  instagram: "https://www.instagram.com/johnbolster.design/",
-  linkedin: "https://www.linkedin.com/in/johnbolster/",
-  distinkt: "https://distinktai.com",
+  email: "sdas169797@gmail.com",
   stats: [
     ["Creating since", "2026"],
     ["Projects", "10+"],
@@ -180,7 +177,14 @@ const sa = {
       projectType: "Independent demo",
       description: `A React demo of accessible search patterns using local sample data. It includes a visible label, helper text, loading, empty, and error states, result announcements, and visible keyboard focus.`,
       services: ["React", "Accessible search", "Keyboard interaction"],
-      images: [],
+      images: [
+        "img/projects/accessible-search-results.webp?v=13",
+        "img/projects/accessible-search-states.webp?v=13",
+      ],
+      imageAlts: [
+        "A search field directs queries to a grid of varied results.",
+        "A search field linked to loading, results, empty, and error states.",
+      ],
       summary: "Accessible search patterns using local sample data.",
       lines: [
         "A query comes in.",
@@ -201,7 +205,8 @@ const sa = {
       projectType: "Independent prototype",
       description: `Open PR #2 sets up the React, Vite, TypeScript, and Tailwind project and a landing-page prototype with hero, features, pricing, and footer sections. The pull request is still open.`,
       services: ["React", "Vite", "TypeScript", "Tailwind CSS"],
-      images: [],
+      images: ["img/projects/assist-ding-flow.webp?v=13"],
+      imageAlts: ["Abstract shapes flow into interface panels and cards."],
       summary: "Initial setup and landing-page prototype, shown as an open PR.",
       lines: [
         "React and Vite are set up.",
@@ -222,7 +227,14 @@ const sa = {
       projectType: "Open-source contribution",
       description: `Merged PR #70 extracted AuditInputCard and normalizeUrl into a separate component and added an AuditInputCard test.`,
       services: ["React", "Component extraction", "Testing"],
-      images: [],
+      images: [
+        "img/projects/aeo-toolkit-components.webp?v=13",
+        "img/projects/aeo-toolkit-normalization.webp?v=13",
+      ],
+      imageAlts: [
+        "Abstract modules lead into a reusable interface card.",
+        "A module flow passes through URL normalization into a reusable card.",
+      ],
       summary: "Extracted the audit input component and added a test.",
       lines: [
         "AuditInputCard is extracted.",
@@ -388,7 +400,7 @@ oa();
       i = a.x < 0 ? 1 : -1;
     return (
       '<section class="st" data-label="Work" data-gap="' +
-      (n ? 1.55 : 2.2) +
+      (n ? 3 : 2.2) +
       '" data-hold=".38" data-ease=".5" data-a="' +
       a.ax +
       "," +
@@ -478,11 +490,11 @@ oa();
             a("Copied");
           },
           function () {
-            (i(), a("Press ⌘C"));
+            (i(), a("Press Ctrl/Cmd+C"));
           },
         );
       } catch (t) {
-        (i(), a("Press ⌘C"));
+        (i(), a("Press Ctrl/Cmd+C"));
       }
       function i() {
         var t = v.createRange();
@@ -491,58 +503,6 @@ oa();
         (r.removeAllRanges(), r.addRange(t));
       }
     }));
-  (function () {
-    var e = l("#dkvid"),
-      n = l("#dkfig");
-    if (!e) return;
-    var a = l("#dkpp"),
-      i = l("#dkbig"),
-      t = l("#dkseek"),
-      r = l("#dktime"),
-      d = l("#dksnd");
-    function o(f) {
-      return (
-        (f = Math.max(0, Math.floor(f || 0))),
-        Math.floor(f / 60) + ":" + String(f % 60).padStart(2, "0")
-      );
-    }
-    function u() {
-      if (e.paused) {
-        e.preload !== "auto" && (e.preload = "auto");
-        var f = e.play();
-        f && f.catch && f.catch(function () {});
-      } else e.pause();
-    }
-    (i.addEventListener("click", u),
-      a.addEventListener("click", u),
-      e.addEventListener("click", u),
-      e.addEventListener("play", function () {
-        (n.classList.add("playing"), a.setAttribute("aria-label", "Pause"));
-      }),
-      e.addEventListener("pause", function () {
-        (n.classList.remove("playing"), a.setAttribute("aria-label", "Play"));
-      }));
-    function s() {
-      var f = e.duration || 0,
-        j = f ? e.currentTime / f : 0;
-      ((t.value = Math.round(j * 1e3)),
-        t.style.setProperty("--pct", (j * 100).toFixed(2) + "%"),
-        (r.textContent = o(e.currentTime) + " / " + o(f)));
-    }
-    (e.addEventListener("timeupdate", s),
-      e.addEventListener("loadedmetadata", s),
-      e.addEventListener("ended", function () {
-        ((e.currentTime = 0), s());
-      }),
-      t.addEventListener("input", function () {
-        e.duration && ((e.currentTime = (t.value / 1e3) * e.duration), s());
-      }),
-      d.addEventListener("click", function () {
-        ((e.muted = !e.muted),
-          d.setAttribute("aria-pressed", String(!e.muted)),
-          d.setAttribute("aria-label", e.muted ? "Unmute" : "Mute"));
-      }));
-  })();
   var nt = l("#burger");
   function Re(e) {
     (C.classList.toggle("menu-open", e), nt.setAttribute("aria-expanded", e));
@@ -601,7 +561,7 @@ oa();
         var i = new Image();
         return (
           (i.sizes = ot),
-          (i.srcset = G(a)),
+          a.indexOf("/upload/") >= 0 && (i.srcset = G(a)),
           (i.src = L(a, 1600)),
           i.decode ? i.decode().catch(function () {}) : Promise.resolve()
         );
@@ -622,17 +582,19 @@ oa();
         })
         .join(""),
       r = a.images.map(function (s, f) {
+        var srcset =
+          s.indexOf("/upload/") >= 0
+            ? ' srcset="' + G(s) + '" sizes="' + ot + '"'
+            : "";
         return (
           '<figure><img src="' +
           L(s, 1600) +
-          '" srcset="' +
-          G(s) +
-          '" sizes="' +
-          ot +
-          '" alt="' +
-          a.title +
-          " image " +
-          (f + 1) +
+          '"' +
+          srcset +
+          ' alt="' +
+          (a.imageAlts && a.imageAlts[f]
+            ? a.imageAlts[f]
+            : a.title + " image " + (f + 1)) +
           '"' +
           (f > 1 ? ' loading="lazy" decoding="async"' : "") +
           "></figure>"
@@ -926,12 +888,12 @@ oa();
         (e.preventDefault(), Re(!1));
         var a = n.dataset.go;
         if (!Oe) {
-          var i = l("#" + (a === "distinkt" ? "distinkt" : a));
+          var i = l("#" + (a === "assist-ding" ? "assist-ding" : a));
           i && i.scrollIntoView({ behavior: "smooth" });
           return;
         }
         var t = W.filter(function (r) {
-          return r.id === a || (a === "distinkt" && r.dk);
+          return r.id === a || (a === "assist-ding" && r.dk);
         })[0];
         t && scrollTo(0, t.sHold + (t.dk ? t.holdPx * 0.45 : 2));
       }
@@ -950,7 +912,7 @@ oa();
   var Ke = l("#cv"),
     k = Ke.getContext("2d"),
     Bt = l("#spacer"),
-    se = l("#distinkt"),
+    se = l("#assist-ding"),
     Te = l(".panel", se),
     Ct = m(".fly", se),
     Be = l(".dk-in", se),
@@ -1404,8 +1366,6 @@ oa();
           s.style.setProperty("--q", j.toFixed(3));
         }),
         (se.style.pointerEvents = i > 0.98 && r < 0.2 ? "auto" : "none"));
-      var u = l("#dkvid");
-      u && !u.paused && !(i > 0.9 && r < 0.85) && u.pause();
     }
   }
   var qe = l("#count"),

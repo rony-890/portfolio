@@ -46,6 +46,7 @@
   let canvas = null;
   let ctx = null;
   let garden = null;
+  let heroEl = null;
   let animationId = null;
   let lastScrollY = 0;
   let targetScrollY = 0;
@@ -71,6 +72,8 @@
   }
 
   function setupCanvas() {
+    heroEl = document.querySelector('#hero .hero-scene');
+
     // Create new canvas for the curved line
     canvas = document.createElement('canvas');
     canvas.id = 'curved-guide-line';
@@ -154,14 +157,15 @@
 
   function drawCurvedLine(progress) {
     if (!ctx) return;
+
+    ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    if (!heroEl || heroEl.style.visibility !== 'visible') return;
     
     const pos = getLetterPositions();
     if (!pos) return;
     
     const vpWidth = window.innerWidth;
     const vpHeight = window.innerHeight;
-    
-    ctx.clearRect(0, 0, vpWidth, vpHeight);
     
     // Apply length ratio - only draw portion of the curve
     const drawProgress = progress * CURVED_LINE_CONFIG.LENGTH_RATIO;

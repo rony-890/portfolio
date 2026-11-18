@@ -1073,6 +1073,14 @@
 
       // focal point: lower hole of "B" glyph
       this.computeAndSetBHoleFocalPoint(S);
+      const splitIdx = SLIDE_DOOR_CONFIG.SPLIT_AFTER_INDEX;
+      const left = this.letters[splitIdx];
+      const right = this.letters[splitIdx + 1];
+      if (left && right) {
+        const gapCenter =
+          (left.tx + left.tw / 2 + right.tx - right.tw / 2) / 2;
+        this._gapCenterOffset = this.W / 2 - gapCenter;
+      }
     }
     start() {
       const now = performance.now();
@@ -1130,6 +1138,7 @@
       if (!heroEl) {
         this._slideProgress = 0;
         this._slideShift = 0;
+        this._slideGapShift = 0;
         this._globalOpacity = 1;
         return;
       }
@@ -1140,6 +1149,7 @@
       if (!scaleMatch) {
         this._slideProgress = 0;
         this._slideShift = 0;
+        this._slideGapShift = 0;
         this._globalOpacity = 1;
         return;
       }
@@ -1159,6 +1169,7 @@
       const vpWidth = window.innerWidth;
       const maxShiftCanvas = (vpWidth * SLIDE_DOOR_CONFIG.MAX_SHIFT_RATIO) / this.dpr;
       this._slideShift = maxShiftCanvas * easedSlide;
+      this._slideGapShift = (this._gapCenterOffset || 0) * easedSlide;
       
       this._globalOpacity = 1 - (1 - SLIDE_DOOR_CONFIG.MIN_OPACITY) * progress;
       
@@ -1260,7 +1271,7 @@
         // Temporarily shift letter position for drawing
         const origX = l.x;
         const origY = l.y;
-        l.x += slideX;
+        l.x += slideX + (this._slideGapShift || 0);
         
         const age = this.reducedMotion ? 1e9 : now - l.birth;
         const S = this.S;
