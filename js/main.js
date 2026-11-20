@@ -1003,11 +1003,12 @@ oa();
         m(".el", h).forEach(function (B) {
           var ie = Ye(Z && B.dataset.mp ? B.dataset.mp : B.dataset.p),
             re = Ye(B.dataset.f),
-            oe = le(B.dataset.z, 0);
+            oe = le(B.dataset.z, 0),
+            caption = B.querySelector(".h-cap");
           ((B.style.visibility = "hidden"),
             ve.push({
               abs: le(B.dataset.abs, 0),
-              caption: !!B.querySelector(".h-cap"),
+              captionWidth: caption ? caption.offsetWidth : 0,
               el: B,
               st: T,
               x: ie[0],
@@ -1214,7 +1215,8 @@ oa();
         t.vis && ((t.el.style.visibility = "hidden"), (t.vis = !1));
         continue;
       }
-      var u = (t.abs ? p * t.abs : d) / r,
+      const rawScale = (t.abs ? p * t.abs : d) / r;
+      var u = isHero ? Math.min(rawScale, 2.43) : rawScale,
         s = o > 0 ? E(o / (1.9 * p)) : 0,
         f = (t.x + t.fx * s) * q,
         j = (t.y + t.fy * s) * x,
@@ -1229,8 +1231,19 @@ oa();
         t.vis && ((t.el.style.visibility = "hidden"), (t.vis = !1));
         continue;
       }
-      const captionFade = Z && t.caption ? 1 - E((u - 1.04) / 0.105) : 1;
-      const elementOpacity = (isHero ? Math.max(_, 0.7) : _) * captionFade;
+      const captionMargin = Math.min(16, q * 0.04);
+      const captionHalfWidth = (t.captionWidth * u) / 2;
+      const captionOverflow = Math.max(
+        0,
+        captionHalfWidth + captionMargin - c,
+        c + captionHalfWidth + captionMargin - q,
+      );
+      const captionFade = t.captionWidth
+        ? 1 - E(captionOverflow / captionMargin)
+        : 1;
+      const heroFade = isHero ? 1 - E((rawScale - 2.43) / (5.8 - 2.43)) : 1;
+      const elementOpacity =
+        (isHero ? Math.max(_, 0.7) : _) * captionFade * heroFade;
       if (elementOpacity < 0.01 && !isHero) {
         t.vis && ((t.el.style.visibility = "hidden"), (t.vis = !1));
         continue;

@@ -777,15 +777,19 @@
       this.fa = {};
       this.mx = null;
       this.my = null;
+      this._pointerDirty = false;
+      this._pointerSettleUntil = 0;
       this._stopped = false;
       this._boundResize = () => this.resize();
       this._boundMove = (e) => {
         const r = this.cv.getBoundingClientRect();
         this.mx = e.clientX - r.left;
         this.my = e.clientY - r.top;
+        this._pointerDirty = true;
       };
       this._boundLeave = () => {
         this.mx = null;
+        this._pointerDirty = true;
       };
       window.addEventListener("resize", this._boundResize);
       window.addEventListener("pointermove", this._boundMove);
@@ -1084,14 +1088,46 @@
     }
     start() {
       const now = performance.now();
+      this._animationEnd = now;
       this.letters.forEach((l, i) => {
         l.birth = now + i * 180;
+        for (const e of (l.els || []).concat(l.tend || [])) {
+          const duration =
+            e.t === "stem" ? e.dur : e.t === "rose" ? 1200 : 1000;
+          this._animationEnd = Math.max(
+            this._animationEnd,
+            l.birth + e.d0 + duration,
+          );
+        }
       });
       this._stopped = false;
+      let lastTransform = null;
+      let lastVisibility = null;
+      let lastBoilFrame = null;
       const loop = (ts) => {
         if (this._stopped) return;
+        const heroEl = document.querySelector("#hero .el");
+        const transform = heroEl ? heroEl.style.transform : "";
+        const visibility = heroEl ? heroEl.style.visibility : "visible";
+        const boilFrame =
+          CFG.boil && !this.reducedMotion ? Math.floor(ts / 120) : 0;
+        if (this._pointerDirty) this._pointerSettleUntil = ts + 600;
+        if (
+          visibility !== "hidden" &&
+          (ts < this._animationEnd ||
+            transform !== lastTransform ||
+            visibility !== lastVisibility ||
+            boilFrame !== lastBoilFrame ||
+            this._pointerDirty ||
+            ts < this._pointerSettleUntil)
+        ) {
+          this._frame(ts);
+          this._pointerDirty = false;
+        }
+        lastTransform = transform;
+        lastVisibility = visibility;
+        lastBoilFrame = boilFrame;
         this.raf = requestAnimationFrame(loop);
-        this._frame(ts);
       };
       this.raf = requestAnimationFrame(loop);
     }
