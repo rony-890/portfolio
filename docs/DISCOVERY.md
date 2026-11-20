@@ -1,4 +1,5 @@
 # Current Project Discovery — 2026-11-18
+> Status updated 2026-11-20: source issue fixes completed; final browser sign-off remains.
 
 ## Runtime shape
 

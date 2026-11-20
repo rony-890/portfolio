@@ -1,4 +1,5 @@
 # Current Project Structure — 2026-11-18
+> Status updated 2026-11-20 with issue fixes and the documentation checkpoint.
 
 The runtime folders stay at the root to preserve the site's current asset
 URLs. Project reports are grouped under `docs/`. `node_modules/` and `.git/`
@@ -15,8 +16,10 @@ subhu-jb-portfolio/
 │   └── main.css
 ├── docs/
 │   ├── CHANGES_REPORT.md
+│   ├── ARCHITECTURE.md
 │   ├── DISCOVERY.md
 │   ├── FINAL_REPORT.md
+│   ├── FUTURE_CHANGES.md
 │   └── PRE_PUBLISH_CHECKLIST.md
 ├── img/
 │   └── portfolio images, poses, and video assets

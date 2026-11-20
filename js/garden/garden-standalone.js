@@ -1259,22 +1259,21 @@
       const splitIdx = SLIDE_DOOR_CONFIG.SPLIT_AFTER_INDEX;
       const shift = this._slideShift || 0;
       const opacity = this._globalOpacity !== undefined ? this._globalOpacity : 1;
+      const S = this.S;
       
-      for (const l of this.letters) {
+      for (let i = 0; i < this.letters.length; i++) {
+        const l = this.letters[i];
         if (l.ch === " " || !l.els) continue;
         
-        // Apply slide-door shift
-        const isLeftGroup = this.letters.indexOf(l) <= splitIdx;
+        const isLeftGroup = i <= splitIdx;
         const dir = isLeftGroup ? -1 : 1;
         const slideX = dir * shift;
         
-        // Temporarily shift letter position for drawing
         const origX = l.x;
         const origY = l.y;
         l.x += slideX + (this._slideGapShift || 0);
         
         const age = this.reducedMotion ? 1e9 : now - l.birth;
-        const S = this.S;
         for (const e of l.els) {
           if (e.t === "stem") this._drawStem(B, e, l, age, S, f, amp);
         }
@@ -1284,13 +1283,26 @@
         }
         if (l.tend)
           for (const e of l.tend) this._drawStem(B, e, l, age, S, f, amp);
-        
-        // Draw text with global opacity
+
+        l.x = origX;
+        l.y = origY;
+      }
+
+      for (let i = 0; i < this.letters.length; i++) {
+        const l = this.letters[i];
+        if (l.ch === " " || !l.els) continue;
+
+        const isLeftGroup = i <= splitIdx;
+        const dir = isLeftGroup ? -1 : 1;
+        const slideX = dir * shift;
+        const origX = l.x;
+        const origY = l.y;
+        l.x += slideX + (this._slideGapShift || 0);
+
         g.globalAlpha = opacity;
         B.text(l.ch, l.x, l.y, S, COLORS.text);
         g.globalAlpha = 1;
-        
-        // Restore position
+
         l.x = origX;
         l.y = origY;
       }

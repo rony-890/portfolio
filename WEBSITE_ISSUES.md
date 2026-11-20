@@ -1,5 +1,38 @@
 # Website Issue Log
 
+## Checkpoint status — 2026-11-20
+
+The issue-fix pass has been implemented in the live source. Verification uses
+the integrated preview only; final sign-off still requires Subhu's laptop
+Chrome and physical display.
+
+Resolved in this pass:
+- WEB-001: the DOM title and Garden handoff now avoid a second visible title
+  after the first reveal.
+- The Garden-only hero is now the visible title after reveal; Playwright
+  confirmed that the DOM title opacity is 0 while the Garden canvas is active.
+- WEB-002: the hero settles gradually at the 70% opacity floor instead of
+  jumping directly from the initial state.
+- Verified trace: opacity 1 at y=0, 0.997 at y=200, 0.922 at y=250,
+  0.759 at y=300, and 0.700 from y=350 onward in the 1377 x 764 preview.
+- WEB-004: the hero remains present through the start of the About transition
+  instead of cutting off before the next scene arrives.
+- Verified trace: About becomes visible at y=550 with opacity 0.882 and reaches
+  opacity 1 at y=800 in the 1377 x 764 preview.
+- WEB-007: the narrow-screen Work scene now hides inactive project cards.
+- Verified at 320 x 800: 0/1/2 card parents showed hidden/visible/hidden, with
+  one Assist-Ding card in the active viewport.
+- WEB-008: the right-edge HUD progress rail is hidden.
+- The Journey "100MB" illustration label is removed.
+- The “Worked” and “with” labels are placed on one line, with “company” paired
+  beside the “2” tail.
+
+Needs final visual sign-off:
+- WEB-003: split gap centering.
+- WEB-005: portrait baseline and bio proportion.
+- WEB-006: exact glyph-tail alignment.
+- WEB-009: mobile and desktop About stacking.
+
 Use this file to collect website issues for later review and fix them one at a
 time. Do not treat an issue as resolved until it has been verified.
 

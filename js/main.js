@@ -1007,6 +1007,7 @@ oa();
           ((B.style.visibility = "hidden"),
             ve.push({
               abs: le(B.dataset.abs, 0),
+              caption: !!B.querySelector(".h-cap"),
               el: B,
               st: T,
               x: ie[0],
@@ -1228,7 +1229,12 @@ oa();
         t.vis && ((t.el.style.visibility = "hidden"), (t.vis = !1));
         continue;
       }
-      const elementOpacity = isHero ? Math.max(_, 0.7) : _;
+      const captionFade = Z && t.caption ? 1 - E((u - 1.04) / 0.105) : 1;
+      const elementOpacity = (isHero ? Math.max(_, 0.7) : _) * captionFade;
+      if (elementOpacity < 0.01 && !isHero) {
+        t.vis && ((t.el.style.visibility = "hidden"), (t.vis = !1));
+        continue;
+      }
       (t.vis || ((t.el.style.visibility = "visible"), (t.vis = !0)),
         (t.el.style.opacity = elementOpacity.toFixed(3)),
         (t.el.style.transform =

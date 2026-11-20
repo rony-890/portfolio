@@ -518,6 +518,23 @@ a {
   align-items: center;
 }
 
+@media (min-width: 761px) and (max-width: 1158px) {
+  #hero .h-cap {
+    width: min(400px, calc(38vw - 40px));
+  }
+}
+
+@media (max-width: 760px) {
+  #hero .hero-scene {
+    width: 100vw;
+    height: min(100dvh, 700px);
+  }
+
+  #hero .h-cap {
+    transform: translateY(-26vh);
+  }
+}
+
 .h-cue i {
   width: 1px;
   height: 36px;

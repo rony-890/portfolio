@@ -1,4 +1,5 @@
 # Portfolio Progress Checkpoint — 2026-11-18
+> Status updated 2026-11-20: issue-fix implementation completed.
 
 This replaces the older step-by-step log. Treat this as the current handoff
 point; the full project backup is maintained by the user outside this folder.
