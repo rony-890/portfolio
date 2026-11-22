@@ -1,5 +1,5 @@
-# Current Project Structure — 2026-11-18
-> Status updated 2026-11-20 with issue fixes and the documentation checkpoint.
+# Current Project Structure — 2026-11-21
+> Status updated 2026-11-21 with the Neon handoff and supplied asset folders.
 
 The runtime folders stay at the root to preserve the site's current asset
 URLs. Project reports are grouped under `docs/`. `node_modules/` and `.git/`
@@ -10,6 +10,7 @@ subhu-jb-portfolio/
 ├── .gitignore
 ├── .vscode/
 │   └── launch.json
+├── NEON_HANDOFF.md
 ├── PROJECT_STRUCTURE.md
 ├── WEBSITE_ISSUES.md
 ├── css/
@@ -22,6 +23,8 @@ subhu-jb-portfolio/
 │   ├── FUTURE_CHANGES.md
 │   └── PRE_PUBLISH_CHECKLIST.md
 ├── img/
+│   ├── my assets/ (eight supplied pose PNGs)
+│   ├── projects/ (project artwork)
 │   └── portfolio images, poses, and video assets
 ├── index.html
 ├── js/
@@ -62,6 +65,7 @@ site code, all `img/` assets, and `WEBSITE_ISSUES.md` are preserved.
 ## Source of truth
 
 - Current progress and next step: [`CHANGES_REPORT.md`](./docs/CHANGES_REPORT.md).
+- Neon implementation guidance: [`NEON_HANDOFF.md`](./NEON_HANDOFF.md).
 - Open polish issues: [`WEBSITE_ISSUES.md`](./WEBSITE_ISSUES.md).
 - Publish blockers:
   [`PRE_PUBLISH_CHECKLIST.md`](./docs/PRE_PUBLISH_CHECKLIST.md).

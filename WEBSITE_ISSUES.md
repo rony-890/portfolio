@@ -1,14 +1,34 @@
 # Website Issue Log
 
-## Checkpoint status — 2026-11-20
+## Checkpoint status — 2026-11-21
 
-The issue-fix pass has been implemented in the live source. Verification uses
-the integrated preview only; final sign-off still requires Subhu's laptop
+WEB-001 is resolved in the live source. The hero name now rises and blooms in
+one Garden canvas instead of switching from the animated DOM heading to a
+differently sized canvas rendering. The Garden uses the heading's computed
+responsive font size and deterministic seeds.
+
+Playwright verification: the rendered size and letter positions were identical
+across three fresh loads at 390 x 844. The name size matched the heading at
+320 x 568, 390 x 844, 492 x 300, and 1024 x 768. Reduced-motion mode showed
+the full name on its first painted frame. The mobile caption stayed inside the
+viewport and clear of the Scroll cue. A scroll trace at 492 x 300 changed
+scale by at most 0.06 per frame. Final sign-off still requires Subhu's laptop
 Chrome and physical display.
 
-Resolved in this pass:
-- WEB-001: the DOM title and Garden handoff now avoid a second visible title
-  after the first reveal.
+Current user direction:
+- WEB-003: Subhu accepts the current centered split composition. Do not adjust
+  it unless requested.
+- WEB-005: the pose baseline is still wrong on Subhu's laptop. Eight replacement
+  pose PNGs are available at `img/my assets/pose_1.png` through `pose_8.png`.
+- WEB-010: six new Selected Work images are available in
+  `D:\PROTFOLIO WEBSITE\selected-work-images`; the current Work cards still use
+  inline SVG diagrams.
+- Garden flower variety: Subhu currently sees one flower type and has deferred
+  changing it. Do not modify the Garden for variety now.
+
+Previously verified changes (2026-11-20):
+- WEB-001: the DOM title was hidden once Garden became active. The
+  2026-11-21 single-canvas reveal replaces that handoff.
 - The Garden-only hero is now the visible title after reveal; Playwright
   confirmed that the DOM title opacity is 0 while the Garden canvas is active.
 - WEB-002: the hero settles gradually at the 70% opacity floor instead of
@@ -24,14 +44,18 @@ Resolved in this pass:
   one Assist-Ding card in the active viewport.
 - WEB-008: the right-edge HUD progress rail is hidden.
 - The Journey "100MB" illustration label is removed.
-- The “Worked” and “with” labels are placed on one line, with “company” paired
-  beside the “2” tail.
+- The “Worked” and “with” labels are on one line. The requested “company”
+  placement beside the “2” remains open under WEB-006.
 
-Needs final visual sign-off:
-- WEB-003: split gap centering.
-- WEB-005: portrait baseline and bio proportion.
-- WEB-006: exact glyph-tail alignment.
-- WEB-009: mobile and desktop About stacking.
+Current open work:
+- WEB-005: replace/use the supplied pose frames and align the visible pose with
+  the bio baseline on Subhu's laptop.
+- WEB-006: finish the “Worked with 2 company” composition.
+- WEB-009: reposition the bio block for mobile and desktop.
+- WEB-010: replace the Selected Work card diagrams with the supplied images.
+
+WEB-003 is accepted as-is by Subhu. Garden flower variety is explicitly
+deferred.
 
 Use this file to collect website issues for later review and fix them one at a
 time. Do not treat an issue as resolved until it has been verified.
@@ -62,15 +86,16 @@ time. Do not treat an issue as resolved until it has been verified.
 - The blue right-edge line was reproduced in the preview. Its colored segment
   and marker belong to the fixed `#hud` scroll indicator; `#spacer` has a
   transparent background and only adds scroll height.
-- This is a report-only update. No website behavior was changed, and all items
-  remain open for the post-completion polish pass.
+- Preview measurements are historical where the issue status below records a
+  later resolution or user decision. The latest About-pose report is from
+  Subhu's laptop; it still needs direct viewport verification.
 
-## Open Issues
+## Tracked Issues
 
 ### WEB-001 — Hero title flashes oversized on refresh
 
 - **Priority:** High
-- **Status:** Open — fix deferred by user
+- **Status:** Resolved — 2026-11-21
 - **Area:** Hero / page-load animation
 - **Reported:** 2026-11-18
 - **Observed:** On refresh, “SUBHU” first appears much larger than its intended
@@ -84,7 +109,8 @@ time. Do not treat an issue as resolved until it has been verified.
   first oversized in the hero and then in its settled composition. The images
   establish the visual jump, but do not record its duration or exact scroll
   offset; the screenshot pixels are not available locally for direct measuring.
-- **Integrated-preview test:** At 1377 x 764, the DOM title measured 900 x 207
+- **Previous integrated-preview test (before the fix):** At 1377 x 764, the
+  DOM title measured 900 x 207
   at x=266, y=17 with a computed 241.1 px font size and opacity 1 from about
   100 ms through 1400 ms after reload. The Garden canvas had not started during
   that interval. At about 1900 ms the Garden had started and the DOM title
@@ -92,13 +118,19 @@ time. Do not treat an issue as resolved until it has been verified.
   these samples. This confirms a very large initial title in the integrated
   preview, but does not reproduce the screenshot's apparent shrink/drag into
   place; that movement remains unverified in the user's Chrome.
-- **Investigation/fix:** Tested in the integrated preview; not fixed, per user
-  request. Capture the user's actual Chrome refresh before choosing a fix.
+- **Resolution:** Removed the visible DOM-to-canvas handoff. Garden now draws
+  the staggered rise and bloom on the same canvas, uses the responsive heading
+  font size, and generates its floral layout from deterministic seeds. The
+  generic 3D text-fit rule no longer shrinks the full-width hero heading box.
+- **Verification:** Fresh-load checks at 320 x 568, 390 x 844, 492 x 300, and
+  1024 x 768; three identical 390 x 844 reload measurements; reduced-motion
+  first-frame check; and a scroll trace at 492 x 300. The user's physical
+  display and laptop Chrome remain unverified.
 
 ### WEB-002 — Hero fade timing at the next-section transition
 
 - **Priority:** Not triaged
-- **Status:** Open — fix deferred by user
+- **Status:** Resolved in integrated preview — 2026-11-20
 - **Area:** Hero / scroll transition
 - **Reported:** 2026-11-18
 - **Requested behavior:** Begin fading at approximately the scroll position
@@ -113,13 +145,15 @@ time. Do not treat an issue as resolved until it has been verified.
   0.7 floor at y=350 and y=400. This places the fade roughly between y=200 and
   y=350 in this preview. Because the camera is eased, these values are not a
   portable pixel-perfect threshold for the user's screenshot or laptop.
-- **Investigation/fix:** Tested in the integrated preview; not fixed, per user
-  request. Compare against the screenshot's exact state during later tuning.
+- **Resolution:** The hero now fades gradually to the 70% floor instead of
+  dropping directly from its initial opacity. The trace above records the
+  integrated-preview behavior; recheck the exact screenshot timing during
+  final visual polish.
 
 ### WEB-003 — Center the gap between the split hero groups
 
 - **Priority:** Not triaged
-- **Status:** Open — fix deferred by user
+- **Status:** Closed by user preference — 2026-11-21
 - **Area:** Hero / split animation
 - **Reported:** 2026-11-18
 - **Observed:** During the scroll split, “SU” moves too far left and “BHU” too
@@ -136,13 +170,13 @@ time. Do not treat an issue as resolved until it has been verified.
   hero's measured 2.4987 scale, this corresponds to an estimated 111 px
   left-of-center screen displacement. This is a geometry-based estimate, not a
   direct pixel scan of the screenshot.
-- **Investigation/fix:** Tested in the integrated preview; not fixed, per user
-  request. Verify the gap in the rendered screenshot when polishing.
+- **Resolution:** Subhu accepts the current centered split composition and
+  likes it. Do not change it unless Subhu asks.
 
 ### WEB-004 — Hero disappears before the next section arrives
 
 - **Priority:** Not triaged
-- **Status:** Open — polish after the website is complete
+- **Status:** Resolved in integrated preview — 2026-11-20
 - **Area:** Hero / section transition
 - **Reported:** 2026-11-18
 - **Observed:** While scrolling, the hero title remains visible and then
@@ -161,13 +195,14 @@ time. Do not treat an issue as resolved until it has been verified.
   roughly 250 px scroll interval from the hero hiding to About first appearing,
   followed by a gradual arrival. The hero's inline opacity remained at 0.7
   while hidden.
-- **Investigation/fix:** Tested in the integrated preview; not fixed. Keep this
-  in the backlog until the website is complete.
+- **Resolution:** The hero remains visible as About begins to arrive. In the
+  1377 x 764 preview, About reached opacity 0.882 at y=550 and 1 at y=800.
+  Recheck after further scroll choreography changes.
 
 ### WEB-005 — About portrait size and baseline vary by screen ratio
 
 - **Priority:** Not triaged
-- **Status:** Open — polish after the website is complete
+- **Status:** Open — user reports it still looks wrong on laptop
 - **Area:** About / responsive layout
 - **Reported:** 2026-11-18
 - **Observed:** The portrait size and foot baseline still look wrong for the
@@ -187,6 +222,12 @@ time. Do not treat an issue as resolved until it has been verified.
   Only this desktop ratio was tested; 4:3, mobile, and the user's laptop Chrome
   remain unverified. These are image-box bounds, not alpha-pixel bounds of the
   figure itself.
+- **New pose assets:** The current page uses `img/pose0.webp` through
+  `img/pose7.webp`. Subhu supplied eight replacement PNGs in
+  `img/my assets/pose_1.png` through `pose_8.png`. Inspect and use the supplied
+  set in filename order unless their visual sequence shows otherwise. Align
+  the visible figure's feet, not the transparent image-box edge, with the
+  intended bio baseline.
 - **Investigation/fix:** Tested in the integrated preview; not fixed. Keep this
   in the backlog until the website is complete.
 
@@ -221,7 +262,7 @@ time. Do not treat an issue as resolved until it has been verified.
 ### WEB-007 — Work project cards overlap on narrow screens
 
 - **Priority:** High
-- **Status:** Open — fix deferred by user
+- **Status:** Resolved in integrated preview — 2026-11-20
 - **Area:** Work / responsive 3D scroll scene
 - **Reported:** 2026-11-18
 - **Observed:** At 320 x 800, selecting Work in the integrated preview shows all
@@ -250,14 +291,15 @@ time. Do not treat an issue as resolved until it has been verified.
   same area on the narrow viewport. This is the best-supported explanation
   from the source and preview; the exact desktop trigger still needs
   confirmation.
-- **Fix direction:** Adjust the Work scene's spacing/visibility so only the
-  intended card occupies the active area. No source changes have been made,
-  per the user's instruction.
+- **Resolution:** The narrow-screen fix hides inactive cards so only the
+  active Work card is visible. At 320 x 800, the three card parents showed
+  hidden/visible/hidden. Recheck other viewport sizes during final Work-scene
+  polish.
 
 ### WEB-008 — Remove the blue scroll-progress line at the right edge
 
 - **Priority:** Medium
-- **Status:** Open — fix deferred by user
+- **Status:** Resolved in integrated preview — 2026-11-20
 - **Area:** Global HUD / scroll indicator
 - **Reported:** 2026-11-18
 - **Observed:** A blue vertical line and progress marker appear at the right
@@ -274,8 +316,8 @@ time. Do not treat an issue as resolved until it has been verified.
   color ([css/main.css](./css/main.css):369). The scroll handler updates its
   progress value ([js/main.js](./js/main.js):1698). The selected `#spacer`
   element is transparent and only provides document scroll height.
-- **Fix direction:** Remove the unwanted blue rail as requested, then verify
-  whether the marker should go with it. No source changes have been made.
+- **Resolution:** The right-edge HUD progress rail is hidden. Recheck the
+  remaining HUD and marker during final visual polish.
 
 ### WEB-009 — About bio block sits too low
 
@@ -311,3 +353,27 @@ time. Do not treat an issue as resolved until it has been verified.
 - **Fix direction:** Rework the About text's vertical placement and narrow
   screen stacking, then verify the portrait and complete bio together at
   mobile and desktop sizes. No source changes have been made.
+
+### WEB-010 — Replace Selected Work card diagrams with supplied artwork
+
+- **Priority:** Medium
+- **Status:** Open — source images supplied, not integrated into the cards
+- **Area:** Work / project-card artwork
+- **Reported:** 2026-11-21
+- **Observed:** The Work cards still render inline SVG flow diagrams through
+  `renderWorkDiagram` in `js/main.js`. The project dialogs already use images
+  from `img/projects/`.
+- **Expected:** Use Subhu's supplied project artwork for the three Work cards
+  while preserving project links, dialog behavior, and accessible text.
+- **Supplied images:** `D:\PROTFOLIO WEBSITE\selected-work-images` contains
+  `Accessible Search project in a frontend portfolio.png`,
+  `Accessible Search React demo.png`,
+  `AEO Toolkit open-source contribution.png`,
+  `AuditInputCard test added in AEO Toolkit PR70.png`,
+  `Assist-Ding spotlight in a junior frontend developer portfolio.png`, and
+  `Assist-Ding Work-card cover.png`.
+- **Fix direction:** Map one suitable cover to each card and use supporting
+  images in the project dialogs where they add useful detail. Keep the source
+  files unchanged, optimize copied assets using the existing project pattern,
+  and provide accurate alt text. Clean the generated labels in the AEO image
+  before publication if they remain visible.

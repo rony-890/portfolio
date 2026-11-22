@@ -125,24 +125,28 @@
     
     if (!heroEl || !gardenCanvas) return null;
     
-    const heroRect = heroEl.getBoundingClientRect();
     const canvasRect = gardenCanvas.getBoundingClientRect();
-    
-    // Garden coordinates are in canvas space (0 to W, 0 to H)
-    // Need to map to viewport
     const scaleX = canvasRect.width / garden.W;
     const scaleY = canvasRect.height / garden.H;
-    
-    const sTop = sLetter.y - garden.S * 0.75; // Top of S flower (approximate)
-    const uBaseline = uLetter.y + garden.S * 0.1; // Baseline of U
-    const uBottom = uBaseline + garden.S * 0.1 * CURVED_LINE_CONFIG.BOTTOM_OFFSET_RATIO;
+    const fx = garden._focalShiftX || 0;
+    const fy = garden._focalShiftY || 0;
+    const slideShift = garden._slideShift || 0;
+    const gapShift = garden._slideGapShift || 0;
+    const sDrawnX = sLetter.x - slideShift + gapShift + fx;
+    const sDrawnY = sLetter.y + fy;
+    const uDrawnX = uLetter.x + slideShift + gapShift + fx;
+    const uDrawnY = uLetter.y + fy;
+    const sTop = sDrawnY - garden.S * 0.75;
+    const uBaseline = uDrawnY + garden.S * 0.1;
+    const uBottom =
+      uBaseline + garden.S * 0.1 * CURVED_LINE_CONFIG.BOTTOM_OFFSET_RATIO;
     
     return {
-      sX: canvasRect.left + sLetter.x * scaleX,
+      sX: canvasRect.left + sDrawnX * scaleX,
       sY: canvasRect.top + sTop * scaleY,
-      uX: canvasRect.left + uLetter.x * scaleX,
+      uX: canvasRect.left + uDrawnX * scaleX,
       uY: canvasRect.top + uBottom * scaleY,
-      sBaselineY: canvasRect.top + sLetter.y * scaleY,
+      sBaselineY: canvasRect.top + sDrawnY * scaleY,
       uBaselineY: canvasRect.top + uBaseline * scaleY,
     };
   }

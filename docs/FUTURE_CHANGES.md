@@ -1,6 +1,8 @@
 # Future Changes
 
-Status: approved direction, not implemented.
+Status: approved direction; hero refresh/title-swap fixes implemented. The
+current split centering is accepted by Subhu. See `NEON_HANDOFF.md` for the
+prioritized remaining tasks and asset instructions.
 
 ## Palette
 
@@ -17,16 +19,28 @@ deeper black, while its type remains Bone. Vermilion is the flower accent.
 
 ## Hero and Garden
 
-- Keep the fixed, intended “SUBHU” position after refresh.
-- Do not replay a second title when the Garden becomes ready.
-- Keep one centered Garden composition behind the text.
-- Fade from 100% gradually toward 70% while scrolling.
-- Do not abruptly cut the hero before About is present.
-- Keep the split gap visually centered.
+- Resolved: keep “SUBHU” at a stable responsive size and position after refresh.
+- Resolved: animate the visible title and Garden on one canvas; do not replay a
+  second DOM title.
+- Resolved: keep a centered Garden composition behind the canvas text.
+- Resolved in the integrated preview: fade gradually from 100% toward the
+  70% floor and keep the hero visible as About arrives. Recheck after further
+  scroll choreography changes.
+- Accepted: Subhu likes the current split centering. Do not adjust it unless
+  requested.
+- Deferred: Subhu currently sees one flower type and does not want flower
+  variety changed now. Do not alter Garden seeds or flower generation for this
+  handoff.
 
 ## About
 
-- Align the pose with the last line of the bio as a complete composition.
+- The current animation uses `img/pose0.webp` through `img/pose7.webp`.
+- Use the eight supplied pose files in `img/my assets/pose_1.png` through
+  `pose_8.png`. Keep their filename order unless visual inspection shows it is
+  not the intended sequence.
+- Align the visible pose's feet with the bio's last line. Subhu reports that
+  the current baseline still looks wrong on the laptop, so do not mark this
+  complete based on a different viewport or the image-box bounds alone.
 - On desktop, keep the pose close to the text without crowding it.
 - On mobile, place the portrait above the bio.
 
@@ -41,7 +55,7 @@ deeper black, while its type remains Bone. Vermilion is the flower accent.
 ## Journey
 
 - Keep “The journey” close to “so far”.
-- Remove the `100MB` text from the MAR-AUG storage illustration.
+- Done: the `100MB` text was removed from the MAR-AUG storage illustration.
 - Keep both milestone layouts and current project links.
 
 ## What I do
@@ -52,12 +66,23 @@ deeper black, while its type remains Bone. Vermilion is the flower accent.
 
 ## Selected Work
 
-- Use real supplied project artwork where the current inline/placeholder
-  imagery remains.
-- Accessible Search: use the supplied Accessible Search artwork.
-- Assist-Ding: use the same promotional/spotlight artwork consistently.
-- AEO Toolkit: use the supplied AEO Toolkit artwork and clean its generated
-  labels before publication.
+- The current Work cards still use inline SVG flow diagrams. Replace their
+  artwork with images from `D:\PROTFOLIO WEBSITE\selected-work-images`.
+- Accessible Search: use
+  `Accessible Search project in a frontend portfolio.png` as a card-cover
+  candidate and `Accessible Search React demo.png` as supporting project
+  detail.
+- Assist-Ding: use `Assist-Ding Work-card cover.png` as a card-cover candidate
+  and `Assist-Ding spotlight in a junior frontend developer portfolio.png` for
+  the spotlight/detail where appropriate.
+- AEO Toolkit: use `AEO Toolkit open-source contribution.png` as a card-cover
+  candidate and `AuditInputCard test added in AEO Toolkit PR70.png` as
+  supporting proof. Clean its generated labels before publication if they
+  remain visible.
+- These are candidates based on filenames. Inspect the artwork and map images
+  to the correct project before wiring them in. Keep source files unchanged;
+  copy optimized project assets into the repository and maintain useful alt
+  text.
 - Project cards: keep one active card readable at each scroll stop.
 
 ## Assist-Ding spotlight
@@ -72,11 +97,8 @@ deeper black, while its type remains Bone. Vermilion is the flower accent.
 
 ## Contact and FAQ
 
-- Keep “Let’s build something.”
-- Keep the existing email and LinkedIn actions.
-- Replace the currently odd LinkedIn-only footer composition with LinkedIn and
-  an FAQ entry.
-- FAQ behavior: opening the FAQ shows “Coming soon.”
+- Current contact copy and email/LinkedIn actions are in place. The FAQ was
+  removed in the current version; do not restore it unless Subhu requests it.
 - Do not add a contact form unless Subhu explicitly requests one.
 
 ## Deferred publication work

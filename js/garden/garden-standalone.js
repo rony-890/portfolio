@@ -37,7 +37,7 @@
     // Easing function for slide
     SLIDE_EASE: (t) => 1 - Math.pow(1 - t, 3), // easeOutCubic
   };
-  const HERO_LETTER_GAP_RATIO = 0.025;
+  const HERO_LETTER_GAP_RATIO = 0;
 
   // Safe rect for random seed constraint (Step 7)
   const SAFE_RECT_CONFIG = {
@@ -47,6 +47,13 @@
     HORIZONTAL_PADDING_RATIO: 0.08,
     // Max attempts to find a valid seed
     MAX_SEED_ATTEMPTS: 20,
+  };
+  const INTRO_RISE_CONFIG = {
+    INITIAL_DELAY: 150,
+    STAGGER_MS: 55,
+    DURATION_MS: 1300,
+    OFFSET_EM: 1.05,
+    BLOOM_OVERLAP_MS: 120,
   };
 
   function h(n) {
@@ -62,6 +69,26 @@
     if (t >= 1) return 1;
     return 1 - Math.pow(1 - t, 3);
   }
+  function riseEase(t) {
+    if (t <= 0) return 0;
+    if (t >= 1) return 1;
+    const sampleX = (u) =>
+      3 * (1 - u) * (1 - u) * u * 0.2 +
+      3 * (1 - u) * u * u * 0.2 +
+      u * u * u;
+    const sampleY = (u) =>
+      3 * (1 - u) * (1 - u) * u * 0.8 +
+      3 * (1 - u) * u * u +
+      u * u * u;
+    let lo = 0;
+    let hi = 1;
+    for (let i = 0; i < 10; i++) {
+      const mid = (lo + hi) / 2;
+      if (sampleX(mid) < t) lo = mid;
+      else hi = mid;
+    }
+    return sampleY((lo + hi) / 2);
+  }
   function rng(seed) {
     let s = seed | 0;
     return () => {
@@ -76,9 +103,14 @@
   function computeBHoleCentroid(fontSpec, size) {
     const offscreen = document.createElement('canvas');
     const ctx = offscreen.getContext('2d');
-    const renderSize = Math.ceil(size * B_HOLE_CONFIG.RENDER_SCALE);
-    const padding = Math.ceil(renderSize * 0.2);
+    const renderSize = Math.max(
+      32,
+      Math.ceil(size * B_HOLE_CONFIG.RENDER_SCALE),
+    );
+    const padding = Math.ceil(renderSize * 0.25);
     const canvasSize = renderSize + padding * 2;
+    const anchorX = canvasSize / 2;
+    const anchorY = padding + renderSize;
     
     offscreen.width = canvasSize;
     offscreen.height = canvasSize;
@@ -87,16 +119,25 @@
     ctx.fillRect(0, 0, canvasSize, canvasSize);
     
     ctx.font = fontSpec.replace('100px', `${renderSize}px`);
+    ctx.fontKerning = "normal";
+    ctx.fontVariantLigatures = "none";
+    ctx.fontSynthesis = "none";
     ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
+    ctx.textBaseline = 'alphabetic';
     ctx.fillStyle = 'black';
-    ctx.fillText('B', canvasSize / 2, canvasSize / 2);
+    ctx.fillText('B', anchorX, anchorY);
     
     // Get image data
     const imgData = ctx.getImageData(0, 0, canvasSize, canvasSize);
     const data = imgData.data;
     const w = canvasSize;
     const h = canvasSize;
+    const isLight = (idx) => {
+      const alpha = data[idx * 4 + 3];
+      const brightness =
+        (data[idx * 4] + data[idx * 4 + 1] + data[idx * 4 + 2]) / 3;
+      return alpha < 128 || brightness > B_HOLE_CONFIG.TOLERANCE;
+    };
     
     // Flood fill from outside (white background) to mark exterior
     const visited = new Uint8Array(w * h);
@@ -117,16 +158,14 @@
     }
     
     // BFS flood fill
-    while (queue.length > 0) {
-      const [cx, cy] = queue.shift();
+    for (let head = 0; head < queue.length; head++) {
+      const [cx, cy] = queue[head];
       const neighbors = [[cx + 1, cy], [cx - 1, cy], [cx, cy + 1], [cx, cy - 1]];
       for (const [nx, ny] of neighbors) {
         if (nx < 0 || nx >= w || ny < 0 || ny >= h) continue;
         const nidx = ny * w + nx;
         if (visited[nidx]) continue;
-        const alpha = data[nidx * 4 + 3];
-        const brightness = (data[nidx * 4] + data[nidx * 4 + 1] + data[nidx * 4 + 2]) / 3;
-        if (alpha < 128 || brightness > B_HOLE_CONFIG.TOLERANCE) {
+        if (isLight(nidx)) {
           visited[nidx] = 1;
           queue.push([nx, ny]);
         }
@@ -139,25 +178,21 @@
       for (let x = 0; x < w; x++) {
         const idx = y * w + x;
         if (visited[idx]) continue;
-        const alpha = data[idx * 4 + 3];
-        const brightness = (data[idx * 4] + data[idx * 4 + 1] + data[idx * 4 + 2]) / 3;
-        if (alpha >= 128 && brightness <= B_HOLE_CONFIG.TOLERANCE) {
+        if (isLight(idx)) {
           // Found a hole pixel - flood fill this hole
           const holePixels = [];
           const holeQueue = [[x, y]];
           visited[idx] = 2; // Mark as hole
           
-          while (holeQueue.length > 0) {
-            const [hx, hy] = holeQueue.shift();
+          for (let head = 0; head < holeQueue.length; head++) {
+            const [hx, hy] = holeQueue[head];
             holePixels.push([hx, hy]);
             const neighbors = [[hx + 1, hy], [hx - 1, hy], [hx, hy + 1], [hx, hy - 1]];
             for (const [nhx, nhy] of neighbors) {
               if (nhx < 0 || nhx >= w || nhy < 0 || nhy >= h) continue;
               const nidx = nhy * w + nhx;
               if (visited[nidx] !== 0) continue;
-              const nalpha = data[nidx * 4 + 3];
-              const nbrightness = (data[nidx * 4] + data[nidx * 4 + 1] + data[nidx * 4 + 2]) / 3;
-              if (nalpha >= 128 && nbrightness <= B_HOLE_CONFIG.TOLERANCE) {
+              if (isLight(nidx)) {
                 visited[nidx] = 2;
                 holeQueue.push([nhx, nhy]);
               }
@@ -183,14 +218,24 @@
     const lowerHole = holes[holes.length - 1];
     
     // Compute centroid of lower hole
-    const cx = lowerHole.reduce((sum, p) => sum + p[0], 0) / lowerHole.length;
-    const cy = lowerHole.reduce((sum, p) => sum + p[1], 0) / lowerHole.length;
+    const cx = lowerHole.reduce((sum, p) => sum + p[0] + 0.5, 0) / lowerHole.length;
+    const cy = lowerHole.reduce((sum, p) => sum + p[1] + 0.5, 0) / lowerHole.length;
     
     // Convert to normalized coordinates (0-1) relative to canvas center
-    const normX = (cx - canvasSize / 2) / (renderSize / 2);
-    const normY = (cy - canvasSize / 2) / (renderSize / 2);
+    const offsetXEm = (cx - anchorX) / renderSize;
+    const offsetYEm = (cy - anchorY) / renderSize;
     
-    return { x: normX, y: normY, cx, cy, canvasSize, renderSize };
+    return {
+      offsetXEm,
+      offsetYEm,
+      holeCount: holes.length,
+      cx,
+      cy,
+      anchorX,
+      anchorY,
+      canvasSize,
+      renderSize,
+    };
   }
   function bez(a, b, c, d, n) {
     const P = [];
@@ -279,11 +324,14 @@
         // Add letter spacing for better readability
         const letterSpacing = S * 0.08;
         const chars = ch.split("");
-        const totalWidth = chars.reduce((sum, c) => sum + g.measureText(c).width, 0) + letterSpacing * (chars.length - 1);
+        const widths = chars.map((char) => g.measureText(char).width);
+        const totalWidth =
+          widths.reduce((sum, width) => sum + width, 0) +
+          letterSpacing * (chars.length - 1);
         let cursorX = x - totalWidth / 2;
-        for (const char of chars) {
-          g.fillText(char, cursorX, y);
-          cursorX += g.measureText(char).width + letterSpacing;
+        for (let i = 0; i < chars.length; i++) {
+          g.fillText(chars[i], cursorX + widths[i] / 2, y);
+          cursorX += widths[i] + letterSpacing;
         }
       },
     };
@@ -780,11 +828,18 @@
       this._pointerDirty = false;
       this._pointerSettleUntil = 0;
       this._stopped = false;
+      this._readyFired = false;
       this._boundResize = () => this.resize();
       this._boundMove = (e) => {
         const r = this.cv.getBoundingClientRect();
-        this.mx = e.clientX - r.left;
-        this.my = e.clientY - r.top;
+        this.mx =
+          r.width && this.W
+            ? ((e.clientX - r.left) * this.W) / r.width
+            : e.clientX - r.left;
+        this.my =
+          r.height && this.H
+            ? ((e.clientY - r.top) * this.H) / r.height
+            : e.clientY - r.top;
         this._pointerDirty = true;
       };
       this._boundLeave = () => {
@@ -801,9 +856,10 @@
       
       const initAfterFontLoad = () => {
         this.cache = {};
-        this._buildLetters();
         this.resize();
-        if (typeof this.opts.onReady === "function") this.opts.onReady();
+        this._buildLetters();
+        this.layout();
+        this.start();
       };
       
       if (document.fonts) {
@@ -826,16 +882,21 @@
       return (this.cache[ch] = w);
     }
     resize() {
-      const r = this.cv.getBoundingClientRect();
+      const cssW = this.cv.clientWidth || this.cv.offsetWidth;
+      const cssH = this.cv.clientHeight || this.cv.offsetHeight;
       const d = Math.min(window.devicePixelRatio || 1, this.opts.maxDpr || 2);
-      if (!r.width || !r.height) return;
-      this.cssW = r.width;
-      this.cssH = r.height;
-      this.W = Math.round(r.width * d);
-      this.H = Math.round(r.height * d);
+      if (!cssW || !cssH) return;
+      this.cssW = this.W = cssW;
+      this.cssH = this.H = cssH;
+      const title = document.querySelector("#hero .h-name");
+      const titleSize = title
+        ? parseFloat(getComputedStyle(title).fontSize)
+        : NaN;
+      this._targetTextSize =
+        Number.isFinite(titleSize) && titleSize > 0 ? titleSize : 300;
       this.dpr = d;
-      this.cv.width = this.W;
-      this.cv.height = this.H;
+      this.cv.width = Math.round(cssW * d);
+      this.cv.height = Math.round(cssH * d);
       this.layout();
     }
     _buildLetters() {
@@ -843,12 +904,11 @@
       this._computeTextBoundsForSafeRect();
       
       // Try multiple random seeds until all garden elements fit in safe rect
-      let bestSeed = null;
       let bestLetters = null;
       let bestFit = false;
       
       for (let attempt = 0; attempt < SAFE_RECT_CONFIG.MAX_SEED_ATTEMPTS; attempt++) {
-        const seed = Math.floor(Math.random() * 1e9);
+        const seed = 0x5eed1234 + attempt;
         const rand = rng(seed);
         const chars = [...this.text];
         let prev = null;
@@ -869,29 +929,28 @@
         
         // Check if this seed's garden elements fit in safe rect (at target scale, before safety fit)
         if (this._checkSafeRect(letters)) {
-          bestSeed = seed;
           bestLetters = letters;
           bestFit = true;
           break;
         }
         
         // Keep track of last attempt as fallback
-        bestSeed = seed;
         bestLetters = letters;
       }
       
       this.letters = bestLetters;
       this._seedFit = bestFit;
-      
-      // layout() will be called by resize() after font loads
-      this.start();
     }
     
     _computeTextBoundsForSafeRect() {
       if (!this.W || !this.H) return;
-      const TARGET_S = 300;
+      const TARGET_S = this._targetTextSize || 300;
       let x = this.W / 2;
-      const y = this.H * 0.48;
+      this.g.font = `${HERO_FONT_WEIGHT} ${TARGET_S}px ${HERO_FONT_FAMILY}`;
+      const metrics = this.g.measureText(this.text);
+      const ascent = metrics.actualBoundingBoxAscent || TARGET_S * 0.72;
+      const descent = metrics.actualBoundingBoxDescent || 0;
+      const y = this.H * 0.48 + (ascent - descent) / 2;
       
       // Compute total text width at target scale
       const chars = [...this.text];
@@ -933,7 +992,7 @@
     
     _checkSafeRect(letters) {
       if (!this._safeRect) return false;
-      const S = 300; // TARGET_S
+      const S = this._targetTextSize || 300;
       
       // Temporarily position letters at target positions (like layout does)
       let x = this.W / 2;
@@ -942,7 +1001,11 @@
         letters.reduce((s, l) => s + this.mw(l.ch) * S, 0) +
         letterGap * Math.max(0, letters.length - 1);
       x -= totalW() / 2;
-      const y = this.H * 0.48;
+      this.g.font = `${HERO_FONT_WEIGHT} ${S}px ${HERO_FONT_FAMILY}`;
+      const metrics = this.g.measureText(this.text);
+      const ascent = metrics.actualBoundingBoxAscent || S * 0.72;
+      const descent = metrics.actualBoundingBoxDescent || 0;
+      const y = this.H * 0.48 + (ascent - descent) / 2;
       
       for (let i = 0; i < letters.length; i++) {
         const l = letters[i];
@@ -999,16 +1062,19 @@
     }
     layout() {
       if (!this.W || !this.letters.length) return;
-      const TARGET_S = 300;
+      const TARGET_S = this._targetTextSize || 300;
       let S = TARGET_S;
       const letterGap = HERO_LETTER_GAP_RATIO * S;
+      this.g.font = `${HERO_FONT_WEIGHT} ${S}px ${HERO_FONT_FAMILY}`;
+      const metrics = this.g.measureText(this.text);
+      const ascent = metrics.actualBoundingBoxAscent || S * 0.72;
+      const descent = metrics.actualBoundingBoxDescent || 0;
 
-      // center letters at the target size first - DETERMINISTIC
       const totalW = () =>
         this.letters.reduce((s, l) => s + this.mw(l.ch) * S, 0) +
         letterGap * Math.max(0, this.letters.length - 1);
       let x = this.W / 2 - totalW() / 2;
-      const y = this.H * 0.48;
+      const y = this.H * 0.48 + (ascent - descent) / 2;
       this.letters.forEach((l, i) => {
         const w = this.mw(l.ch) * S;
         l.tx = x + w / 2;
@@ -1022,15 +1088,9 @@
         l.y = l.ty;
       });
 
-      // safety fit: shrink ONLY if full garden (stems+leaves+roses) overflows — prevents crop
-      // Extra left padding to prevent left-side crop from vines/flowers
-      const pad = Math.max(80, this.W * 0.08);  // Original pad for larger text
-      
-      // The focal compensation shift is clamped to pad and only shifts LEFT (negative)
-      // Reserve shift space only on left side
-      const maxShift = pad;
-      const availW = this.W - pad * 2 - maxShift,  // Only left side needs shift reserve
-        availH = this.H - pad * 2;
+      const pad = this._getPad();
+      const availW = Math.max(60, this.W - pad * 2);
+      const availH = Math.max(60, this.H - pad * 2);
       let x0 = 1e9,
         y0 = 1e9,
         x1 = -1e9,
@@ -1075,22 +1135,38 @@
         }
       }
 
-      // focal point: lower hole of "B" glyph
-      this.computeAndSetBHoleFocalPoint(S);
+      this.computeAndSetBHoleFocalPoint(this.S);
       const splitIdx = SLIDE_DOOR_CONFIG.SPLIT_AFTER_INDEX;
       const left = this.letters[splitIdx];
       const right = this.letters[splitIdx + 1];
       if (left && right) {
         const gapCenter =
           (left.tx + left.tw / 2 + right.tx - right.tw / 2) / 2;
-        this._gapCenterOffset = this.W / 2 - gapCenter;
+        const focalX = this._bHoleX != null ? this._bHoleX : this.W / 2;
+        this._gapCenterOffset = focalX - gapCenter;
       }
+    }
+    _getPad() {
+      return Math.min(80, Math.max(24, this.W * 0.08));
     }
     start() {
       const now = performance.now();
+      const useRise = !this.reducedMotion && this.opts.introRise !== false;
+      this.introStart = now;
+      let riseCount = 0;
+      for (const l of this.letters) {
+        l.riseIdx = l.ch === " " ? null : riseCount++;
+      }
+      const riseDuration = riseCount
+        ? INTRO_RISE_CONFIG.INITIAL_DELAY +
+          (riseCount - 1) * INTRO_RISE_CONFIG.STAGGER_MS +
+          INTRO_RISE_CONFIG.DURATION_MS -
+          INTRO_RISE_CONFIG.BLOOM_OVERLAP_MS
+        : 0;
+      const bloomStart = useRise ? now + Math.max(0, riseDuration) : now;
       this._animationEnd = now;
       this.letters.forEach((l, i) => {
-        l.birth = now + i * 180;
+        l.birth = bloomStart + i * 180;
         for (const e of (l.els || []).concat(l.tend || [])) {
           const duration =
             e.t === "stem" ? e.dur : e.t === "rose" ? 1200 : 1000;
@@ -1133,46 +1209,33 @@
     }
     computeAndSetBHoleFocalPoint(S) {
       const hole = computeBHoleCentroid(FONT_SPEC, S);
-      if (!hole) return;
-      
-      // Find B letter
-      const bIdx = this.letters.findIndex((l) => l.ch.toLowerCase() === "b");
-      if (bIdx < 0) return;
-      const bLetter = this.letters[bIdx];
-      
-      // Convert normalized hole position to canvas coordinates
-      // hole.x, hole.y are normalized (-1 to 1) relative to B center
-      // B letter center is at bLetter.tx, bLetter.ty
-      const holeScale = S * 0.5; // approximate B width/2
-      const holeCanvasX = bLetter.tx + hole.x * holeScale;
-      const holeCanvasY = bLetter.ty + hole.y * holeScale;
-      
-      // Shift all letters so B-hole is at canvas center
-      const dx = this.W / 2 - holeCanvasX;
-      const dy = this.H / 2 - holeCanvasY;
-      this.letters.forEach((l) => {
-        l.tx += dx;
-        l.ty += dy;
-        l.x += dx;
-        l.y += dy;
-      });
-      
-      // After shift, B-hole is at canvas center (W/2, H/2)
-      // Transform-origin should be 50% 50% to scale around canvas center = B-hole
-      this.updateTransformOrigin(this.W / 2, this.H / 2);
+      const bLetter = this.letters.find((l) => l.ch.toLowerCase() === "b");
+      if (!hole || !bLetter) {
+        this._bHoleMeta = null;
+        this._bHoleX = this.W / 2;
+        this._bHoleY = this.H / 2;
+        this.updateTransformOrigin(this.W / 2, this.H / 2);
+        return;
+      }
+      this._bHoleMeta = hole;
+      this._bHoleX = bLetter.tx + hole.offsetXEm * S;
+      this._bHoleY = bLetter.ty + hole.offsetYEm * S;
+      this.updateTransformOrigin(this._bHoleX, this._bHoleY);
     }
     updateTransformOrigin(canvasX, canvasY) {
-      const heroEl = document.querySelector('#hero .el');
-      if (!heroEl) return;
-      // Convert canvas coordinates to .el percentage (0-100%)
-      const originX = (canvasX / this.W) * 100;
-      const originY = (canvasY / this.H) * 100;
-      heroEl.style.transformOrigin = `${originX.toFixed(2)}% ${originY.toFixed(2)}%`;
+      const heroEl = document.querySelector("#hero .hero-scene");
+      if (!heroEl || !this.W || !this.H) return;
+      const pctX = Number(((canvasX / this.W) * 100).toFixed(2));
+      const pctY = Number(((canvasY / this.H) * 100).toFixed(2));
+      heroEl.style.transformOrigin = `${pctX}% ${pctY}%`;
+      this._originX = (pctX / 100) * this.W;
+      this._originY = (pctY / 100) * this.H;
     }
     _computeSlideDoorState() {
       const heroEl = document.querySelector('#hero .el');
       if (!heroEl) {
         this._slideProgress = 0;
+        this._easedSlide = 0;
         this._slideShift = 0;
         this._slideGapShift = 0;
         this._globalOpacity = 1;
@@ -1184,6 +1247,7 @@
       const scaleMatch = transform.match(/scale\(([\d.]+)\)/);
       if (!scaleMatch) {
         this._slideProgress = 0;
+        this._easedSlide = 0;
         this._slideShift = 0;
         this._slideGapShift = 0;
         this._globalOpacity = 1;
@@ -1201,9 +1265,10 @@
       
       const slideProgress = Math.min(1, progress / SLIDE_DOOR_CONFIG.SLIDE_COMPLETE_PROGRESS);
       const easedSlide = SLIDE_DOOR_CONFIG.SLIDE_EASE(slideProgress);
+      this._easedSlide = easedSlide;
       
       const vpWidth = window.innerWidth;
-      const maxShiftCanvas = (vpWidth * SLIDE_DOOR_CONFIG.MAX_SHIFT_RATIO) / this.dpr;
+      const maxShiftCanvas = vpWidth * SLIDE_DOOR_CONFIG.MAX_SHIFT_RATIO;
       this._slideShift = maxShiftCanvas * easedSlide;
       this._slideGapShift = (this._gapCenterOffset || 0) * easedSlide;
       
@@ -1211,57 +1276,49 @@
       
       this._slideDoorActive = slideProgress > 0;
     }
-    _applyFocalCompensation(g, dpr) {
-      const heroEl = document.querySelector('#hero .el');
-      if (!heroEl) return;
-      
-      // Parse heroEl transform to get scale and translate
-      const transform = heroEl.style.transform;
-      const scaleMatch = transform.match(/scale\(([\d.]+)\)/);
-      const translateMatch = transform.match(/translate3d\(([^,]+),\s*([^,]+)/);
-      
+    _applyFocalCompensation(g) {
+      this._focalShiftX = 0;
+      this._focalShiftY = 0;
+      this._focalClamped = false;
+      const heroEl = document.querySelector("#hero .hero-scene");
+      if (!heroEl || !this.W || !this.H) return;
+
+      const transform = heroEl.style.transform || "";
+      const scaleMatch = transform.match(/scale\(\s*([-+]?\d*\.?\d+)\s*\)/i);
+      const translateMatch = transform.match(
+        /translate3d\(\s*([-+]?\d*\.?\d+)(?:px)?\s*,\s*([-+]?\d*\.?\d+)(?:px)?/i,
+      );
       if (!scaleMatch || !translateMatch) return;
-      
-      const scale = parseFloat(scaleMatch[1]);
-      const translateX = parseFloat(translateMatch[1]);
-      const translateY = parseFloat(translateMatch[2]);
-      
-      // Viewport center
-      const vpCenterX = window.innerWidth / 2;
-      const vpCenterY = window.innerHeight / 2;
-      
-      // HeroEl center in viewport = translate (after translate3d, before translate(-50%,-50%))
-      const heroCenterX = translateX;
-      const heroCenterY = translateY;
-      
-      // Keep focal compensation independent of the split so both groups move equally.
-      const bHoleShiftX = 0;
-      
-      // B-hole position in heroEl coords (before CSS scale) = canvas center + slide shift
-      const bHoleHeroElX = this.W / 2 + bHoleShiftX;
-      const bHoleHeroElY = this.H / 2;
-      
-      // B-hole position in viewport = heroEl center + (bHoleHeroEl - heroEl center) * scale
-      // heroEl center in heroEl coords = (W/2, H/2)
-      const bHoleVpX = heroCenterX + (bHoleHeroElX - this.W / 2) * scale;
-      const bHoleVpY = heroCenterY + (bHoleHeroElY - this.H / 2) * scale;
-      
-      // Required shift in viewport coords to center B-hole
-      const shiftVpX = vpCenterX - bHoleVpX;
-      const shiftVpY = vpCenterY - bHoleVpY;
-      
-      // Convert to garden canvas coords (before heroEl CSS scale)
-      let shiftCanvasX = shiftVpX / scale;
-      let shiftCanvasY = shiftVpY / scale;
-      
-      // Clamp shift to safety pad to prevent cropping
-      const pad = Math.max(80, this.W * 0.08);
-      const maxShift = pad;
-      shiftCanvasX = Math.max(-pad, Math.min(pad, shiftCanvasX));
-      shiftCanvasY = Math.max(-pad, Math.min(pad, shiftCanvasY));
-      
-      // Apply translation (g context already has DPR transform)
-      g.translate(shiftCanvasX * dpr, shiftCanvasY * dpr);
+      const u = parseFloat(scaleMatch[1]);
+      const c = parseFloat(translateMatch[1]);
+      const w = parseFloat(translateMatch[2]);
+      if (
+        !Number.isFinite(u) ||
+        u <= 0 ||
+        !Number.isFinite(c) ||
+        !Number.isFinite(w)
+      ) {
+        return;
+      }
+
+      const bx = this._bHoleX != null ? this._bHoleX : this.W / 2;
+      const by = this._bHoleY != null ? this._bHoleY : this.H / 2;
+      const ox = this._originX != null ? this._originX : this.W / 2;
+      const oy = this._originY != null ? this._originY : this.H / 2;
+      const bHoleVpX = c - this.W / 2 + ox + u * (bx - ox);
+      const bHoleVpY = w - this.H / 2 + oy + u * (by - oy);
+      const alpha = this._easedSlide || 0;
+      if (alpha <= 0) return;
+
+      const rawFx = (alpha * (window.innerWidth / 2 - bHoleVpX)) / u;
+      const rawFy = (alpha * (window.innerHeight / 2 - bHoleVpY)) / u;
+      const pad = this._getPad();
+      const fx = Math.max(-pad, Math.min(pad, rawFx));
+      const fy = Math.max(-pad, Math.min(pad, rawFy));
+      this._focalClamped = fx !== rawFx || fy !== rawFy;
+      this._focalShiftX = fx;
+      this._focalShiftY = fy;
+      g.translate(fx, fy);
     }
     stop() {
       this._stopped = true;
@@ -1274,17 +1331,18 @@
       window.removeEventListener("pointerleave", this._boundLeave);
     }
     _frame(now) {
-      const g = this.g,
-        d = this.dpr;
-      g.setTransform(d, 0, 0, d, 0, 0);
+      const g = this.g;
+      const sx = this.W ? this.cv.width / this.W : this.dpr;
+      const sy = this.H ? this.cv.height / this.H : this.dpr;
+      g.setTransform(1, 0, 0, 1, 0, 0);
+      g.clearRect(0, 0, this.cv.width, this.cv.height);
+      g.setTransform(sx, 0, 0, sy, 0, 0);
       
       // Compute scroll progress and slide-door state
       this._computeSlideDoorState();
       
       // Apply focal compensation transform to keep B-hole at viewport center
-      this._applyFocalCompensation(g, d);
-      
-      g.clearRect(0, 0, this.W, this.H);
+      this._applyFocalCompensation(g);
       const B = backend(g);
       const st = { mx: this.touch ? null : this.mx, my: this.my, fa: this.fa };
       const f = CFG.boil && !this.reducedMotion ? Math.floor(now / 120) : 0;
@@ -1335,12 +1393,40 @@
         const origY = l.y;
         l.x += slideX + (this._slideGapShift || 0);
 
+        const useRise = !this.reducedMotion && this.opts.introRise !== false;
+        let riseY = 0;
+        let riseAlpha = 1;
+        if (useRise) {
+          const riseStart =
+            this.introStart +
+            INTRO_RISE_CONFIG.INITIAL_DELAY +
+            l.riseIdx * INTRO_RISE_CONFIG.STAGGER_MS;
+          const t = Math.max(
+            0,
+            Math.min(
+              1,
+              (now - riseStart) / INTRO_RISE_CONFIG.DURATION_MS,
+            ),
+          );
+          const eased = riseEase(t);
+          riseY = (1 - eased) * S * INTRO_RISE_CONFIG.OFFSET_EM;
+          riseAlpha = eased;
+        }
+
         g.globalAlpha = opacity;
-        B.text(l.ch, l.x, l.y, S, COLORS.text);
+        if (riseAlpha > 0.001) {
+          g.globalAlpha = opacity * riseAlpha;
+          B.text(l.ch, l.x, l.y + riseY, S, COLORS.text);
+        }
         g.globalAlpha = 1;
 
         l.x = origX;
         l.y = origY;
+      }
+
+      if (!this._readyFired) {
+        this._readyFired = true;
+        if (typeof this.opts.onReady === "function") this.opts.onReady();
       }
     }
     _drawStem(B, e, l, age, S, f, amp) {

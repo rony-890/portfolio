@@ -531,8 +531,35 @@ a {
   }
 
   #hero .h-cap {
-    transform: translateY(-26vh);
+    width: min(250px, calc(100vw - 120px));
+    gap: 10px;
   }
+
+  #hero .h-cap .lede {
+    font-size: clamp(14px, 2.8vw, 14.5px);
+    line-height: 1.4;
+  }
+
+  #hero .h-cap .mono {
+    font-size: clamp(11px, 2.5vw, 12px);
+  }
+}
+
+.is3d #hero .hero-caption-scene {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100dvh;
+  transform: none !important;
+  pointer-events: none;
+}
+
+.is3d #hero .hero-caption-scene .h-cap {
+  position: absolute;
+  inset-inline-start: max(16px, env(safe-area-inset-left, 0px));
+  inset-block-end: max(clamp(24px, 8vh, 64px), env(safe-area-inset-bottom, 0px));
+  margin: 0;
+  transform: none;
 }
 
 .h-cue i {

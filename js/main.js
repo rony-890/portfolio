@@ -470,7 +470,20 @@ oa();
                 }
               }),
                 i.replaceChild(r, t));
-            } else t.nodeType === 1 && a(t);
+            } else if (t.nodeType === 1) {
+              if (t.classList && t.classList.contains("c")) {
+                t.style.setProperty("--i", n++);
+                return;
+              }
+              if (
+                t.localName === "svg" ||
+                t.namespaceURI === "http://www.w3.org/2000/svg" ||
+                t.getAttribute("aria-hidden") === "true"
+              ) {
+                return;
+              }
+              a(t);
+            }
           }));
       })(e),
         e.setAttribute("aria-label", e.textContent));
@@ -968,6 +981,7 @@ oa();
       (Ke.height = x * Me),
       k.setTransform(Me, 0, 0, Me, 0, 0),
       m(".el .d").forEach(function (h) {
+        if (h.classList.contains("h-name")) return;
         if (getComputedStyle(h).whiteSpace === "nowrap") {
           h.style.fontSize = "";
           var J = h.offsetWidth,
@@ -1204,19 +1218,34 @@ oa();
       k.restore();
     }
   }
+  var heroScale = null,
+    heroScalePending = !1;
   function Rt(e) {
+    heroScalePending = !1;
     for (var n = q / 2, a = x / 2, i = 0; i < ve.length; i++) {
       var t = ve[i],
         r = t.z - e,
         d = p * (1 + t.zo),
         o = r - d;
       const isHero = t.el.classList.contains("hero-scene");
+      const isFixedHeroCaption = t.el.classList.contains("hero-caption-scene");
       if (o > 2.7 * p || r < 0.16 * p) {
         t.vis && ((t.el.style.visibility = "hidden"), (t.vis = !1));
         continue;
       }
       const rawScale = (t.abs ? p * t.abs : d) / r;
-      var u = isHero ? Math.min(rawScale, 2.43) : rawScale,
+      const heroProgress = Math.max(0, Math.min(1, (rawScale - 1) / 1.43));
+      const heroScaleTarget =
+        rawScale < 1
+          ? rawScale
+          : 1 + 1.43 * (1 - Math.pow(1 - heroProgress, 2));
+      if (isHero) {
+        if (heroScale === null) heroScale = heroScaleTarget;
+        const scaleDelta = heroScaleTarget - heroScale;
+        heroScale += Math.max(-0.06, Math.min(0.06, scaleDelta));
+        heroScalePending = Math.abs(scaleDelta) > 0.06;
+      }
+      var u = isHero ? heroScale : rawScale,
         s = o > 0 ? E(o / (1.9 * p)) : 0,
         f = (t.x + t.fx * s) * q,
         j = (t.y + t.fy * s) * x,
@@ -1238,7 +1267,7 @@ oa();
         captionHalfWidth + captionMargin - c,
         c + captionHalfWidth + captionMargin - q,
       );
-      const captionFade = t.captionWidth
+      const captionFade = t.captionWidth && !isFixedHeroCaption
         ? 1 - E(captionOverflow / captionMargin)
         : 1;
       const heroFade = isHero ? 1 - E((rawScale - 2.43) / (5.8 - 2.43)) : 1;
@@ -1705,12 +1734,12 @@ oa();
     gt = e;
     var a = scrollY,
       i = a - K;
-    ((K += i * (1 - Math.exp(-n * (Math.abs(i) > 3 * x ? 9 : 5.5)))),
+    ((K += i * (1 - Math.exp(-n * 3.5))),
       Math.abs(i) < 0.3 && (K = a));
     var t = M((e - qt - 250) / 1700, 0, 1);
     Ae = (Z ? 3 : 3.3) * p * E(t);
     var r = Ht(K);
-    ((r !== yt || K !== bt || Ae !== xt || Le) &&
+    ((r !== yt || K !== bt || Ae !== xt || Le || heroScalePending) &&
       ((yt = r),
       (bt = K),
       (xt = Ae),

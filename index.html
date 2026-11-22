@@ -66,8 +66,8 @@
         rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Anton:wght@400;700&family=Oswald:wght@700&family=DM+Serif+Display:ital@0;1&family=Geist:wght@300;400;500&family=Geist+Mono:wght@400;500&family=Playfair+Display:wght@700&display=swap"
     /></noscript>
-    <script type="module" crossorigin="" src="js/main.js?v=13"></script>
-    <link rel="stylesheet" crossorigin="" href="css/main.css?v=13" />
+    <script type="module" crossorigin="" src="js/main.js?v=19"></script>
+    <link rel="stylesheet" crossorigin="" href="css/main.css?v=20" />
   </head>
   <body>
     <noscript>
@@ -204,7 +204,7 @@
           </div>
         </div>
         <div
-          class="el"
+          class="el hero-caption-scene"
           data-p="-0.31,0.34"
           data-mp="-0.02,0.24"
           data-z="-.12"
@@ -1581,55 +1581,33 @@
         pointer-events: none;
       "
     ></div>
-    <script src="/js/garden/garden-standalone.js?v=8"></script>
-    <script src="/js/curved-line-patch.js?v=3"></script>
+    <script src="/js/garden/garden-standalone.js?v=12"></script>
+    <script src="/js/curved-line-patch.js?v=4"></script>
     <script>
       (function () {
         "use strict";
         document.body.style.overflowX = "visible";
         var canvas = document.getElementById("garden-canvas");
-        if (!canvas || !window.Garden) return;
         var title = document.querySelector("#hero .h-name");
-        var startGarden = function () {
-          if (window.__garden) return;
+        if (!canvas || !window.Garden) {
+          if (title) title.style.opacity = "1";
+          return;
+        }
+        var prefersReducedMotion =
+          window.matchMedia &&
+          window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (title) {
+          title.style.opacity = "0";
+          title.style.pointerEvents = "none";
+        }
+        if (!window.__garden) {
           window.__garden = new Garden(canvas, {
             text: "SUBHU",
             boil: true,
             maxDpr: 2,
             density: 1,
-            onReady: function () {
-              if (title) title.style.opacity = "0";
-            },
+            introRise: !prefersReducedMotion,
           });
-        };
-        var prefersReducedMotion =
-          window.matchMedia &&
-          window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        if (!prefersReducedMotion && title) {
-          title.style.fontFamily = '"Anton", sans-serif';
-          title.style.fontWeight = "700";
-          var characters = title.querySelectorAll(".c");
-          var lastCharacter = characters[characters.length - 1];
-          var revealTitle = function () {
-            title.style.opacity = "1";
-            if (lastCharacter) {
-              lastCharacter.addEventListener("animationend", startGarden, {
-                once: true,
-              });
-              title.classList.add("is-revealing");
-            } else {
-              startGarden();
-            }
-          };
-          if (document.fonts && document.fonts.load) {
-            document.fonts
-              .load('700 100px "Anton"')
-              .then(revealTitle, revealTitle);
-          } else {
-            revealTitle();
-          }
-        } else {
-          startGarden();
         }
         // Keep body overflow visible (JS may reset it)
         var obs = new MutationObserver(function () {
