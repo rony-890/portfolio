@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
   const v = document.createElement("link").relList;
   if (v && v.supports && v.supports("modulepreload")) return;
   for (const m of document.querySelectorAll('link[rel="modulepreload"]')) l(m);
@@ -177,14 +177,11 @@ const sa = {
       projectType: "Independent demo",
       description: `A React demo of accessible search patterns using local sample data. It includes a visible label, helper text, loading, empty, and error states, result announcements, and visible keyboard focus.`,
       services: ["React", "Accessible search", "Keyboard interaction"],
-      images: [
-        "img/projects/accessible-search-results.webp?v=13",
-        "img/projects/accessible-search-states.webp?v=13",
-      ],
+      images: ["img/projects/accessible-search-demo.webp?v=1"],
       imageAlts: [
-        "A search field directs queries to a grid of varied results.",
-        "A search field linked to loading, results, empty, and error states.",
+        "Accessible Search demo showing search results and interface states.",
       ],
+      cardImage: "img/projects/accessible-search-work-card.webp?v=1",
       summary: "Accessible search patterns using local sample data.",
       lines: [
         "A query comes in.",
@@ -205,8 +202,11 @@ const sa = {
       projectType: "Independent prototype",
       description: `Open PR #2 sets up the React, Vite, TypeScript, and Tailwind project and a landing-page prototype with hero, features, pricing, and footer sections. The pull request is still open.`,
       services: ["React", "Vite", "TypeScript", "Tailwind CSS"],
-      images: ["img/projects/assist-ding-flow.webp?v=13"],
-      imageAlts: ["Abstract shapes flow into interface panels and cards."],
+      images: ["img/projects/assist-ding-spotlight.webp?v=1"],
+      imageAlts: [
+        "Assist-Ding illustration showing customer questions flowing into a reply.",
+      ],
+      cardImage: "img/projects/assist-ding-work-card.webp?v=1",
       summary: "Initial setup and landing-page prototype, shown as an open PR.",
       lines: [
         "React and Vite are set up.",
@@ -228,13 +228,14 @@ const sa = {
       description: `Merged PR #70 extracted AuditInputCard and normalizeUrl into a separate component and added an AuditInputCard test.`,
       services: ["React", "Component extraction", "Testing"],
       images: [
+        "img/projects/aeo-toolkit-test.webp?v=1",
         "img/projects/aeo-toolkit-components.webp?v=13",
-        "img/projects/aeo-toolkit-normalization.webp?v=13",
       ],
       imageAlts: [
-        "Abstract modules lead into a reusable interface card.",
-        "A module flow passes through URL normalization into a reusable card.",
+        "AuditInputCard contribution with its added test.",
+        "A reusable AEO Toolkit interface component.",
       ],
+      cardImage: "img/projects/aeo-toolkit-test.webp?v=1",
       summary: "Extracted the audit input component and added a test.",
       lines: [
         "AuditInputCard is extracted.",
@@ -349,7 +350,7 @@ oa();
         x: -0.22,
         y: -0.02,
         w: "clamp(260px,30vw,560px)",
-        ar: "16/9",
+        ar: "4/3",
         ax: 0.05,
         ay: 0.3,
       },
@@ -357,7 +358,7 @@ oa();
         x: 0.21,
         y: 0.05,
         w: "clamp(260px,30vw,560px)",
-        ar: "16/9",
+        ar: "4/3",
         ax: -0.02,
         ay: -0.3,
       },
@@ -365,7 +366,7 @@ oa();
         x: -0.18,
         y: 0,
         w: "clamp(260px,30vw,560px)",
-        ar: "16/9",
+        ar: "4/3",
         ax: 0.26,
         ay: 0.34,
       },
@@ -421,10 +422,11 @@ oa();
       n +
       '" style="width:' +
       a.w +
-      '"><span class="fig work-diagram" style="--ar:' +
+      '"><span class="fig work-cover" style="--ar:' +
       a.ar +
-      '">' +
-      renderWorkDiagram(e) +
+      '"><img src="' +
+      e.cardImage +
+      '" alt="" loading="lazy" decoding="async">' +
       '</span><span class="meta"><span class="mono">' +
       String(n + 1).padStart(2, "0") +
       " / " +

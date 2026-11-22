@@ -1,4 +1,4 @@
-﻿:root {
+:root {
   --bg: #14152c;
   --ink: #f4f1ec;
   --muted: #a8a29e;
@@ -624,7 +624,10 @@ a {
   overflow: visible;
   background: none;
   position: relative;
-  transform: translateY(-14vh);
+  /* The transparent canvas shifts the visible feet relative to the image box. */
+  transform: translateY(
+    calc(10.4vh - 162px + clamp(0px, calc(35vh - 315px), 40px))
+  );
 }
 
 .ab-fig.pose img {
@@ -689,14 +692,20 @@ a {
   gap: 0;
 }
 
-.num-worked .num-with {
+.num-worked-label {
+  display: flex;
+  align-items: baseline;
   justify-self: center;
-  margin: 4px 0;
+  gap: 0.35em;
+}
+
+.num-worked .num-with {
+  margin: 0;
 }
 
 .num-worked .num-company {
   justify-self: end;
-  margin-top: 1em;
+  margin-top: 1.25em;
 }
 
 .num-worked .d {
@@ -1101,12 +1110,9 @@ a {
   aspect-ratio: var(--ar, 4/3);
 }
 
-.card .fig.work-diagram {
+.card .fig.work-cover {
   display: grid;
-  place-items: center;
-  padding: clamp(12px, 2.4vw, 28px);
-  background: var(--bg);
-  border: 1px solid var(--hair);
+  background: #f4f1ec;
 }
 
 .work-svg {

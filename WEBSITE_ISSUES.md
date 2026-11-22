@@ -1,6 +1,6 @@
 # Website Issue Log
 
-## Checkpoint status — 2026-11-21
+## Current checkpoint
 
 WEB-001 is resolved in the live source. The hero name now rises and blooms in
 one Garden canvas instead of switching from the animated DOM heading to a
@@ -15,16 +15,17 @@ viewport and clear of the Scroll cue. A scroll trace at 492 x 300 changed
 scale by at most 0.06 per frame. Final sign-off still requires Subhu's laptop
 Chrome and physical display.
 
-Current user direction:
-- WEB-003: Subhu accepts the current centered split composition. Do not adjust
-  it unless requested.
-- WEB-005: the pose baseline is still wrong on Subhu's laptop. Eight replacement
-  pose PNGs are available at `img/my assets/pose_1.png` through `pose_8.png`.
-- WEB-010: six new Selected Work images are available in
-  `D:\PROTFOLIO WEBSITE\selected-work-images`; the current Work cards still use
-  inline SVG diagrams.
-- Garden flower variety: Subhu currently sees one flower type and has deferred
-  changing it. Do not modify the Garden for variety now.
+The final polish for WEB-005, WEB-006, WEB-009, and WEB-010 is implemented and
+verified in the integrated preview. The About pose uses the eight-frame WebP
+sequence in `img/poses/`; its visible feet align with the bio baseline within
+about 3 px at desktop viewports from 1366 x 768 through 1920 x 1080. At
+320 x 766, the full bio fits in the viewport, with about 16 px between the
+portrait and text. This does not replace testing on Subhu's laptop.
+
+The three Work cards use project artwork, and their dialogs load the selected
+supporting images with alt text. The “Worked” and “with” labels share one line;
+“company” sits below and to the right of the “2.” WEB-003's centered split
+composition remains accepted. Garden flower variety is deferred.
 
 Previously verified changes (2026-11-20):
 - WEB-001: the DOM title was hidden once Garden became active. The
@@ -44,15 +45,15 @@ Previously verified changes (2026-11-20):
   one Assist-Ding card in the active viewport.
 - WEB-008: the right-edge HUD progress rail is hidden.
 - The Journey "100MB" illustration label is removed.
-- The “Worked” and “with” labels are on one line. The requested “company”
-  placement beside the “2” remains open under WEB-006.
 
-Current open work:
-- WEB-005: replace/use the supplied pose frames and align the visible pose with
-  the bio baseline on Subhu's laptop.
-- WEB-006: finish the “Worked with 2 company” composition.
-- WEB-009: reposition the bio block for mobile and desktop.
-- WEB-010: replace the Selected Work card diagrams with the supplied images.
+Remaining verification and publish work:
+- Test the final About composition on Subhu's laptop Chrome and physical
+  display.
+- Complete keyboard, reduced-motion, zoom, and deployed-origin link checks.
+- Resolve canonical/Open Graph values after the production domain and approved
+  preview image are available.
+- Configure or remove the optional Vercel analytics script, which returns 404
+  in the integrated preview.
 
 WEB-003 is accepted as-is by Subhu. Garden flower variety is explicitly
 deferred.
@@ -202,7 +203,8 @@ time. Do not treat an issue as resolved until it has been verified.
 ### WEB-005 — About portrait size and baseline vary by screen ratio
 
 - **Priority:** Not triaged
-- **Status:** Open — user reports it still looks wrong on laptop
+- **Status:** Implemented and verified in the integrated preview; laptop sign-off
+  remains open
 - **Area:** About / responsive layout
 - **Reported:** 2026-11-18
 - **Observed:** The portrait size and foot baseline still look wrong for the
@@ -214,27 +216,21 @@ time. Do not treat an issue as resolved until it has been verified.
   looks too small for the composition, and its feet do not align with the
   bio's final line. The screenshot confirms the mismatch; no exact pixel delta
   is claimed from the image.
-- **Integrated-preview test:** At 1377 x 764, y=1200, with the HUD on “About,”
-  the pose image box measured 310 x 556 at x=319, y=152. The bio rendered as
-  11 lines; its last line ended at y=660, while the pose box ended at y=708
-  (48 px lower). This confirms a baseline mismatch in the integrated preview,
-  but not necessarily the same direction or magnitude as the user's Chrome.
-  Only this desktop ratio was tested; 4:3, mobile, and the user's laptop Chrome
-  remain unverified. These are image-box bounds, not alpha-pixel bounds of the
-  figure itself.
-- **New pose assets:** The current page uses `img/pose0.webp` through
-  `img/pose7.webp`. Subhu supplied eight replacement PNGs in
-  `img/my assets/pose_1.png` through `pose_8.png`. Inspect and use the supplied
-  set in filename order unless their visual sequence shows otherwise. Align
-  the visible figure's feet, not the transparent image-box edge, with the
-  intended bio baseline.
-- **Investigation/fix:** Tested in the integrated preview; not fixed. Keep this
-  in the backlog until the website is complete.
+- **Integrated-preview test:** The visible alpha edge of the pose frames was
+  measured against the bio's bottom at 1366 x 768, 1440 x 900, 1600 x 1000, and
+  1920 x 1080. The differences were within about 3 px at all four sizes.
+  At 320 x 766, the portrait's visible bottom was about 16 px above the bio,
+  and the full bio ended at y=763, inside the viewport.
+- **Assets and implementation:** The page now uses
+  `img/poses/pose-1.webp` through `pose-8.webp`, generated from the supplied
+  eight-frame set. The desktop offset accounts for transparent space at the
+  bottom of each image. The user's laptop Chrome and physical display remain
+  unverified.
 
 ### WEB-006 — Rework the “Worked with 2 company” composition
 
 - **Priority:** Not triaged
-- **Status:** Open — polish after the website is complete
+- **Status:** Implemented and verified in the integrated preview
 - **Area:** By the numbers / stat layout
 - **Reported:** 2026-11-18
 - **Observed:** The “Worked with” label does not align with the number in the
@@ -247,17 +243,13 @@ time. Do not treat an issue as resolved until it has been verified.
   label and large “2.” The requested composition is for “with” to sit above
   the number and “company” to begin about 1em below the end of the number's
   tail, aligned to its right side.
-- **Integrated-preview test:** After the counter settled at y=2800, “Worked
-  with” measured 83 x 16 at x=1071, y=194; “with” alone measured 30 x 13 at
-  x=1124, y=195; and the “2” box measured 72 x 155 at x=1071, y=216. Thus
-  “with” is 21 px above the number box and overlaps its upper-right area.
-  “company” is absent from the current card's DOM. The visible tail itself
-  needs pixel-level alignment during implementation; a DOM box is not the
-  glyph's exact outline. The Projects counter was “0+” at 350 ms and settled
-  to “10+” after about 2.85 s; confirm whether the plus sign is intended when
-  reviewing the final stats.
-- **Investigation/fix:** Tested in the integrated preview; not fixed. Keep this
-  in the backlog until the website is complete.
+- **Integrated-preview test:** At 1440 x 900 after the counters settled,
+  “Worked” and “with” share one line above the “2.” “Company” appears below
+  and to the right of the number; its rendered text box begins about 8 px
+  below the number's box. The Projects counter settles to “10+.”
+- **Implementation:** The label and company placement are styled in
+  `css/main.css`. Review the final composition on Subhu's laptop before
+  publishing.
 
 ### WEB-007 — Work project cards overlap on narrow screens
 
@@ -322,47 +314,28 @@ time. Do not treat an issue as resolved until it has been verified.
 ### WEB-009 — About bio block sits too low
 
 - **Priority:** High on narrow screens
-- **Status:** Open — fix deferred by user
+- **Status:** Implemented and verified in the integrated preview
 - **Area:** About / bio positioning
 - **Reported:** 2026-11-18
-- **Observed:** At 320 x 766, after selecting About and waiting for the scene
-  to settle, the portrait occupied y=209–543 while the bio container began at
-  y=695. The title began at y=726 and the paragraph at y=798, below the
-  viewport; the paragraph ended at y=1098. At 1377 x 766, the text container
-  began at y=336, 215 px below the portrait's top at y=121. This reproduces the
-  user's report that the bio sits too low.
+- **Observed:** The previous mobile layout put much of the bio below the
+  viewport.
 - **Expected:** Raise the bio heading and copy so they appear within the About
   scene and sit in a deliberate relationship to the portrait, including on
   narrow screens.
-- **Reproduce:** Open `http://127.0.0.1:5000/`, set the viewport to 320 x 766,
-  select About from the navigation, and wait about 2.2 seconds. In this run the
-  page reached `scrollY=1466`; the number varies with viewport and camera
-  easing.
-- **Integrated-preview test:** At 320 x 766, the bio's computed transform was
-  `translateY(306.4px)`, matching the mobile CSS rule. At 1377 x 766, the bio
-  remained visibly lower than the portrait's top, though it fit in the
-  viewport. These measurements are preview observations, not the exact user's
-  Chrome state.
-- **Likely cause:** The About text scene uses a lower vertical position
-  (`data-p="0.18,0.21"` and mobile `data-mp="0,0.35"` in
-  [index.html](./index.html):402), and the <=360 px rule adds
-  `translateY(40vh)` ([css/main.css](./css/main.css):638). The mobile offset is
-  directly confirmed by the computed transform; the desktop placement also
-  needs to be tuned against the intended composition. This is separate from
-  WEB-005, which tracks portrait sizing and baseline alignment.
-- **Fix direction:** Rework the About text's vertical placement and narrow
-  screen stacking, then verify the portrait and complete bio together at
-  mobile and desktop sizes. No source changes have been made.
+- **Integrated-preview test:** At 320 x 766, the bio box measured y=359–763,
+  so the full copy fits within the viewport. The visible portrait ends about
+  16 px above the bio. Desktop placement was checked with the pose baseline at
+  1366 x 768, 1440 x 900, 1600 x 1000, and 1920 x 1080.
+- **Implementation:** The mobile pose and bio use the stacked layout; desktop
+  positioning is tuned together with WEB-005. Confirm both on Subhu's laptop.
 
 ### WEB-010 — Replace Selected Work card diagrams with supplied artwork
 
 - **Priority:** Medium
-- **Status:** Open — source images supplied, not integrated into the cards
+- **Status:** Implemented and verified in the integrated preview
 - **Area:** Work / project-card artwork
 - **Reported:** 2026-11-21
-- **Observed:** The Work cards still render inline SVG flow diagrams through
-  `renderWorkDiagram` in `js/main.js`. The project dialogs already use images
-  from `img/projects/`.
+- **Observed:** The Work cards previously rendered inline SVG flow diagrams.
 - **Expected:** Use Subhu's supplied project artwork for the three Work cards
   while preserving project links, dialog behavior, and accessible text.
 - **Supplied images:** `D:\PROTFOLIO WEBSITE\selected-work-images` contains
@@ -372,8 +345,11 @@ time. Do not treat an issue as resolved until it has been verified.
   `AuditInputCard test added in AEO Toolkit PR70.png`,
   `Assist-Ding spotlight in a junior frontend developer portfolio.png`, and
   `Assist-Ding Work-card cover.png`.
-- **Fix direction:** Map one suitable cover to each card and use supporting
-  images in the project dialogs where they add useful detail. Keep the source
-  files unchanged, optimize copied assets using the existing project pattern,
-  and provide accurate alt text. Clean the generated labels in the AEO image
-  before publication if they remain visible.
+- **Integrated-preview test:** All three Work card images load, the cards no
+  longer contain inline SVG diagrams, and each project dialog loads its
+  selected image or images with alt text. The AEO Toolkit card uses the test
+  artwork; the supplied contribution image with visible generated labels is
+  not used.
+- **Implementation:** The cards use optimized WebP covers in `img/projects/`.
+  Accessible Search, Assist-Ding, and AEO Toolkit dialogs preserve their
+  project links and display the selected supporting artwork.
