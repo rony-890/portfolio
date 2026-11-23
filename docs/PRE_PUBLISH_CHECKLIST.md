@@ -27,7 +27,8 @@
 
 ## Interaction and responsive QA
 
-- [ ] Review the Assist-Ding spotlight and Contact copy before publishing.
+- [x] Review the Assist-Ding spotlight copy and keep only the live-site action.
+      The integrated preview confirms Bone text on the lavender panel.
 - [x] Implement and verify WEB-005, WEB-006, WEB-009, and WEB-010 in the
       integrated preview. See [`WEBSITE_ISSUES.md`](../WEBSITE_ISSUES.md) for
       measurements and the laptop sign-off gap.

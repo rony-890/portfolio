@@ -8,11 +8,11 @@
   const FONT = HERO_FONT_FAMILY;
   const FONT_SPEC = `${HERO_FONT_WEIGHT} 100px ${HERO_FONT_FAMILY}`;
   const COLORS = {
-    red: "#FF3B1F",
-    blue: "#1C2B8F",
-    line: "#FFD2C4",
-    text: "#121413",
-    vein: "#FFD2C4",
+    red: "#C62F28",
+    blue: "#4A685A",
+    line: "#EFE7DA",
+    text: "#EFE7DA",
+    vein: "#AFC0A6",
   };
   const CFG = { boil: true, density: 1 };
 

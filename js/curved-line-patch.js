@@ -1,5 +1,5 @@
 /**
- * Curved Blue Guide Line Patch
+ * Curved Vermilion Guide Line Patch
  * Draws a shortened, less tilted curved line on a new canvas above #cv
  * Constants defined at top for easy adjustment
  */
@@ -20,15 +20,15 @@
     TOP_OFFSET_RATIO: 0.0,
     BOTTOM_OFFSET_RATIO: 0.05,
     
-    // Colors (matching original: ct=[34,52,224], ut=[124,138,255])
-    COLOR_START: [34, 52, 224],    // #2234E0
-    COLOR_END: [124, 138, 255],    // #7C8AFF
+    // Palette: Vermilion guide line
+    COLOR_START: [198, 47, 40],    // #C62F28
+    COLOR_END: [198, 47, 40],
     
     // Line width (relative to viewport)
     BASE_LINE_WIDTH: 1.5,
     MAX_LINE_WIDTH: 3,
     
-    // NO DOT at end - removed extra blue dot
+    // NO DOT at end - removed extra accent dot
     SHOW_END_DOT: false,
     
     // Z-index: above #cv (z-index: 1), above .el (z-index: 2), below #hud (z-index: 30)

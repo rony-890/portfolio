@@ -1,11 +1,10 @@
 :root {
-  --bg: #14152c;
-  --ink: #f4f1ec;
-  --muted: #a8a29e;
-  --hair: #2b2443;
-  --line: #4f53af;
-  --orange: #d4cdf4;
-  --black: #0a0a1a;
+  --bg: #0f372b;
+  --ink: #efe7da;
+  --muted: #ccc5b7;
+  --hair: #4f695e;
+  --line: #c62f28;
+  --black: #0a0a0a;
   --display: "Bebas Neue", "Arial Narrow", Impact, sans-serif;
   --body: "Geist", ui-sans-serif, system-ui, sans-serif;
   --mono: "Geist Mono", ui-monospace, Menlo, monospace;
@@ -271,7 +270,7 @@ a {
 }
 
 #menu a:hover .d {
-  color: #4b5cff;
+  color: var(--line);
 }
 
 .burger:focus,
@@ -1241,9 +1240,9 @@ a {
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: var(--orange);
+  background: var(--line);
   display: block;
-  box-shadow: 0 0 0 8px #f4792029;
+  box-shadow: 0 0 0 8px #c62f2829;
 }
 
 .is3d #assist-ding {
@@ -1321,7 +1320,7 @@ a {
   margin: 0;
   letter-spacing: -0.015em;
   text-wrap: balance;
-  color: #fff;
+  color: #efe7da;
 }
 
 .dk-side {
@@ -1347,6 +1346,7 @@ a {
   font-size: clamp(16px, 1.3vw, 20px);
   line-height: 1.55;
   max-width: 62ch;
+  color: #efe7da;
 }
 
 .dk-side .mono {
@@ -1482,15 +1482,15 @@ a {
 }
 
 #proj {
-  --bg: #ffffff;
-  --hair: #e4e4e1;
-  --ink: #f4f1ec;
-  --muted: #a8a29e;
+  --bg: #efe7da;
+  --hair: #cfc3ae;
+  --ink: #0f372b;
+  --muted: #5a6860;
   color: var(--ink);
   position: fixed;
   inset: 0;
   z-index: 45;
-  background: #fff;
+  background: var(--bg);
   overflow: auto;
   overscroll-behavior: contain;
   clip-path: inset(50% 50% 50% 50%);
@@ -1709,7 +1709,7 @@ a {
 
 #wipe path {
   fill: none;
-  stroke: #2234e0;
+  stroke: var(--line);
   stroke-width: 3;
   stroke-linecap: round;
 }

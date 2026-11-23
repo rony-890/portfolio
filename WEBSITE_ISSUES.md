@@ -29,6 +29,17 @@ in the lower-right corner without changing the source files. The “Worked” an
 “2.” WEB-003's centered split composition remains accepted. Garden flower
 variety is deferred.
 
+The final palette uses Bottle Green `#0F372B` as the base page background,
+Bone `#EFE7DA` for high-contrast text and the hero name, and Vermilion
+`#C62F28` for flowers and accents. Measured rendered contrast for Bone on
+Bottle Green is 10.68:1. The Assist-Ding panel retains its lavender color;
+its heading and body copy use Bone, and only “Visit live site” remains visible.
+The curved guide line and HUD accent now also use Vermilion; the integrated
+preview confirmed the red line against the green base and Bone name.
+Garden stems and leaves use muted green `#4A685A`; veins use lighter sage
+`#AFC0A6`; flower fills use deep Vermilion `#C62F28`. Petal linework uses Bone
+`#EFE7DA`, creating enough separation without overpowering the hero.
+
 Previously verified changes (2026-11-20):
 
 - WEB-001: the DOM title was hidden once Garden became active. The

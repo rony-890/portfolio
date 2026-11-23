@@ -2,8 +2,8 @@
 
 ## Status
 
-**In progress; not a final or publish-ready release.** The next handoff work is
-the About pose alignment and supplied Selected Work images.
+**Core implementation complete; not publish-ready.** Remaining work is
+publish QA and deployment configuration, not portfolio feature implementation.
 
 ## Preserved progress
 
@@ -12,26 +12,24 @@ the About pose alignment and supplied Selected Work images.
 - Single-canvas staggered hero reveal and Garden bloom; the old DOM-to-canvas
   title swap that caused the refresh size jump is removed. Scroll zoom/fade,
   SU/BHU split, and curved line remain.
-- The About pose animation currently uses `img/pose0.webp` through
-  `img/pose7.webp`. Subhu reports that its baseline still looks wrong on the
-  laptop and supplied eight PNG pose frames under `img/my assets/`.
+- The About pose uses `img/poses/pose-1.webp` through
+  `img/poses/pose-8.webp`; it is aligned in the integrated preview.
 - Stats currently settle to Creating since 2026, Projects 10+, and Worked with
   2.
+- The approved Bone, Bottle Green, and Vermilion palette is applied.
+- The Assist-Ding panel retains lavender and uses Bone copy with only the
+  live-site action.
 - Detailed visual backlog in [`WEBSITE_ISSUES.md`](../WEBSITE_ISSUES.md).
 
 ## Outstanding
 
 - WEB-001, WEB-002, WEB-004, WEB-007, and WEB-008 are resolved in the
   integrated preview. Subhu accepts WEB-003's current centered split as-is.
-- WEB-005, WEB-006, WEB-009, and WEB-010 remain open in
-  [`WEBSITE_ISSUES.md`](../WEBSITE_ISSUES.md): pose baseline, stats layout, bio
-  position, and supplied Work-card artwork.
-- Selected Work cards still use inline SVG diagrams. The new image set is in
-  `D:\PROTFOLIO WEBSITE\selected-work-images`; existing project-dialog images
-  remain in `img/projects/`.
-- “company” is not present in the Worked with stat.
-- The settled Projects value is `10+`; confirm whether the plus sign is
-  intentional.
+- WEB-005, WEB-006, WEB-009, and WEB-010 are complete in the integrated preview.
+- Selected Work cards use supplied artwork and project dialogs use supporting
+  WebP images.
+- “Company” appears below the right edge of the Worked with “2.”
+- The settled Projects value remains `10+`.
 - Canonical/Open Graph URL fields and referenced icon files need review before
   publication.
 - User-laptop Chrome and cross-browser behavior are not verified; mobile checks
@@ -53,7 +51,6 @@ and did not use Subhu's laptop viewport. Pose alignment is not verified.
 
 ## Next step
 
-Use the supplied pose PNGs to correct the visible feet-to-bio baseline at
-Subhu's laptop viewport. Then replace Work-card diagrams with the supplied
-project images. Keep the current split centering and leave flower variety
-unchanged. Recheck WEB-006 and WEB-009 before publication.
+Complete laptop and deployed-origin QA, canonical/Open Graph metadata,
+copyright/permission confirmation, and analytics configuration. Keep the
+current split centering and leave flower variety unchanged.

@@ -1,8 +1,8 @@
 # Neon Handoff: Portfolio
 
-This file records the current decisions, supplied assets, and pending work for
-the next implementation pass. Read it with the issue log and progress reports
-before changing the site.
+This file records the current decisions and handoff state after the core
+implementation pass. Read it with the issue log and progress reports before
+changing the site.
 
 ## Read first
 
@@ -23,15 +23,15 @@ work focused on the remaining tasks below; do not redesign unrelated sections.
   closed by user preference. Do not adjust the split.
 - The Garden currently shows one flower type. Subhu has deferred flower
   variety changes. Do not change flower generation or its seeds in this pass.
-- The About pose still looks misaligned on Subhu's laptop. Treat it as open
-  until verified at the user's actual viewport.
+- The About pose is aligned in the integrated preview. Verify final laptop
+  appearance at the user's actual viewport before publish sign-off.
 - Subhu supplied eight replacement pose PNGs and six new Selected Work images.
   Their original files must remain unchanged.
 
 ## Priority 1: align the About pose and bio
 
-The current page uses the eight-frame sequence `img/pose0.webp` through
-`img/pose7.webp`. The supplied PNGs are in
+The current page uses the eight-frame sequence `img/poses/pose-1.webp` through
+`img/poses/pose-8.webp`. The supplied PNGs are in
 `D:\PROTFOLIO WEBSITE\subhu-jb-portfolio\img\my assets`:
 
 - `pose_1.png`
@@ -80,11 +80,9 @@ The six source images are outside the repository at
 - `Assist-Ding spotlight in a junior frontend developer portfolio.png`
 - `Assist-Ding Work-card cover.png`
 
-The current project cards render inline SVG diagrams through
-`renderWorkDiagram` in `js/main.js`. The project detail dialogs already use
-assets from `img/projects/`. Inspect the supplied images, then replace the
-card diagrams with suitable project artwork. Use supporting images in the
-dialogs when they add relevant detail.
+The project cards use optimized artwork from `img/projects/`. The project
+detail dialogs use supporting images with accurate alt text. Keep the Gemini
+sparkle hidden with the existing CSS crop; do not modify the source images.
 
 Filename-based mapping to verify against the actual artwork:
 
@@ -108,14 +106,11 @@ keyboard access working.
 
 ## Remaining tracked work
 
-- WEB-005: use the supplied pose frames and align the visible pose to the bio
-  on Subhu's laptop.
-- WEB-009: correct the bio's vertical position and its mobile/desktop
-  relationship to the pose.
-- WEB-010: replace the three Work-card diagrams with the supplied project
-  artwork.
-- WEB-006: the “Worked with 2 company” stat composition remains open. Keep it
-  in the backlog unless Subhu changes the priority.
+- WEB-005: pose and bio are aligned in the integrated preview; laptop sign-off
+  remains.
+- WEB-006: “Worked” and “with” share a line; “company” is below the “2.”
+- WEB-009: mobile and desktop bio positioning is complete in the integrated preview.
+- WEB-010: Selected Work cards and dialogs use the supplied project artwork.
 
 ## Verification before handoff
 

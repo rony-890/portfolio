@@ -1,5 +1,5 @@
 # Current Project Structure — 2026-11-21
-> Status updated 2026-11-21 with the Neon handoff and supplied asset folders.
+> Status updated 2026-11-23 with the core implementation completed.
 
 The runtime folders stay at the root to preserve the site's current asset
 URLs. Project reports are grouped under `docs/`. `node_modules/` and `.git/`
