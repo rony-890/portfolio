@@ -1115,6 +1115,11 @@ a {
   background: #f4f1ec;
 }
 
+.card .fig.work-cover img {
+  transform: scale(calc(1.11 + var(--k, 0) * 0.3));
+  transform-origin: center;
+}
+
 .work-svg {
   display: block;
   width: 100%;
@@ -1612,6 +1617,8 @@ a {
 .pv-r img {
   width: 100%;
   height: auto;
+  transform: scale(1.11);
+  transform-origin: center;
 }
 
 .pv-vids {

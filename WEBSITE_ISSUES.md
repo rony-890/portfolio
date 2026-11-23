@@ -23,11 +23,14 @@ about 3 px at desktop viewports from 1366 x 768 through 1920 x 1080. At
 portrait and text. This does not replace testing on Subhu's laptop.
 
 The three Work cards use project artwork, and their dialogs load the selected
-supporting images with alt text. The “Worked” and “with” labels share one line;
-“company” sits below and to the right of the “2.” WEB-003's centered split
-composition remains accepted. Garden flower variety is deferred.
+supporting images with alt text. A small display crop hides the Gemini sparkle
+in the lower-right corner without changing the source files. The “Worked” and
+“with” labels share one line; “company” sits below and to the right of the
+“2.” WEB-003's centered split composition remains accepted. Garden flower
+variety is deferred.
 
 Previously verified changes (2026-11-20):
+
 - WEB-001: the DOM title was hidden once Garden became active. The
   2026-11-21 single-canvas reveal replaces that handoff.
 - The Garden-only hero is now the visible title after reveal; Playwright
@@ -47,6 +50,7 @@ Previously verified changes (2026-11-20):
 - The Journey "100MB" illustration label is removed.
 
 Remaining verification and publish work:
+
 - Test the final About composition on Subhu's laptop Chrome and physical
   display.
 - Complete keyboard, reduced-motion, zoom, and deployed-origin link checks.
@@ -245,7 +249,7 @@ time. Do not treat an issue as resolved until it has been verified.
   tail, aligned to its right side.
 - **Integrated-preview test:** At 1440 x 900 after the counters settled,
   “Worked” and “with” share one line above the “2.” “Company” appears below
-  and to the right of the number; its rendered text box begins about 8 px
+  and to the right of the number; its rendered text box begins about 13 px
   below the number's box. The Projects counter settles to “10+.”
 - **Implementation:** The label and company placement are styled in
   `css/main.css`. Review the final composition on Subhu's laptop before
@@ -347,9 +351,10 @@ time. Do not treat an issue as resolved until it has been verified.
   `Assist-Ding Work-card cover.png`.
 - **Integrated-preview test:** All three Work card images load, the cards no
   longer contain inline SVG diagrams, and each project dialog loads its
-  selected image or images with alt text. The AEO Toolkit card uses the test
-  artwork; the supplied contribution image with visible generated labels is
-  not used.
+  selected image or images with alt text. The display crop hides the small
+  lower-right Gemini sparkle while keeping the source images unchanged. The
+  AEO Toolkit card uses the test artwork; the supplied contribution image with
+  visible generated labels is not used.
 - **Implementation:** The cards use optimized WebP covers in `img/projects/`.
   Accessible Search, Assist-Ding, and AEO Toolkit dialogs preserve their
   project links and display the selected supporting artwork.

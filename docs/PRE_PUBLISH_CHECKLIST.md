@@ -13,13 +13,13 @@
       domain and approved preview image are available.
 - [ ] Confirm that all portfolio copy, images, video, and reference-derived
       materials are authorized for publication.
-- [ ] Review the generated project artwork in `img/projects/`, including the
-      visible prompt labels in the AEO Toolkit normalization image.
+- [x] Add project artwork with a small display crop for the Gemini sparkle.
+      Keep the AEO Toolkit contribution image with visible generated labels
+      out of the selected card artwork.
 
 ## Assets and links
 
-- [ ] Verify that `/favicon-32.png`, `/icon-512.png`, and
-      `/apple-touch-icon.png` exist and load, or update/remove those references.
+- [x] Remove stale favicon links because the referenced icon files are absent.
 - [ ] Check every project, navigation, email, and social link on the deployed
       origin.
 - [ ] Confirm the optional Vercel analytics request is configured or removed;
@@ -28,16 +28,17 @@
 ## Interaction and responsive QA
 
 - [ ] Review the Assist-Ding spotlight and Contact copy before publishing.
-- [ ] Resolve and verify WEB-001 through WEB-009 in
-      [`WEBSITE_ISSUES.md`](../WEBSITE_ISSUES.md).
+- [x] Implement and verify WEB-005, WEB-006, WEB-009, and WEB-010 in the
+      integrated preview. See [`WEBSITE_ISSUES.md`](../WEBSITE_ISSUES.md) for
+      measurements and the laptop sign-off gap.
 - [ ] Test a fresh reload and the hero-to-About handoff in the user's Chrome.
 - [ ] Test desktop, mobile, portrait/landscape, keyboard navigation, reduced
       motion, and zoom at supported sizes.
-- [ ] Recheck the About pose baseline and stat counter/layout after final
-      content and responsive changes.
-- [ ] Run a final console/network check and confirm that all required assets
-      load.
-- [ ] Verify both the PNG source copies and WebP display images in
-      `img/projects/`.
+- [x] Recheck the About pose baseline and stat layout in the integrated
+      preview. Verify the final result on Subhu's laptop before publishing.
+- [x] Confirm that the required pose, Work-card, and project-dialog WebP
+      images load in the integrated preview.
+- [ ] Complete the final network check. The optional Vercel analytics request
+      currently returns 404 in the integrated preview.
 
 Do not mark this checklist complete based only on the integrated preview.
