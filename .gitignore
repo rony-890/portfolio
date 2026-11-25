@@ -1,4 +1,4 @@
-﻿node_modules/
+node_modules/
 qa/*.png
 qa/*.js
 test-results/
@@ -17,3 +17,7 @@ unused/
 JOHN_BOLSTER_ASSETS/
 PORTFOLIO_RESOURCES/
 garden-frames/
+.vscode/
+*.bak
+*.zip
+docs/
