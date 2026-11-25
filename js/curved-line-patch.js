@@ -77,6 +77,7 @@
     // Create new canvas for the curved line
     canvas = document.createElement('canvas');
     canvas.id = 'curved-guide-line';
+  canvas.setAttribute('aria-hidden', 'true');
     canvas.style.position = 'fixed';
     canvas.style.left = '0';
     canvas.style.top = '0';
