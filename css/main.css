@@ -17,6 +17,26 @@
   box-sizing: border-box;
 }
 
+/* Text selection off for the animated UI; keep it on where copying matters */
+body {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.ct-mail,
+input,
+textarea,
+code,
+pre {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+.ct-mail {
+  -webkit-user-select: all;
+  user-select: all;
+}
+
 html {
   background: var(--bg);
 }
