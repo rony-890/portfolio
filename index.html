@@ -1494,6 +1494,49 @@
             <span class="ct-mail" id="mail">sdas169797@gmail.com</span
             ><button class="pill" id="copy">Copy email</button>
           </div>
+          <form
+            class="ct-form"
+            id="contact-form"
+            action="https://formspree.io/f/xoedrlgz"
+            method="POST"
+          >
+            <label class="ct-f"
+              ><span>Name</span
+              ><input
+                type="text"
+                name="name"
+                required
+                autocomplete="name"
+                placeholder="Your name"
+            /></label>
+            <label class="ct-f"
+              ><span>Email</span
+              ><input
+                type="email"
+                name="email"
+                required
+                autocomplete="email"
+                placeholder="you@example.com"
+            /></label>
+            <label class="ct-f"
+              ><span>Message</span
+              ><textarea
+                name="message"
+                rows="2"
+                required
+                placeholder="What do you need help with?"
+              ></textarea>
+            </label>
+            <div class="ct-f-row">
+              <button class="pill" type="submit">Send message</button>
+              <span
+                class="ct-f-status mono"
+                id="form-status"
+                role="status"
+                aria-live="polite"
+              ></span>
+            </div>
+          </form>
         </div>
         <div
           class="el"
@@ -1605,6 +1648,7 @@
     ></div>
     <script src="js/garden/garden-standalone.js?v=21"></script>
     <script src="js/curved-line-patch.js?v=6"></script>
+    <script src="js/contact-form.js?v=1" defer></script>
     <script>
       (function () {
         "use strict";

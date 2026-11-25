@@ -1480,6 +1480,93 @@ a {
 .ct-foot a:hover {
   color: var(--ink);
 }
+/* Contact form */
+.ct-form {
+  width: min(560px, 86vw);
+  margin: 26px auto 0;
+  padding-top: 22px;
+  border-top: 1px solid var(--hair);
+  display: grid;
+  gap: 14px;
+  text-align: left;
+}
+
+.ct-f {
+  display: grid;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.ct-f input,
+.ct-f textarea {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--hair);
+  border-radius: 0;
+  padding: 8px 2px;
+  font-family: var(--body);
+  font-size: 14px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink);
+  transition: border-color 0.25s;
+}
+
+.ct-f input:focus,
+.ct-f textarea:focus {
+  outline: none;
+  border-bottom-color: var(--line);
+}
+
+.ct-f textarea {
+  resize: vertical;
+  min-height: 64px;
+}
+
+.ct-f-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.ct-f-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.ct-f-status {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.ct-f-status[data-state='ok'] {
+  color: var(--ink);
+}
+
+.ct-f-status[data-state='err'] {
+  color: var(--line);
+}
+
+@media (max-width: 640px) {
+  .ct-f-2 {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .ct-form {
+    width: 100%;
+    margin-top: 20px;
+  }
+}
+
 
 #proj {
   --bg: #efe7da;

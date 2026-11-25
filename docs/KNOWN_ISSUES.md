@@ -14,7 +14,7 @@ Open items only. Everything else has been verified or removed.
 - Repository history still carries a 64.8 MB `Subhu-jb-portfolio-finihed
   project.zip` from before publishing, so a full clone downloads about 170 MB.
   The live site is unaffected. Cleanup needs a history rewrite and force push.
-- No analytics and no contact form yet, both need an external account.
+- Analytics (Cloudflare) and the contact form (Formspree) are live as of 2026-11-25.
 
 ## Known-good
 

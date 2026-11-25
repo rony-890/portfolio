@@ -10,11 +10,11 @@
 
 ## Next
 
-1. Analytics snippet once a Cloudflare account exists.
-2. Contact form once a Formspree endpoint exists.
+1. ~~Analytics snippet~~ done: Cloudflare Web Analytics.
+2. ~~Contact form~~ done: Formspree `xoedrlgz`.
 3. Videos to Cloudinary so the repository stays light; embed the player here.
 4. Fourth and fifth project once they clear the same bar as the current three.
-5. Optional: drop the old zip from history to shrink the clone.
+5. Watch the first real submissions and add a spam guard if needed.
 
 ## Rules when adding work
 

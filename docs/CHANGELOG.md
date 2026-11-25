@@ -2,6 +2,16 @@
 
 ## 2026-11-25
 
+Analytics, contact form, sitemap and CI
+
+- Cloudflare Web Analytics beacon added (cookie-less, no banner).
+- Contact form posts to Formspree, AJAX submit with a no-JS fallback.
+- `sitemap.xml` added; `robots.txt` points at it.
+- `scripts/check-links.mjs` plus a GitHub Action that fails on a missing or
+  wrong-case asset reference.
+
+## 2026-11-25
+
 Publish v1.0
 
 - Created the public repository and enabled GitHub Pages.
