@@ -1434,9 +1434,18 @@ a {
   font-size: clamp(44px, 8.6vw, 180px);
 }
 
+.ct-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(16px, 2.6vh, 38px);
+  width: min(1000px, 94vw);
+}
+
 .ct-wrap {
   position: relative;
   display: inline-block;
+  text-align: center;
 }
 
 .ct-wrap .c {
@@ -1516,7 +1525,7 @@ a {
 /* Contact form */
 .ct-form {
   width: min(560px, 86vw);
-  margin: 26px auto 0;
+  margin: 0 auto;
   padding-top: 22px;
   border-top: 1px solid var(--hair);
   display: grid;
