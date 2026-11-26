@@ -1524,7 +1524,8 @@ a {
 }
 /* Contact form */
 .ct-form {
-  width: min(560px, 86vw);
+  /* section sits at ~1.12 camera scale, so keep the card inside the viewport */
+  width: min(560px, 74vw);
   margin: 0 auto;
   padding-top: 22px;
   border-top: 1px solid var(--hair);
