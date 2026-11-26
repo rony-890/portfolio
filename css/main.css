@@ -1955,10 +1955,15 @@ a {
     right: 14px;
   }
 
-  .ct-row {
-    flex-direction: column;
-    gap: 12px;
-  }
+.ct-row {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+}
+
+.ct-mail {
+  font-size: clamp(18px, 5vw, 26px);
+}
 
   .pv-next .d {
     font-size: 7vw;
