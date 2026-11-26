@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html
   lang="en"
   class="is3d"
@@ -28,6 +29,12 @@
     />
     <meta property="og:type" content="website" />
     <link rel="canonical" href="https://rony-890.github.io/portfolio/" />
+    <link
+      rel="preload"
+      as="image"
+      href="img/poses/pose-1.webp?v=3"
+      fetchpriority="high"
+    />
     <meta
       property="og:url"
       content="https://rony-890.github.io/portfolio/"
@@ -268,23 +275,25 @@
         >
           <figure class="ab-fig pose" style="margin: 0">
             <img
-              src="img/poses/pose-1.webp?v=2"
+              src="img/poses/pose-1.webp?v=3"
               alt="Subhu"
               loading="eager"
+              fetchpriority="high"
+              decoding="async"
               class="on"
-            /><img src="img/poses/pose-2.webp?v=2" alt="" loading="eager" /><img
-              src="img/poses/pose-3.webp?v=2"
+            /><img
               alt=""
-              loading="eager"
-            /><img src="img/poses/pose-4.webp?v=2" alt="" loading="eager" /><img
-              src="img/poses/pose-5.webp?v=2"
+              data-defer-src="img/poses/pose-2.webp?v=3"
+            /><img alt="" data-defer-src="img/poses/pose-3.webp?v=3" /><img
               alt=""
-              loading="eager"
-            /><img src="img/poses/pose-6.webp?v=2" alt="" loading="eager" /><img
-              src="img/poses/pose-7.webp?v=2"
+              data-defer-src="img/poses/pose-4.webp?v=3"
+            /><img alt="" data-defer-src="img/poses/pose-5.webp?v=3" /><img
               alt=""
-              loading="eager"
-            /><img src="img/poses/pose-8.webp?v=2" alt="" loading="eager" />
+              data-defer-src="img/poses/pose-6.webp?v=3"
+            /><img alt="" data-defer-src="img/poses/pose-7.webp?v=3" /><img
+              alt=""
+              data-defer-src="img/poses/pose-8.webp?v=3"
+            />
           </figure>
         </div>
         <div
@@ -1664,6 +1673,27 @@
           attributes: true,
           attributeFilter: ["style"],
         });
+      })();
+    </script>
+    <script>
+      // Pose frames 2-8 are deferred: only the first frame is needed for the
+      // first paint (it is the LCP element). Load the rest once the page is idle.
+      (function () {
+        var loadRest = function () {
+          var frames = document.querySelectorAll("img[data-defer-src]");
+          for (var i = 0; i < frames.length; i++) {
+            var f = frames[i];
+            if (!f.getAttribute("src")) {
+              f.setAttribute("src", f.getAttribute("data-defer-src"));
+              f.removeAttribute("data-defer-src");
+            }
+          }
+        };
+        if (window.requestIdleCallback) {
+          requestIdleCallback(loadRest, { timeout: 2500 });
+        } else {
+          setTimeout(loadRest, 1200);
+        }
       })();
     </script>
     <!-- Cloudflare Web Analytics -->
