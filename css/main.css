@@ -1610,6 +1610,25 @@ a {
   }
 }
 
+/* short laptop screens: keep the whole contact block inside the frame */
+@media (max-height: 820px) and (min-width: 641px) {
+  .ct-stack {
+    gap: 12px;
+  }
+  .ct-one {
+    font-size: clamp(40px, 7vw, 108px);
+  }
+  .ct-form {
+    gap: 10px;
+    padding-top: 14px;
+  }
+  .ct-f input,
+  .ct-f textarea {
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+}
+
 
 #proj {
   --bg: #efe7da;
