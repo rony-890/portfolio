@@ -1823,9 +1823,10 @@ a {
   right: var(--gutR);
   width: 48px;
   height: 48px;
+  border: 0;
   border-radius: 50%;
-  background: var(--ink);
-  color: var(--bg);
+  background: #0f372b;
+  color: #efe7da;
   display: grid;
   place-items: center;
   font-size: 22px;
