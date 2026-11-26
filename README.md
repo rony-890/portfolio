@@ -4,6 +4,8 @@ Personal portfolio for **Subhu**, a junior frontend developer working on accessi
 
 **Live site:** https://rony-890.github.io/portfolio/
 
+**Lighthouse, mobile, 26 Nov 2026:** Performance 95 · Accessibility 100 · Best Practices 100 · SEO 100 — LCP 2.6s, CLS 0, TBT 20ms.
+
 ---
 
 ## Stack
